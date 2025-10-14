@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="welcome-container">
+        <div class="login-card">
+            <div class="sticky-sync-wrapper">
+                <!-- Flecha atrás -->
+                <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+                ←
+                </button>
+                
+                <div class="slide" id="slideSync">
+                    <div class="welcome-buttons">
+                        <h1>Hola, <br> {{ usuario.nombre }}</h1>
+                        <hr>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="welcome-buttons">
+
+                <button type="button" onclick="window.location.href='{% url 'perfil-aprendiz' %}'">Perfil</button>
+                <button type="button" onclick="window.location.href='{% url 'solicitud-uniforme' %}'">Solicitar Uniforme</button>
+                <button type="button" onclick="window.location.href='{% url 'historial-solicitudes' %}'">Historial de Solicitudes</button>
+                <br>
+
+                <!-- Botón de cerrar sesión -->
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

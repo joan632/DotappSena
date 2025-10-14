@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+  <div class="welcome-container">
+    <div class="login-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h1>Bienvenido</h1>
+          <p>Aqui podrás gestionar pedidos e inventario</p>
+        </div>
+      </div>
+
+      <div class="welcome-buttons">
+
+        <button onclick="window.location.href='{% url 'administrar-productos' %}'">Administrar productos</button>
+        <button onclick="window.location.href='{% url 'solicitudes-inventario' %}'">Solicitudes de inventario</button>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

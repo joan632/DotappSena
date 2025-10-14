@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="admin-container">
+    <div class="admin-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h1>Historial de Solicitudes</h1>
+          <br>
+
+          <!-- FILTROS -->
+          <div class="filtros">
+            <input type="text" id="buscar" placeholder="Buscar por ID, tipo, talla o color..." />
+            <select id="filtroRol">
+              <option value="">Estado</option>
+              <option value="Aprobado">Aprobada</option>
+              <option value="Rechazado">Rechazada</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Cancelado">Cancelada</option>
+              <option value="Entregado">Entregada</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="table-scroll" id="tableScroll">
+        <table id="tablaPedidos" class="usuarios-table">
+          <thead>
+            <tr>
+              <th>ID_solicitud</th>
+              <th>Fecha_solicitud</th>
+              <th>Tipo</th>
+              <th>Talla</th>
+              <th>Color</th>
+              <th>Cantidad</th>
+              <th>Detalles adicionales</th>
+              <th>Fecha_finalización</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for solicitud in solicitudes %}
+              <tr data-id="{{ solicitud.id }}">
+                <td>{{ solicitud.id_solicitud }}</td>
+                <td>{{ solicitud.fecha_solicitud|date:"Y-m-d" }}</td>
+                <td>{{ solicitud.id_producto.nombre }}</td>
+                <td>{{ solicitud.id_producto.talla }}</td>
+                <td>{{ solicitud.id_producto.color }}</td>
+                <td>{{ solicitud.cantidad }}</td>
+                <td>{{ solicitud.detalles_adicionales }}</td>
+                <td>
+                  {% if solicitud.fecha_finalizacion %}
+                    {{ solicitud.fecha_finalizacion|date:"Y-m-d" }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td>{{ solicitud.estado_solicitud|title }}</td>
+                <td>
+                  {% if solicitud.estado_solicitud|lower == "pendiente" %}
+                    <form method="post" action="{% url 'cancelar-solicitud' solicitud.id_solicitud %}">
+                      {% csrf_token %}
+                      <button type="submit" class="cancel-btn">Cancelar</button>
+                    </form>
+                  {% else %}
+                    <span style="color: gray;">No disponible</span>
+                  {% endif %}
+                </td>
+              </tr>
+
+
+
+            {% empty %}
+              <tr>
+                <td colspan="10" style="text-align:center;">No tienes solicitudes registradas</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+  <!-- Script de Filtros de Busqueda -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputBuscar = document.getElementById("buscar");
+      const selectRol = document.getElementById("filtroRol");
+      const tablaBody = document.querySelector("#tablaPedidos tbody");
+
+      function normalizarTexto(texto) {
+        return String(texto || '')
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
+      }
+
+      // Mapeo flexible para estados (para que "Aprobado" funcione con "Aprobada", etc.)
+      const statusMap = {
+        'aprobado': ['aprobada','aprobado'],
+        'rechazado': ['rechazada','rechazado'],
+        'pendiente': ['pendiente'],
+        'cancelado': ['cancelada','cancelado'],
+        'entregado': ['entregado','entregada']
+      };
+
+      function filtrarTabla() {
+        const texto = normalizarTexto(inputBuscar.value);
+        const rol = normalizarTexto(selectRol.value);
+
+        for (let fila of tablaBody.rows) {
+          // texto combinado de todas las celdas (id, tipo, talla, color, etc.)
+          const cellsText = Array.from(fila.cells)
+            .map(c => normalizarTexto(c.textContent))
+            .join(' ');
+
+          // estado normalmente está en la última celda
+          const estado = normalizarTexto(fila.cells[fila.cells.length - 2]?.textContent || '');
+
+          const coincideTexto = texto === '' || cellsText.includes(texto);
+
+          let coincideRol = false;
+          if (rol === '') {
+            coincideRol = true;
+          } else {
+            const posibles = statusMap[rol] || [rol];
+            coincideRol = posibles.some(p => estado.includes(p));
+          }
+
+          fila.style.display = (coincideTexto && coincideRol) ? '' : 'none';
+        }
+      }
+
+      inputBuscar.addEventListener('input', filtrarTabla);
+      selectRol.addEventListener('change', filtrarTabla);
+    });
+  </script>
+
+  <!-- Script para centrar el slide con el scroll -->
+  <script>
+    const tableScroll = document.getElementById('tableScroll');
+    const slideSync   = document.getElementById('slideSync');
+
+    function syncCenter() {
+      const scrollLeft = tableScroll.scrollLeft;
+      const viewportW  = tableScroll.clientWidth;
+      const slideW     = slideSync.offsetWidth;
+
+      const factor = 0;
+      const offset = scrollLeft * factor + (viewportW - slideW) / 2 * factor;
+
+      slideSync.style.transform = `translateX(${offset}px)`;
+    }
+
+    tableScroll.addEventListener('scroll', syncCenter);
+    window.addEventListener('resize', syncCenter);
+    syncCenter(); // inicial
+  </script>
+
+{% endblock %}
+

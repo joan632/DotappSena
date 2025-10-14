@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="login-container">
+    <div class="login-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h1>🚫 Acceso Denegado</h1>
+          <p>No tienes permisos para acceder a esta sección.</p>
+          <br>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+{% endblock %}

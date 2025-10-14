@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+  <div class="welcome-container">
+    <div class="login-card">
+      <div class="sticky-sync-wrapper">
+        <div class="slide" id="slideSync">
+
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h2>¡Bienvenido a DotApp SENA!</h2>
+          <p>Aquí podrás adquirir tu uniforme oficial del SENA</p>
+          <br>
+
+        </div>
+      </div>
+
+      <a href="{% url 'principal-aprendiz' %}"> 
+        <button type="button">Continuar</button>
+      </a>
+
+    </div>
+  </div>
+{% endblock %}

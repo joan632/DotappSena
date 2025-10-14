@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="admin-container">
+    <div class="admin-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h1>Gestión de Productos</h1>
+
+          <div class="form-group">
+            <!-- Buscador de Productos -->
+            <input type="text" id="buscador" placeholder="Buscar producto...">
+          </div>
+
+          <!-- Botón que activa modal de agregar producto -->
+          <button id="btnAbrirAgregar" class="btn-agregar">Agregar Producto</button>
+
+        </div>
+      </div>
+
+      <div class="table-scroll" id="tableScroll">
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID_Producto</th>
+              <th>Imagen</th>
+              <th>Nombre</th>
+              <th>Talla</th>
+              <th>Color</th>
+              <th>Stock</th>
+              <th>Precio</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for producto in productos %}
+            <tr>
+              <td>{{ producto.id_producto }}</td>
+              <td>
+                {% if producto.imagen %}
+                  <img src="{{ MEDIA_URL }}{{ producto.imagen }}">
+                {% else %}
+                  Sin imagen
+                {% endif %}
+              </td>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.talla }}</td>
+              <td>{{ producto.color }}</td>
+              <td>{{ producto.stock }}</td>
+              <td>{{ producto.precio }}</td>
+              <td>
+                <button class="btn btn-editar js-editar" data-id="{{ producto.id_producto }}" data-action="editar">Editar</button>
+                <button class="btn btn-eliminar js-eliminar" data-id="{{ producto.id_producto }}" data-action="eliminar">Eliminar</button>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8">No hay productos registrados.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal de Editar -->
+  <div id="modalAccion" class="modal-gestion-producto" style="display:none;">
+    <div class="modal-content-gestion-producto">
+      <span class="close">&times;</span>
+            
+      <h2 id="modalTitulo"></h2>
+      <div id="modalBody"></div>
+
+      <div class="modal-footer">
+        <button id="btnConfirmar" type="button" class="btn btn-guardar">Confirmar</button>
+        <button id="btnCancelar" type="button" class="btn btn-cancelar">Cancelar</button>
+      </div>
+        
+    </div>
+  </div>
+
+  <!-- Modal de Eliminar producto -->
+  <div id="modalEliminar" class="modal-gestion-producto" style="display:none;">
+    <div class="modal-content-gestion-producto">
+      <span class="close" id="cerrarEliminar">&times;</span>
+
+      <h2>Eliminar producto</h2>
+      <div id="modalEliminarBody">
+        <p>¿Estás seguro de que deseas eliminar este producto?</p>
+      </div>
+
+      <div class="modal-footer">
+        <button id="btnEliminarConfirmar" type="button" class="btn btn-eliminar-productos">Eliminar</button>
+        <button id="btnEliminarCancelar" type="button" class="btn btn-cancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Agregar Producto -->
+  <div id="modalAgregar" class="modal-gestion-producto">
+    <div class="modal-content-gestion-producto">
+      <span class="close">&times;</span>
+      <h2>Agregar Producto</h2>
+      <form id="formAgregar" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="nombre" placeholder="Nombre del producto" required />
+        <input type="number" name="precio" placeholder="Precio" min="0" step="0.01" required />
+        <input type="text" name="talla" placeholder="Talla" required />
+        <input type="text" name="color" placeholder="Color" required />
+        <input type="number" name="cantidad" placeholder="Cantidad disponible" min="1" required />
+        <label name="imagen">Imagen en formato PNG o JPEG</label>
+        <input type="file" name="imagen" accept="image/png, image/jpeg" required />
+        
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-guardar">Agregar</button>
+          <button type="button" class="btn btn-cancelar">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+  <!-- Script de Modal Agregar Producto -->
+  <script>
+    const modalAgregar = document.getElementById("modalAgregar");
+    const btnAbrirAgregar = document.getElementById("btnAbrirAgregar");
+    const btnCerrarAgregar = modalAgregar.querySelector(".close");
+    const btnCancelarAgregar = modalAgregar.querySelector(".btn-cancelar");
+    const formAgregar = document.getElementById("formAgregar");
+
+    // Abrir/cerrar modal
+    btnAbrirAgregar.onclick = () => modalAgregar.style.display = "block";
+    btnCerrarAgregar.onclick = () => modalAgregar.style.display = "none";
+    btnCancelarAgregar.onclick = () => modalAgregar.style.display = "none";
+
+    // Guardar producto con fetch
+    formAgregar.onsubmit = e => {
+      e.preventDefault();
+      const formData = new FormData(formAgregar);
+      fetch("{% url 'agregar_producto' %}", {
+        method: "POST",
+        headers: { "X-CSRFToken": "{{ csrf_token }}" },
+        body: formData
+      }).then(res => res.json())
+        .then(data => {
+          if (data.status === 'ok') {
+            alert("Producto agregado correctamente");
+            location.reload();
+          } else {
+            alert("Error al agregar producto");
+          }
+        });
+    };
+  </script>
+
+  <!-- Modal de editar producto -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("modalAccion");
+      const modalTitulo = document.getElementById("modalTitulo");
+      const modalBody = document.getElementById("modalBody");
+      const btnConfirmar = document.getElementById("btnConfirmar");
+      const btnCancelar = document.getElementById("btnCancelar");
+      const btnCerrar = document.querySelector("#modalAccion .close");
+
+      let productoId = null;
+
+      // Botón de editar (se distingue con clase js-editar)
+      document.querySelectorAll(".js-editar").forEach(btn => {
+        btn.addEventListener("click", () => {
+          productoId = btn.dataset.id;
+
+          modalTitulo.textContent = "Editar producto";
+          modalBody.innerHTML = `
+            <form id="formEditar">
+              <label>Nombre:</label>
+              <input type="text" name="nombre" required>
+
+              <label>Talla:</label>
+              <input type="text" name="talla" required>
+
+              <label>Color:</label>
+              <input type="text" name="color" required>
+
+              <label>Cantidad:</label>
+              <input type="number" name="cantidad" min="0" required>
+
+              <label>Precio:</label>
+              <input type="number" name="precio" min="0" required>
+
+              <label>Imagen:</label>
+              <input type="file" name="imagen">
+            </form>
+          `;
+
+          // Precargar valores desde la fila de la tabla
+          const fila = btn.closest("tr");
+          document.querySelector("#formEditar input[name='nombre']").value = fila.children[2].textContent.trim();
+          document.querySelector("#formEditar input[name='talla']").value = fila.children[3].textContent.trim();
+          document.querySelector("#formEditar input[name='color']").value = fila.children[4].textContent.trim();
+          document.querySelector("#formEditar input[name='cantidad']").value = parseFloat(fila.children[5].textContent.trim());
+          document.querySelector("#formEditar input[name='precio']").value = parseFloat(fila.children[6].textContent.trim());
+
+          modal.style.display = "block";
+        });
+      });
+
+      // Botones del modal
+      btnCancelar.onclick = () => modal.style.display = "none";
+      btnCerrar.onclick = () => modal.style.display = "none";
+
+      // Confirmar edición
+      btnConfirmar.onclick = () => {
+        const formData = new FormData(document.getElementById("formEditar"));
+
+        fetch(`/almacenista/productos/editar/${productoId}/`, {   // 👈 ajustado con prefijo
+          method: "POST",
+          headers: { "X-CSRFToken": "{{ csrf_token }}" },
+          body: formData
+        }).then(res => {
+          if (res.ok) location.reload();
+        });
+
+        modal.style.display = "none";
+      };
+    });
+  </script>
+
+  <!-- Modal de eliminar producto -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const modalEliminar = document.getElementById("modalEliminar");
+      const btnEliminarConfirmar = document.getElementById("btnEliminarConfirmar");
+      const btnEliminarCancelar = document.getElementById("btnEliminarCancelar");
+      const btnCerrarEliminar = document.getElementById("cerrarEliminar");
+
+      let productoId = null;
+
+      // Abrir modal de eliminar cuando se presiona el botón en la tabla
+      document.querySelectorAll(".js-eliminar").forEach(btn => {
+        btn.addEventListener("click", () => {
+          productoId = btn.dataset.id;
+          document.getElementById("modalEliminarBody").innerHTML = `
+            <p>¿Estás seguro de que deseas eliminar el producto con ID <b>${productoId}</b>?</p>
+          `;
+          modalEliminar.style.display = "block";
+        });
+      });
+
+      // Cerrar modal
+      btnEliminarCancelar.onclick = () => modalEliminar.style.display = "none";
+      btnCerrarEliminar.onclick = () => modalEliminar.style.display = "none";
+
+      // Confirmar eliminación
+      btnEliminarConfirmar.onclick = () => {
+        fetch(`/almacenista/productos/eliminar/${productoId}/`, {
+          method: "POST",
+          headers: { "X-CSRFToken": "{{ csrf_token }}" }
+        }).then(res => {
+          if (res.ok) {
+            alert("Producto eliminado correctamente");
+            location.reload();
+          } else {
+            alert("Error al eliminar el producto");
+          }
+        });
+        modalEliminar.style.display = "none";
+      };
+    });
+  </script>
+
+  <!-- Script de Validacion de formato de imagen y dimensiones -->
+  <script>
+    const inputImagen = document.getElementById("inputImagen");
+
+    inputImagen.addEventListener("change", function () {
+      const archivo = this.files[0];
+      if (!archivo) return;
+
+      // Validar tipo de archivo
+      if (archivo.type !== "image/png" && archivo.type !== "image/jpeg") {
+        alert("❌ Solo se permiten imágenes PNG o JPEG.");
+        inputImagen.value = "";
+        return;
+      }
+
+      // Validar dimensiones
+      const img = new Image();
+      img.src = URL.createObjectURL(archivo);
+
+      img.onload = function () {
+        const ancho = img.width;
+        const alto = img.height;
+
+        if (ancho > 225 || alto > 225) {
+          alert(`❌ La imagen debe ser máximo de 225x225 px. Subiste ${ancho}x${alto}px`);
+          inputImagen.value = ""; // limpiar el input
+        } else {
+          alert("✅ Imagen válida");
+        }
+      };
+    });
+  </script>
+
+  <!-- Script para el buscador de productos -->
+  <script>
+    const buscador = document.getElementById("buscador");
+    const tabla = document.querySelector(".data-table tbody");
+
+    // Crear fila de mensaje
+    let filaNoEncontrado = document.createElement("tr");
+    let celdaMensaje = document.createElement("td");
+    celdaMensaje.colSpan = tabla.parentNode.querySelectorAll("thead th").length; 
+    celdaMensaje.textContent = "Producto no encontrado";
+    celdaMensaje.style.textAlign = "center";
+    celdaMensaje.style.fontWeight = "bold";
+    celdaMensaje.style.color = "#555";
+    filaNoEncontrado.appendChild(celdaMensaje);
+    filaNoEncontrado.style.display = "none";
+    tabla.appendChild(filaNoEncontrado);
+
+    buscador.addEventListener("keyup", function () {
+      const filtro = buscador.value.toLowerCase();
+      const filas = tabla.querySelectorAll("tr:not(:last-child)"); // Ignorar la fila de mensaje
+      let coincidencias = 0;
+
+      filas.forEach(fila => {
+        const celdas = fila.getElementsByTagName("td");
+        let coincide = false;
+
+        for (let j = 0; j < celdas.length - 1; j++) { // -1 para no buscar en botones
+          if (celdas[j].textContent.toLowerCase().includes(filtro)) {
+            coincide = true;
+            break;
+          }
+        }
+
+        fila.style.display = coincide ? "" : "none";
+        if (coincide) coincidencias++;
+      });
+
+      // Mostrar/ocultar mensaje dentro de la tabla
+      filaNoEncontrado.style.display = coincidencias === 0 ? "" : "none";
+    });
+  </script>
+
+  <!-- Script para sincronizar el slider con la tabla -->
+  <script>
+    const tableScroll = document.getElementById('tableScroll');
+    const slideSync   = document.getElementById('slideSync');
+
+    function syncCenter() {
+      const scrollLeft = tableScroll.scrollLeft;
+      const viewportW  = tableScroll.clientWidth;
+      const slideW     = slideSync.offsetWidth;
+
+      const factor = 0;
+      const offset = scrollLeft * factor + (viewportW - slideW) / 2 * factor;
+
+      slideSync.style.transform = `translateX(${offset}px)`;
+    }
+
+    tableScroll.addEventListener('scroll', syncCenter);
+    window.addEventListener('resize', syncCenter);
+    syncCenter(); // inicial
+  </script>
+
+{% endblock %}
+

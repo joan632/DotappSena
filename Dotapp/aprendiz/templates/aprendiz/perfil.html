@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="login-container">
+    <div class="perfil-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+          
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+        </div>
+      </div>
+
+        <!-- Avatar -->
+        <div class="avatar-circle">
+          {{ usuario.nombre|first|upper }}{{ usuario.apellido|first|upper }}
+        </div>
+
+        <!-- Información en columnas -->
+        <div class="info-row">
+          <div class="info-col">
+            <label>Nombres</label>
+            <span class="value">{{ usuario.nombre }}</span>
+          </div>
+          <div class="info-col">
+            <label>Apellidos</label>
+            <span class="value">{{ usuario.apellido }}</span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-col">
+            <label>Correo Electrónico</label>
+            <span class="value">{{ usuario.correo }}</span>
+          </div>
+        </div>
+        <br>
+
+        <!-- Botón -->
+        <button type="button" class="btn-editar-perfil">Editar perfil</button>
+    </div>
+
+    <div class="login-card perfil-buttons-card">
+      <div class="perfil-buttons">
+        <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+        <h1>Editar Perfil</h1>
+        <br>
+        <!-- Formulario de edición de perfil -->
+        <form class="perfil-buttons" action="{% url 'actualizar_perfil' %}" method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <input type="text" id="nombre" name="nombre" required value="{{ usuario.nombre }}">
+                <label for="nombre">Nombres</label>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="apellido" name="apellido" required value="{{ usuario.apellido }}">
+                <label for="apellido">Apellidos</label>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="correo" name="correo" required value="{{ usuario.correo }}">
+                <label for="correo">Correo electrónico</label>
+            </div>
+
+            <br>
+
+            <button type="submit">Guardar Cambios</button>
+        </form>
+      </div>
+    </div>
+  
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // ocultar formulario al arrancar
+    document.querySelector('.login-card.perfil-buttons-card').style.display = 'none';
+
+    // asignar click al botón correcto
+    document.querySelector('.btn-editar-perfil').onclick = function () {
+      document.querySelector('.login-card.perfil-buttons-card').style.display = 'block';
+      document.querySelector('.perfil-card').style.display = 'none';
+    };
+  });
+</script>
+{% endblock %}

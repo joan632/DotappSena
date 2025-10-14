@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="perfil-container">
+    <div class="perfil-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <!-- Título -->
+          <h1>Solicitud de Uniforme</h1>
+          <br>
+        </div>
+      </div>
+
+      <!-- Carrusel de productos -->
+      <div class="carousel" aria-roledescription="carousel">
+
+        <!-- Diapositivas dinámicas -->
+        {% for producto in productos %}
+        <figure class="slide">
+          {% if producto.imagen %}
+            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+          {% else %}
+            <img src="{% static 'img/no-image.jpg' %}" alt="Sin imagen">
+          {% endif %}
+          
+          <figcaption><h1>{{ producto.nombre }}</h1></figcaption>
+          <figcaption>Color: {{ producto.color }}</figcaption>
+          <figcaption>Stock disponible: {{ producto.stock }}</figcaption>
+          <figcaption>Tallas disponibles: {{ producto.talla }}</figcaption>
+          <figcaption>Precio unitario: {{ producto.precio }}</figcaption>
+        </figure>
+        {% empty %}
+        <p>No hay productos disponibles.</p>
+        {% endfor %}
+
+        <!-- Controles del carrusel -->
+        <div class="carousel-controls" aria-hidden="false">
+          <button id="prev" aria-label="Anterior">❮</button>
+          <button id="next" aria-label="Siguiente">❯</button>
+        </div>
+      </div>
+
+      <br>
+      
+      <hr>
+      <!-- Formulario de solicitud -->
+      <form id="form-solicitud" action="{% url 'crear_solicitud' %}" method="POST">
+        {% csrf_token %}
+
+        <button type="submit" formaction="{% url 'guardar_borrador' %}" style="max-width: fit-content;" formnovalidate>Guardar borrador</button>
+        <br><br>
+
+        <!-- Tipo de uniforme -->
+        <label for="tipo">Tipo de uniforme</label>
+        <select name="tipo" id="tipo" required>
+          <option value="">Selecciona un tipo de uniforme</option>
+          <option value="Polo" {% if borrador.tipo == 'Polo' %}selected{% endif %}>Polo</option>
+          <option value="Camiseta" {% if borrador.tipo == 'Camiseta' %}selected{% endif %}>Camiseta</option>
+          <option value="Chaqueta" {% if borrador.tipo == 'Chaqueta' %}selected{% endif %}>Chaqueta</option>
+        </select>
+        <br>
+
+        <!-- Talla -->
+        <label for="talla">Talla</label>
+        <select name="talla" id="talla" required>
+          <option value="">Selecciona una talla</option>
+          <option value="S" {% if borrador.talla == 'S' %}selected{% endif %}>S</option>
+          <option value="M" {% if borrador.talla == 'M' %}selected{% endif %}>M</option>
+          <option value="L" {% if borrador.talla == 'L' %}selected{% endif %}>L</option>
+          <option value="XL" {% if borrador.talla == 'XL' %}selected{% endif %}>XL</option>
+        </select>
+        <br>
+
+        <!-- Color -->
+        <label for="color">Color</label>
+        <select name="color" id="color" required>
+          <option value="">Selecciona un color</option>
+          <option value="Negro" {% if borrador.color == 'Negro' %}selected{% endif %}>Negro</option>
+          <option value="Blanco" {% if borrador.color == 'Blanco' %}selected{% endif %}>Blanco</option>
+          <option value="Azul" {% if borrador.color == 'Azul' %}selected{% endif %}>Azul</option>
+          <option value="Rosa" {% if borrador.color == 'Rosa' %}selected{% endif %}>Rosa</option>
+        </select>
+        <br>
+
+        <!-- Cantidad -->
+        <label for="cantidad">Cantidad</label>
+        <div class="form-group">
+          <input type="number" id="cantidad" name="cantidad" step="1" min="1" required placeholder="" value="{{ borrador.cantidad|default:'' }}">
+          <label for="cantidad">Digite la cantidad</label>
+        </div>
+        <br>
+
+        <!-- Centro de formación -->
+        <label for="centro">Centro de formación</label>
+        <select name="centro" id="centro" required>
+          <option value="">Selecciona centro de formación</option>
+          <option value="CEAI" {% if borrador.centro == 'CEAI' %}selected{% endif %}>Centro de Electricidad y Automatización Industrial</option>
+          <option value="CDTI" {% if borrador.centro == 'CDTI' %}selected{% endif %}>Centro de Diseño Tecnológico Industrial</option>
+          <option value="CC" {% if borrador.centro == 'CC' %}selected{% endif %}>Centro de la Construcción</option>
+          <option value="CGTS" {% if borrador.centro == 'CGTS' %}selected{% endif %}>Centro de Gestión Tecnológica de Servicios</option>
+        </select>
+        <br>
+
+        <!-- Programa -->
+        <label for="programa">Programa</label>
+        <select name="programa" id="programa" required>
+          <option value="">Seleccione un programa</option>
+          <option value="TPS" {% if borrador.programa == 'TPS' %}selected{% endif %}>TPS</option>
+          <option value="ADSO" {% if borrador.programa == 'ADSO' %}selected{% endif %}>ADSO</option>
+          <option value="IA" {% if borrador.programa == 'IA' %}selected{% endif %}>IA</option>
+          <option value="RH" {% if borrador.programa == 'RH' %}selected{% endif %}>RH</option>
+        </select>
+        <br>
+
+        <!-- Ficha -->
+        <label for="ficha">Ficha</label>
+        <div class="form-group">
+          <input type="number" id="ficha" name="ficha" step="1" min="0" required placeholder="" value="{{ borrador.ficha|default:'' }}">
+          <label for="ficha">Digite su ficha</label>
+        </div>
+        <br>
+
+        <!-- Detalles -->
+        <label for="detalles">Detalles de personalización adicionales</label>
+        <br>
+        <div class="form-group">
+          <textarea type="text" id="detalles" name="detalles" maxlength="500" placeholder="">{{ borrador.detalles|default:'' }}</textarea>
+          <label for="detalles">Escribe aquí tus detalles específicos</label>
+        </div>
+
+        <hr>
+        <!-- Botón de envío -->
+        <button type="submit">Enviar solicitud</button>
+      </form>
+
+
+
+      <!-- Modal de confirmación -->
+      <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <h2>Solicitud enviada con éxito</h2>
+          <p>Tu solicitud ha sido registrada y el borrador se eliminó.</p>
+          <button id="cerrarModal">Cerrar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+  <!-- Script del carrusel -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const slides = Array.from(document.querySelectorAll('.carousel .slide'));
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      const carousel = document.querySelector('.carousel');
+
+      if (!slides.length || !prevBtn || !nextBtn || !carousel) return;
+
+      let current = 0;
+      let autoInterval = null;
+      const AUTO_DELAY = 6000; // ms
+
+      function showSlide(index) {
+        const idx = ((index % slides.length) + slides.length) % slides.length; // normalize
+        slides.forEach((slide, i) => {
+          const active = i === idx;
+          slide.classList.toggle('active', active);
+          slide.setAttribute('aria-hidden', (!active).toString());
+        });
+        current = idx;
+      }
+
+      function startAuto() {
+        stopAuto();
+        autoInterval = setInterval(() => showSlide(current + 1), AUTO_DELAY);
+      }
+
+      function stopAuto() {
+        if (autoInterval) {
+          clearInterval(autoInterval);
+          autoInterval = null;
+        }
+      }
+
+      // botones
+      prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showSlide(current - 1);
+        startAuto(); // reinicia autoplay al interactuar
+      });
+
+      nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showSlide(current + 1);
+        startAuto();
+      });
+
+      // soporte teclado (flechas)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') { showSlide(current - 1); startAuto(); }
+        if (e.key === 'ArrowRight') { showSlide(current + 1); startAuto(); }
+      });
+
+      // pausa al pasar el ratón y reanuda al salir
+      carousel.addEventListener('mouseenter', stopAuto);
+      carousel.addEventListener('mouseleave', startAuto);
+
+      // Iniciar mostrando la primera diapositiva y el autoplay
+      showSlide(0);
+      startAuto();
+    });
+  </script>
+
+  <!-- Script para manejar el tamaño del textarea automaticamente -->
+  <script>
+    const textarea = document.getElementById('detalles');
+
+    textarea.addEventListener('input', () => {
+        // Reinicia la altura para que el scrollHeight sea preciso
+        textarea.style.height = 'auto';
+        // Establece la altura al valor de scrollHeight del contenido
+        textarea.style.height = textarea.scrollHeight + 'px';
+    });
+  </script>
+
+{% endblock %}

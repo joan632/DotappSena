@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="login-container">
+  <div class="login-card">
+    <div>
+      <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo">
+    </div>
+    <h1>Iniciar Sesión</h1>
+
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="email" id="login-email" name="correo" required placeholder=" ">
+        <label for="login-email">Correo electrónico</label>
+      </div>
+      <div class="form-group">
+        <input type="password" id="contrasena" name="password" required placeholder=" ">
+        <label for="contrasena">Contraseña</label>
+        <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Mostrar/Ocultar contraseña" style="max-width:fit-content;">
+          <!-- SVG de ojo -->
+           <!-- Eye (mostrar) -->
+            <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+              <path d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"/>
+            </svg>
+            <!-- Eye (ocultar) -->
+            <svg class="eye-slash-icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+              <path d="M73 39.1C63.6 29.7 48.4 29.7 39.1 39.1C29.8 48.5 29.7 63.7 39 73.1L567 601.1C576.4 610.5 591.6 610.5 600.9 601.1C610.2 591.7 610.3 576.5 600.9 567.2L504.5 470.8C507.2 468.4 509.9 466 512.5 463.6C559.3 420.1 590.6 368.2 605.5 332.5C608.8 324.6 608.8 315.8 605.5 307.9C590.6 272.2 559.3 220.2 512.5 176.8C465.4 133.1 400.7 96.2 319.9 96.2C263.1 96.2 214.3 114.4 173.9 140.4L73 39.1zM236.5 202.7C260 185.9 288.9 176 320 176C399.5 176 464 240.5 464 320C464 351.1 454.1 379.9 437.3 403.5L402.6 368.8C415.3 347.4 419.6 321.1 412.7 295.1C399 243.9 346.3 213.5 295.1 227.2C286.5 229.5 278.4 232.9 271.1 237.2L236.4 202.5zM357.3 459.1C345.4 462.3 332.9 464 320 464C240.5 464 176 399.5 176 320C176 307.1 177.7 294.6 180.9 282.7L101.4 203.2C68.8 240 46.4 279 34.5 307.7C31.2 315.6 31.2 324.4 34.5 332.3C49.4 368 80.7 420 127.5 463.4C174.6 507.1 239.3 544 320.1 544C357.4 544 391.3 536.1 421.6 523.4L357.4 459.2z"/>
+            </svg>
+        </button>
+      </div>
+
+      <button type="submit">Ingresar</button>
+    </form>
+
+    <div class="registro-link">
+      <a href="#" id="olvido-contrasena">¿Olvidaste tu contraseña?</a>
+      <button type="button" onclick="window.location.href={% url 'registro-aprendiz' %}">Regístrate aquí</button>
+    </div>
+
+    <div id="modal-olvido" class="modal-recuperacion-contrasena">
+      <div class="modal-content-recuperacion-contrasena">
+        <span class="close-recuperacion-contrasena" id="cerrar-modal">&times;</span>
+        <h2>Recuperar contraseña</h2>
+        <br>
+        <form id="form-olvido">
+          <div class="form-group">
+            <input type="email" id="email-olvido" name="email-olvido" required placeholder=" ">
+            <label for="email-olvido">Correo electrónico</label>
+          </div>
+          <div id="mensaje-olvido" style="color:red; margin-bottom:10px;"></div>
+          <button type="submit">Enviar</button>
+        </form>
+        <button id="reenviar-olvido" style="display:none; margin-top:10px;" disabled>Reenviar enlace (60s)</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mostrar / ocultar contraseña
+    window.togglePassword = function() {
+      const passwordInput = document.getElementById('contrasena');
+      const eyeIcon = document.querySelector('.eye-icon');
+      const eyeSlashIcon = document.querySelector('.eye-slash-icon');
+      if (passwordInput.type === 'password') passwordInput.type = 'text';
+      else passwordInput.type = 'password';
+      eyeIcon?.classList.toggle('hidden');
+      eyeSlashIcon?.classList.toggle('hidden');
+    }
+  });
+</script>
+
+<!-- Script de Recuperación de contraseña -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal         = document.getElementById('modal-olvido');
+    const mensaje       = document.getElementById('mensaje-olvido');
+    const form          = document.getElementById('form-olvido');
+    const reenviarBtn   = document.getElementById('reenviar-olvido');
+    let   lastEmail     = null;
+    let   timer         = null;
+    let   countdown     = 60;
+
+    // Ocultar botón al arrancar (por si acaso)
+    reenviarBtn.style.display = 'none';
+
+    // Abrir / cerrar modal
+    document.getElementById('olvido-contrasena').onclick = e => {
+      e.preventDefault();
+      modal.style.display = 'flex';
+    };
+
+    function cerrarModal() {
+      modal.style.display = 'none';
+      mensaje.innerText   = '';
+      reenviarBtn.style.display = 'none';   // ← lo oculta al cerrar
+      clearInterval(timer);
+      countdown = 60;
+      reenviarBtn.disabled = false;
+      reenviarBtn.innerText = 'Reenviar enlace';
+    }
+
+    document.getElementById('cerrar-modal').onclick = cerrarModal;
+    window.onclick = e => { if (e.target === modal) cerrarModal(); };
+
+    // Envío de correo
+    async function enviarCorreo(email) {
+      try {
+        const res = await fetch("{% url 'password_reset_request' %}", {
+          method : 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+          body   : JSON.stringify({ email })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          mensaje.style.color = 'green';
+          mensaje.innerText   = 'Se ha enviado el correo de recuperación.';
+          lastEmail = email;
+          reenviarBtn.style.display = 'inline-block'; // ← lo muestra
+          iniciarTemporizador();
+        } else {
+          mensaje.style.color = 'red';
+          mensaje.innerText   = data.message;
+        }
+      } catch {
+        mensaje.style.color = 'red';
+        mensaje.innerText   = 'No fue posible enviar el correo, intente más tarde.';
+      }
+    }
+
+    form.onsubmit = e => {
+      e.preventDefault();
+      enviarCorreo(document.getElementById('email-olvido').value);
+    };
+
+    // Reenvío
+    reenviarBtn.onclick = () => {
+      if (lastEmail) {
+        countdown = 60;
+        enviarCorreo(lastEmail);
+      }
+    };
+
+    // Temporizador
+    function iniciarTemporizador() {
+      clearInterval(timer);
+      countdown = 60;
+
+      // ----  estado INACTIVO  ----
+      reenviarBtn.disabled = true;
+      reenviarBtn.innerText = `Reenviar enlace (${countdown}s)`;
+
+      timer = setInterval(() => {
+        countdown--;
+        reenviarBtn.innerText = `Reenviar enlace (${countdown}s)`;
+
+        if (countdown <= 0) {
+          clearInterval(timer);
+
+          // ----  estado ACTIVO  ----
+          reenviarBtn.disabled = false;
+          reenviarBtn.innerText = 'Reenviar enlace';
+        }
+      }, 1000);
+    }
+  });
+</script>
+
+{% endblock %}

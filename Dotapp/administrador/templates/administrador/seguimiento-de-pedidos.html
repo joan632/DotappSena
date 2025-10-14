@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="admin-container">
+    <div class="admin-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h1>Seguimiento de Pedidos</h1>
+          <br>
+
+          <!-- Filtros -->
+          <div class="filtros">
+            <form method="get" id="filtrosForm">
+              <input type="text" name="buscar" id="buscar" placeholder="Buscar..." value="{{ buscar }}">
+              <select name="estado" id="filtroEstado">
+                <option value="">--Todos--</option>
+                <option value="Pendiente" {% if estado == "Pendiente" %}selected{% endif %}>Pendiente</option>
+                <option value="Aprobada" {% if estado == "Aprobada" %}selected{% endif %}>Aprobada</option>
+                <option value="Entregada" {% if estado == "Entregada" %}selected{% endif %}>Entregada</option>
+                <option value="Cancelada" {% if estado == "Cancelada" %}selected{% endif %}>Cancelada</option>
+                <option value="Rechazada" {% if estado == "Rechazada" %}selected{% endif %}>Rechazada</option>
+              </select>
+              <button type="submit" class="aprobar-btn">Filtrar</button>
+            </form>
+          </div>
+
+          <!-- Botones de exportación -->
+          <div class="export-buttons">
+            <a href="{% url 'exportar_pdf' %}?buscar={{ request.GET.buscar }}&estado={{ request.GET.estado }}&usuario={{ request.GET.usuario }}" class="btn-export pdf">
+              📄 Exportar a PDF
+            </a>
+            <a href="{% url 'exportar_excel' %}?buscar={{ request.GET.buscar }}&estado={{ request.GET.estado }}&usuario={{ request.GET.usuario }}" class="btn-export excel">
+              📊 Exportar a Excel
+            </a>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="table-scroll" id="tableScroll">
+        <table id="tablaPedidos" class="seguimiento-pedidos-table">
+          <thead>
+            <tr>
+              <th>ID_solicitud</th>
+              <th>Fecha_solicitud</th>
+              <th>Usuario</th>
+              <th>Tipo</th>
+              <th>Talla</th>
+              <th>Color</th>
+              <th>Cantidad</th>
+              <th>Centro de Formación</th>
+              <th>Programa</th>
+              <th>Ficha</th>
+              <th>Especificaciones_solicitud</th>
+              <th>Fecha_finalización</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for solicitud in solicitudes %}
+            <tr data-id="{{ solicitud.id_solicitud }}">
+              <td>{{ solicitud.id_solicitud }}</td>
+              <td>{{ solicitud.fecha_solicitud|date:"Y-m-d" }}</td>
+              <td>{{ solicitud.id_aprendiz.get_full_name }}</td>
+              <td>{{ solicitud.id_producto.nombre }}</td>
+              <td>{{ solicitud.talla }}</td>
+              <td>{{ solicitud.color }}</td>
+              <td>{{ solicitud.cantidad }}</td>
+              <td>{{ solicitud.centro_formacion }}</td>
+              <td>{{ solicitud.programa }}</td>
+              <td>{{ solicitud.ficha }}</td>
+              <td>{{ solicitud.detalles_adicionales }}</td>
+              <td>
+                  {{ solicitud.fecha_finalizacion|date:"Y-m-d" }}
+              </td>
+              <td>{{ solicitud.estado_solicitud|title }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="13" style="text-align: center;">
+                No hay solicitudes registradas.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const tableScroll = document.getElementById('tableScroll');
+    const slideSync   = document.getElementById('slideSync');
+
+    function syncCenter() {
+      const scrollLeft = tableScroll.scrollLeft;
+      const viewportW  = tableScroll.clientWidth;
+      const slideW     = slideSync.offsetWidth;
+
+      const factor = 0;
+      const offset = scrollLeft * factor + (viewportW - slideW) / 2 * factor;
+
+      slideSync.style.transform = `translateX(${offset}px)`;
+    }
+
+    tableScroll.addEventListener('scroll', syncCenter);
+    window.addEventListener('resize', syncCenter);
+    syncCenter(); // inicial
+  </script>
+{% endblock %}
+

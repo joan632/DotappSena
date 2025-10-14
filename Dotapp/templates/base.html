@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>{% block title %}DotApp SENA{% endblock %}</title>
+
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+      
+      <!-- Google Fonts: Poppins -->
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    </head>
+    <body >
+
+      {% if messages %}
+        <div class="notifications">
+          {% for message in messages %}
+            <div class="notification {{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+
+      <!-- Aquí irá el contenido dinámico de cada página -->
+       <!-- Botón para cambiar tema -->
+      <button id="theme-toggle" title="Cambiar tema" class="theme-toggle">
+        <span class="diamond" aria-hidden="true">Tema</span>
+      </button>
+      <main>
+        {% block content %}
+
+
+        {% endblock %}
+        
+        {% block scripts %}
+        
+        
+        {% endblock %}
+      </main>
+
+      <!-- Footer de la página -->
+      <footer>
+        <p>&copy; 2025 DotApp SENA. Todos los derechos reservados.</p>
+        <p>Versión 1.0.0</p>
+      </footer>
+
+      <script src="{% static 'js/utils.js' %}"></script>
+      
+      <script>
+        // Espera 3 segundos y empieza a desvanecer
+        setTimeout(() => {
+          document.querySelectorAll('.notification').forEach(el => {
+            el.style.opacity = '0';
+            setTimeout(() => el.remove(), 500); // lo borra después de desvanecer
+          });
+        }, 3000); // ⏳ tiempo visible antes de desaparecer
+      </script>
+
+      <script>
+        (() => {
+          const palettes = [
+            'aqua', 'dark', 'emerald', 'sunset', 'purple', 'mono'
+          ];
+          let idx = 0;
+
+          const apply = name => {
+            document.documentElement.className = `theme-${name}`;
+            localStorage.setItem('dotapp-theme', name);
+          };
+
+          const saved = localStorage.getItem('dotapp-theme') || 'aqua';
+          apply(saved);
+
+          document.getElementById('theme-toggle')?.addEventListener('click', () => {
+            idx = (idx + 1) % palettes.length;
+            apply(palettes[idx]);
+          });
+        })();
+      </script>
+
+    </body>
+
+</html>

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="admin-container">
+    <div class="admin-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h1>Solicitudes Pendientes</h1>
+        </div>
+      </div>
+
+      <!-- Tabla de solicitudes pendientes -->
+      <div class="table-scroll" id="tableScroll">
+        <table id="tablaUsuarios" class="solicitudes-table">
+          <thead>
+            <tr>
+              <th>ID_solicitud</th>
+              <th>Fecha_solicitud</th>
+              <th>Aprendiz</th>
+              <th>Tipo</th>
+              <th>Talla</th>
+              <th>Color</th>
+              <th>Cantidad</th>
+              <th>Centro de formación</th>
+              <th>Programa</th>
+              <th>Ficha</th>
+              <th>Especificaciones</th>
+              <th>Fecha_finalización</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for solicitud in solicitudes %}
+            <tr data-id="{{ solicitud.id_solicitud }}">
+              <td>{{ solicitud.id_solicitud }}</td>
+              <td>{{ solicitud.fecha_solicitud }}</td>
+              <td>{{ solicitud.id_aprendiz.nombre }} {{ solicitud.id_aprendiz.apellido }}</td>
+              <td>{{ solicitud.id_producto.nombre }}</td>
+              <td>{{ solicitud.talla }}</td>
+              <td>{{ solicitud.color }}</td>
+              <td>{{ solicitud.cantidad }}</td>
+              <td>{{ solicitud.centro_formacion }}</td>
+              <td>{{ solicitud.programa }}</td>
+              <td>{{ solicitud.ficha }}</td>
+              <td>{{ solicitud.detalles_adicionales }}</td>
+              <td>
+                {% if solicitud.fecha_finalizacion %}
+                  {{ solicitud.fecha_finalizacion }}
+                {% else %}
+                  ---------
+                {% endif %}
+              </td>
+              <td class="estado">{{ solicitud.estado_solicitud }}</td>
+              <td>
+                {% if solicitud.estado_solicitud|lower == "pendiente" %}
+                  <form method="post" action="{% url 'aprobar-solicitud' solicitud.id_solicitud %}">
+                    {% csrf_token %}
+                    <button type="submit" class="aprobar-btn">Aprobar</button>
+                  </form>
+                {% else %}
+                {% endif %}
+
+                {% if solicitud.estado_solicitud|lower == "pendiente" %}
+                  <form method="post" action="{% url 'rechazar-solicitud' solicitud.id_solicitud %}">
+                    {% csrf_token %}
+                    <button type="submit" class="eliminar-btn">Rechazar</button>
+                  </form>
+                {% else %}
+                {% endif %}
+
+                {% if solicitud.estado_solicitud|lower == "aprobada" %}
+                  <form method="post" action="{% url 'despachar-solicitud' solicitud.id_solicitud %}">
+                    {% csrf_token %}
+                    <button type="submit" class="entregado-btn">Despachar</button>
+                  </form>
+                {% else %}
+                  
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="14">No hay solicitudes pendientes.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block scripts %}  
+  
+  <script>
+    const tableScroll = document.getElementById('tableScroll');
+    const slideSync   = document.getElementById('slideSync');
+
+    function syncCenter() {
+      const scrollLeft = tableScroll.scrollLeft;
+      const viewportW  = tableScroll.clientWidth;
+      const slideW     = slideSync.offsetWidth;
+
+      const factor = 0;
+      const offset = scrollLeft * factor + (viewportW - slideW) / 2 * factor;
+
+      slideSync.style.transform = `translateX(${offset}px)`;
+    }
+
+    tableScroll.addEventListener('scroll', syncCenter);
+    window.addEventListener('resize', syncCenter);
+    syncCenter(); // inicial
+  </script>
+
+
+{% endblock %}

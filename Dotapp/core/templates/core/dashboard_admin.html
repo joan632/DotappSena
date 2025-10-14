@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+<div class="welcome-container">
+    <div class="login-card">
+        <div class="welcome-buttons">
+
+            <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+            <h1>Panel de Administración</h1>
+            <hr>
+
+            <button onclick="window.location.href='{% url 'panel-admin' %}'" >Administrador</button>
+            <button onclick="window.location.href='{% url 'dashboard-almacenista' %}'" >Almacenista</button>
+            <button onclick="window.location.href='{% url 'dashboard-despachador' %}'" >Despachador</button>
+            <br>
+
+            <!-- Botón de cerrar sesión -->
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout">Cerrar Sesión</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

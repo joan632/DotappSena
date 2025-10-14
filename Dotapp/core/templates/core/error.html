@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Error{% endblock %}
+
+{% block content %}
+<div class="system-error">
+    <h1>Error {{ status_code }}</h1>
+    <p>{{ message }}</p>
+    <a href="/login"> Volver al inicio</a>
+</div>
+{% endblock %}

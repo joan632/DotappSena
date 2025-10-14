@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="admin-container">
+    <div class="admin-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+
+        <div class="slide" id="slideSync">
+          <img src= {%static 'img/logo-dotapp-sena.png' %} alt="Logo DotApp SENA" class="logo" />
+          <h1>Pedidos Pendientes</h1>
+        </div>
+      </div>
+
+      <div class="table-scroll" id="tableScroll">
+
+        <table class="usuarios-table">
+          <thead>
+            <tr>
+              <th>Aprendiz</th>
+              <th>Centro de formación</th>
+              <th>Ficha</th>
+              <th>Fecha de entrega</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for solicitud in solicitudes %}
+            <tr data-id="{{ solicitud.id_solicitud }}">
+              <td>{{ solicitud.id_aprendiz.nombre }} {{ solicitud.id_aprendiz.apellido }}</td>
+              <td>{{ solicitud.centro_formacion }}</td>
+              <td>{{ solicitud.ficha }}</td>
+              <td>{{ solicitud.fecha_finalizacion }}</td>
+              <td class="estado">{{ solicitud.estado_solicitud }}</td>
+              <td>    
+                <form method="post" action="{% url 'entregar-solicitud' solicitud.id_solicitud %}">
+                  {% csrf_token %}
+                  <button type="submit" class="entregado-btn">Entregado</button>
+                </form>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" style="text-align: center;">
+                No hay solicitudes pendientes por Despachar.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+      
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- Script para sincronizar el slider con la tabla -->
+  <script>
+    const tableScroll = document.getElementById('tableScroll');
+    const slideSync   = document.getElementById('slideSync');
+
+    function syncCenter() {
+      const scrollLeft = tableScroll.scrollLeft;
+      const viewportW  = tableScroll.clientWidth;
+      const slideW     = slideSync.offsetWidth;
+
+      const factor = 0;
+      const offset = scrollLeft * factor + (viewportW - slideW) / 2 * factor;
+
+      slideSync.style.transform = `translateX(${offset}px)`;
+    }
+
+    tableScroll.addEventListener('scroll', syncCenter);
+    window.addEventListener('resize', syncCenter);
+    syncCenter(); // inicial
+  </script>
+{% endblock %}

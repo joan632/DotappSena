@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registro de Aprendiz{% endblock %}
+
+{% block content %}
+<section class="login-container">
+  <div class="login-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo">
+          <h1>Crear cuenta</h1>
+        </div>
+      </div>
+
+    <form id="registroForm" action="{% url 'registro-aprendiz' %}" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="text" id="nombres" name="nombre" required placeholder="">
+        <label for="nombres">Nombres</label>
+      </div>
+      <div class="form-group">
+        <input type="text" id="apellidos" name="apellido" required placeholder="">
+        <label for="apellidos">Apellidos</label>
+      </div>
+      <div class="form-group">
+        <input type="email" id="correo" name="correo" required placeholder="">
+        <label for="correo">Correo electrónico</label>
+      </div>
+      <div class="form-group">
+        <input type="password" id="contrasena" name="password" required placeholder="">
+        <label for="contrasena">Contraseña</label>
+        <button type="button" class="toggle-password" onclick="togglePassword('contrasena', this)" aria-label="Mostrar/Ocultar contraseña" style="max-width:fit-content;">
+          <!-- Eye (mostrar) -->
+          <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+            <path d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"/>
+          </svg>
+          <!-- Eye (ocultar) -->
+          <svg class="eye-slash-icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+            <path d="M73 39.1C63.6 29.7 48.4 29.7 39.1 39.1C29.8 48.5 29.7 63.7 39 73.1L567 601.1C576.4 610.5 591.6 610.5 600.9 601.1C610.2 591.7 610.3 576.5 600.9 567.2L504.5 470.8C507.2 468.4 509.9 466 512.5 463.6C559.3 420.1 590.6 368.2 605.5 332.5C608.8 324.6 608.8 315.8 605.5 307.9C590.6 272.2 559.3 220.2 512.5 176.8C465.4 133.1 400.7 96.2 319.9 96.2C263.1 96.2 214.3 114.4 173.9 140.4L73 39.1zM236.5 202.7C260 185.9 288.9 176 320 176C399.5 176 464 240.5 464 320C464 351.1 454.1 379.9 437.3 403.5L402.6 368.8C415.3 347.4 419.6 321.1 412.7 295.1C399 243.9 346.3 213.5 295.1 227.2C286.5 229.5 278.4 232.9 271.1 237.2L236.4 202.5zM357.3 459.1C345.4 462.3 332.9 464 320 464C240.5 464 176 399.5 176 320C176 307.1 177.7 294.6 180.9 282.7L101.4 203.2C68.8 240 46.4 279 34.5 307.7C31.2 315.6 31.2 324.4 34.5 332.3C49.4 368 80.7 420 127.5 463.4C174.6 507.1 239.3 544 320.1 544C357.4 544 391.3 536.1 421.6 523.4L357.4 459.2z"/>
+          </svg>
+        </button>          
+      </div>
+      
+      <div class="form-group">
+        <input type="password" id="confirmar-contrasena" name="confirmar-contrasena" required placeholder="">
+        <label for="confirmar-contrasena">Confirmar Contraseña</label>   
+        <button type="button" class="toggle-password" onclick="togglePassword('confirmar-contrasena', this)" aria-label="Mostrar/Ocultar contraseña" style="max-width:fit-content;">>
+          <!-- Eye (mostrar) -->
+          <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+            <path d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"/>
+          </svg>
+          <!-- Eye (ocultar) -->
+          <svg class="eye-slash-icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+            <path d="M73 39.1C63.6 29.7 48.4 29.7 39.1 39.1C29.8 48.5 29.7 63.7 39 73.1L567 601.1C576.4 610.5 591.6 610.5 600.9 601.1C610.2 591.7 610.3 576.5 600.9 567.2L504.5 470.8C507.2 468.4 509.9 466 512.5 463.6C559.3 420.1 590.6 368.2 605.5 332.5C608.8 324.6 608.8 315.8 605.5 307.9C590.6 272.2 559.3 220.2 512.5 176.8C465.4 133.1 400.7 96.2 319.9 96.2C263.1 96.2 214.3 114.4 173.9 140.4L73 39.1zM236.5 202.7C260 185.9 288.9 176 320 176C399.5 176 464 240.5 464 320C464 351.1 454.1 379.9 437.3 403.5L402.6 368.8C415.3 347.4 419.6 321.1 412.7 295.1C399 243.9 346.3 213.5 295.1 227.2C286.5 229.5 278.4 232.9 271.1 237.2L236.4 202.5zM357.3 459.1C345.4 462.3 332.9 464 320 464C240.5 464 176 399.5 176 320C176 307.1 177.7 294.6 180.9 282.7L101.4 203.2C68.8 240 46.4 279 34.5 307.7C31.2 315.6 31.2 324.4 34.5 332.3C49.4 368 80.7 420 127.5 463.4C174.6 507.1 239.3 544 320.1 544C357.4 544 391.3 536.1 421.6 523.4L357.4 459.2z"/>
+          </svg>
+        </button>       
+      </div>
+
+      <p id="errorMsg" style="color:red; display:none;">Las contraseñas no coinciden</p>
+      <p id="successMsg" style="color:green; display:none;">Las contraseñas coinciden</p>
+
+      <button type="submit">Registrarse</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Mostrar / ocultar contraseña
+  function togglePassword(inputId, button) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIcon = button.querySelector('.eye-icon');
+    const eyeSlashIcon = button.querySelector('.eye-slash-icon');
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+    } else {
+      passwordInput.type = 'password';
+    }
+
+    eyeIcon?.classList.toggle('hidden');
+    eyeSlashIcon?.classList.toggle('hidden');
+  }
+
+  // Validación de contraseñas
+  const pass1 = document.getElementById('contrasena');
+  const pass2 = document.getElementById('confirmar-contrasena');
+  const errorMsg = document.getElementById('errorMsg');
+  const successMsg = document.getElementById('successMsg');
+
+  function validarPasswords() {
+    const pass1Value = pass1.value;
+    const pass2Value = pass2.value;
+
+    // Si el segundo campo está vacío, ocultamos mensajes
+    if (pass2Value.length === 0) {
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
+      return;
+    }
+
+    // Si pass1 empieza con pass2
+    if (pass1Value.startsWith(pass2Value)) {
+      errorMsg.style.display = 'none';
+      
+      // Mostramos mensaje de éxito solo si son exactamente iguales
+      successMsg.style.display = pass1Value === pass2Value ? 'block' : 'none';
+    } else {
+      // Si no coincide el inicio, mostramos error
+      errorMsg.style.display = 'block';
+      successMsg.style.display = 'none';
+    }
+  }
+
+  pass1.addEventListener('input', validarPasswords);
+  pass2.addEventListener('input', validarPasswords);
+
+  document.getElementById('registroForm').addEventListener('submit', function(event) {
+    if (pass1.value !== pass2.value) {
+      event.preventDefault();
+      errorMsg.style.display = 'block';
+      successMsg.style.display = 'none';
+    }
+  });
+</script>
+
+{% endblock %}

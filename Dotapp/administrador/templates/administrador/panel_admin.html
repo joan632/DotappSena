@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+  <div class="welcome-container">
+    <div class="login-card">
+      <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+          ← 
+        </button>
+          
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h1>Panel de Administración</h1>
+          <p>Administra usuarios, solicitudes y productos.</p>
+        </div>
+      </div>
+        
+      <div class="welcome-buttons">
+
+        <button onclick="window.location.href='{% url 'administracion-usuarios' %}'">Administración de usuarios</button>
+        <button onclick="window.location.href='{% url 'seguimiento-pedidos' %}'">Seguimiento de pedidos</button>
+        <button onclick="window.location.href='{% url 'administrar-productos' %}'">Gestión de productos</button>
+        <br>
+
+        <!-- Botón de cerrar sesión -->
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn-logout">Cerrar Sesión</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
