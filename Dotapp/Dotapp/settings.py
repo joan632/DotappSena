@@ -94,14 +94,18 @@ WSGI_APPLICATION = 'Dotapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dotapp',           
-        'USER': 'postgres',         
-        'PASSWORD': '2536',
-        'HOST': 'localhost',        
-        'PORT': '5432',             
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'joan2004s$dotapp',
+        'USER': 'joan2004s',
+        'PASSWORD': 'Dotapp01092025',
+        'HOST': 'joan2004s.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
+
 
 
 # Password validation
