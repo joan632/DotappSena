@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from core.models import Solicitud, Producto, Borrador
+from django.core.mail import EmailMultiAlternatives
 
 from django.core.mail import EmailMessage
 from PIL import Image, ImageDraw, ImageFont
@@ -200,15 +201,46 @@ def cancelar_solicitud(request, solicitud_id):
         solicitud.estado_solicitud = "cancelada"
         solicitud.save()
 
-    send_mail(
-        'Solicitud cancelada - Dotapp',
+    # Contenido HTML del correo
+    html_content = f"""
+        <html>
+        <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
+            <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
+                <div style="padding:20px;">
+                    f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
+                    f'Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido cancelada.\n'
+                    f'Si deseas hacer un nuevo pedido, créalo desde nuestro sitio web.\n\n'
+                    f'https://joan2004s.pythonanywhere.com/ \n\n'
+                    f'Saludos,\nEl equipo de Dotapp',
+                    'dotappsena@gmail.com',
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+    # Contenido texto opcional del correo
+    text_content = (
         f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
         f'Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido cancelada.\n'
         f'Si deseas hacer un nuevo pedido, créalo desde nuestro sitio web.\n\n'
+        f'https://joan2004s.pythonanywhere.com/ \n\n'
         f'Saludos,\nEl equipo de Dotapp',
         'dotappsena@gmail.com',
-        [solicitud.id_aprendiz.correo],
-        fail_silently=False,
     )
+
+    # Configurar el correo
+    msg = EmailMultiAlternatives(
+        'Solicitud cancelada - Dotapp',
+        text_content,
+        'dotappsena@gmail.com',
+        [solicitud.id_aprendiz.correo],
+    )
+
+    # Adjuntar el contenido HTML
+    msg.attach_alternative(html_content, "text/html")
+
+    # 🚀 Enviar el correo
+    msg.send(fail_silently=False)
 
     return redirect("historial-solicitudes")

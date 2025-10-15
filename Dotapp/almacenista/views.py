@@ -209,17 +209,47 @@ def rechazar_solicitud(request, solicitud_id):
         solicitud.estado_solicitud = "rechazada"
         solicitud.save()
 
-    # Correo al usuario
-    send_mail(
-        'Solicitud rechazada - Dotapp',
+    # Contenido HTML del correo
+    html_content = f"""
+        <html>
+        <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
+            <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
+                <div style="padding:20px;">
+                    f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
+                    f'Lo sentimos, tu solicitud con el ID: #{solicitud.id_solicitud} ha sido rechazada.\n\n'
+                    f'Si tienes dudas, responde a este correo o visita nuestra pagina web.\n\n'
+                    f'https://joan2004s.pythonanywhere.com/ \n\n'
+                    f'Saludos,\nEl equipo de Dotapp',
+                    'dotappsena@gmail.com',
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+    # Contenido texto opcional del correo
+    text_content = (
         f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
         f'Lo sentimos, tu solicitud con el ID: #{solicitud.id_solicitud} ha sido rechazada.\n\n'
-        f'Si tienes dudas, responde a este correo.\n\n'
+        f'Si tienes dudas, responde a este correo o visita nuestra pagina web.\n\n'
+        f'https://joan2004s.pythonanywhere.com/ \n\n'
         f'Saludos,\nEl equipo de Dotapp',
         'dotappsena@gmail.com',
-        [solicitud.id_aprendiz.correo],
-        fail_silently=False,
     )
+
+    # Configurar el correo
+    msg = EmailMultiAlternatives(
+        'Solicitud rechazada - Dotapp',
+        text_content,
+        'dotappsena@gmail.com',
+        [solicitud.id_aprendiz.correo],
+    )
+
+    # Adjuntar el contenido HTML
+    msg.attach_alternative(html_content, "text/html")
+
+    # 🚀 Enviar el correo
+    msg.send(fail_silently=False)
 
     return redirect("solicitudes-inventario")
 
@@ -236,15 +266,17 @@ def aprobar_solicitud(request, solicitud_id):
         # Generar el PDF de la factura
         pdf_bytes = generar_factura_pdf_bytes(solicitud)
 
-        # Contenido HTML opcional del correo
+        # Contenido HTML del correo
         html_content = f"""
         <html>
         <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
             <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
                 <div style="padding:20px;">
                     <p>Hola <strong>{solicitud.id_aprendiz.get_full_name()}</strong>,</p>
-                    <p>Tu solicitud <strong>#{solicitud.id_solicitud}</strong> ha sido creada con éxito.</p>
+                    <p>Felicidades, Tu solicitud con el ID: <strong>#{solicitud.id_solicitud}</strong> ha sido aprobada.</p>
                     <p>Adjunto encontrarás tu factura electrónica.</p>
+                    f'Si tienes dudas, puedes revisar todos los detalles en nuestra pagina web.\n\n'
+                    f'https://joan2004s.pythonanywhere.com/ \n\n'
                     <p>Saludos,<br>El equipo de Dotapp</p>
                 </div>
             </div>
@@ -252,23 +284,29 @@ def aprobar_solicitud(request, solicitud_id):
         </html>
         """
 
+        # Contenido texto opcional del correo
         text_content = (
             f"Hola {solicitud.id_aprendiz.get_full_name()},\n\n"
-            f"Tu solicitud #{solicitud.id_solicitud} ha sido creada con éxito.\n"
+            f"Felicidades, Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido aprobada.\n"
             f"Adjunto encontrarás tu factura electrónica.\n\n"
+            f"Si tienes dudas, puedes revisar todos los detalles en nuestra pagina web.\n\n"
+            f"https://joan2004s.pythonanywhere.com/ \n\n"
             f"Saludos,\nEl equipo de Dotapp"
         )
 
+        # Configurar el correo
         msg = EmailMultiAlternatives(
-            'Factura electrónica - Dotapp',
+            'Solicitud aprobada - Dotapp',
             text_content,
             'dotappsena@gmail.com',
             [solicitud.id_aprendiz.correo],
         )
+
+        # Adjuntar el contenido HTML
         msg.attach_alternative(html_content, "text/html")
 
         # Adjuntar el PDF
-        msg.attach(f'factura_{solicitud.id_solicitud}.pdf', pdf_bytes, 'application/pdf')
+        msg.attach(f'factura_solicitud_{solicitud.estado_solicitud}.pdf', pdf_bytes, 'application/pdf')
 
         # 🚀 Enviar el correo
         msg.send(fail_silently=False)
@@ -285,17 +323,50 @@ def despachar_solicitud(request, solicitud_id):
         solicitud.estado_solicitud = "despachada"
         solicitud.save()
 
-    send_mail(
-        'Solicitud despachada - Dotapp',
+    # Contenido HTML del correo
+    html_content = f"""
+        <html>
+        <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
+            <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
+                <div style="padding:20px;">
+                    f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
+                    f'Tu solicitud con el ID: #{solicitud.id_solicitud} ya fué despachada.\n'
+                    f'Puedes pasar a recogerla en tu centro de formación.\n\n'
+                    f'Si tienes dudas, puedes revisar todos los detalles en nuestra pagina web.\n\n'
+                    f'https://joan2004s.pythonanywhere.com/ \n\n'
+                    f'Muchas gracias por tu paciencia.\n\n'
+                    f'Saludos,\nEl equipo de Dotapp',
+                    'dotappsena@gmail.com',
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+    # Contenido texto opcional del correo
+    text_content = (
         f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
         f'Tu solicitud con el ID: #{solicitud.id_solicitud} ya fué despachada.\n'
         f'Puedes pasar a recogerla en tu centro de formación.\n\n'
         f'Si tienes dudas, puedes revisar todos los detalles en nuestra pagina web.\n\n'
+        f'https://joan2004s.pythonanywhere.com/ \n\n'
         f'Muchas gracias por tu paciencia.\n\n'
         f'Saludos,\nEl equipo de Dotapp',
         'dotappsena@gmail.com',
-        [solicitud.id_aprendiz.correo],
-        fail_silently=False,
     )
+
+    # Configurar el correo
+    msg = EmailMultiAlternatives(
+        'Solicitud despachada - Dotapp',
+        text_content,
+        'dotappsena@gmail.com',
+        [solicitud.id_aprendiz.correo],
+    )
+
+    # Adjuntar el contenido HTML
+    msg.attach_alternative(html_content, "text/html")
+
+    # 🚀 Enviar el correo
+    msg.send(fail_silently=False)
 
     return redirect("solicitudes-inventario")
