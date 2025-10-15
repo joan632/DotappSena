@@ -22,54 +22,7 @@ from django.http import HttpResponse
 from io import BytesIO
 import imgkit
 from PIL import Image, ImageDraw, ImageFont   # solo si la usas para otra cosa
-from core.models import Solicitud, Producto, Borrador
-
-import base64
-from django.core.mail import EmailMultiAlternatives
-
-
-import pdfkit
-from django.conf import settings
-from django.template.loader import render_to_string
-
-# Configuración de wkhtmltopdf en PythonAnywhere
-PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
-
-def generar_factura_pdf_bytes(solicitud):
-    # Usar la ruta absoluta del archivo de la imagen
-    producto_abs_path = solicitud.id_producto.imagen.path
-
-    # Renderizar HTML con la ruta absoluta
-    html_factura = render_to_string('core/factura.html', {
-        's': solicitud,
-        'total': solicitud.cantidad * solicitud.id_producto.precio,
-        'producto_abs_path': producto_abs_path,
-    })
-
-    try:
-        options = {
-            'enable-local-file-access': '',
-            'orientation': 'Landscape',
-            'margin-top': '0mm',
-            'margin-bottom': '0mm',
-            'margin-left': '0mm',
-            'margin-right': '0mm',
-            'page-size': 'Letter',          # o 'A4', da igual
-            'disable-smart-shrinking': '',  # evita que achique el contenido
-            'zoom': '1.0',                  # asegura escala real
-            'print-media-type': '',         # aplica los estilos @page y @media print
-        }
-
-        # Generar PDF en memoria
-        pdf_bytes = pdfkit.from_string(html_factura, False, configuration=PDFKIT_CONFIG, options=options)
-        return pdf_bytes
-
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        raise e
-
-
+from core.models import Solicitud, Producto, Borrador, TipoProducto, Talla, Color
 
 
 
@@ -133,8 +86,14 @@ def actualizar_perfil(request):
 def solicitud_uniforme(request):
     borrador = Borrador.objects.filter(aprendiz=request.user).first()
     productos = Producto.objects.all()
+    TipoProductos = TipoProducto.objects.all()
+    Tallas = Talla.objects.all()
+    Colores = Color.objects.all()
     return render(request, 'aprendiz/creacion_solicitud.html', {
         "productos": productos,
+        "tipos": TipoProductos,
+        "tallas": Tallas,
+        "colores": Colores,
         "borrador": borrador,
     })
 
@@ -143,17 +102,27 @@ def solicitud_uniforme(request):
 @login_required
 def crear_solicitud(request):
     if request.method == "POST":
-        tipo = request.POST.get("tipo")
-        talla = request.POST.get("talla")
-        color = request.POST.get("color")
+        tipo_str = request.POST.get("tipo")
+        talla_str = request.POST.get("talla")
+        color_str = request.POST.get("color")
         cantidad = int(request.POST.get("cantidad"))
         centro = request.POST.get("centro")
         programa = request.POST.get("programa")
         ficha = int(request.POST.get("ficha"))
         detalles = request.POST.get("detalles")
 
+        # Obtener instancias de modelos relacionados
         try:
-            producto = Producto.objects.get(nombre=tipo, talla=talla, color=color)
+            tipo_obj = TipoProducto.objects.get(nombre=tipo_str)
+            talla_obj = Talla.objects.get(nombre=talla_str)
+            color_obj = Color.objects.get(nombre=color_str)
+        except (TipoProducto.DoesNotExist, Talla.DoesNotExist, Color.DoesNotExist):
+            messages.warning(request, "El tipo, talla o color seleccionado no existe.")
+            return redirect("solicitud-uniforme")
+
+        # Obtener el producto
+        try:
+            producto = Producto.objects.get(tipo=tipo_obj, talla=talla_obj, color=color_obj)
         except Producto.DoesNotExist:
             messages.warning(request, "El producto seleccionado no está disponible.")
             return redirect("solicitud-uniforme")
@@ -161,15 +130,15 @@ def crear_solicitud(request):
         if cantidad > producto.stock:
             messages.warning(
                 request,
-                f"No hay suficiente stock de {producto.nombre}. Solo quedan {producto.stock} unidades."
+                f"No hay suficiente stock de {producto.tipo.nombre}. Solo quedan {producto.stock} unidades."
             )
             return redirect("solicitud-uniforme")
 
         solicitud = Solicitud.objects.create(
             id_aprendiz=request.user,
             id_producto=producto,
-            talla=talla,
-            color=color,
+            talla=talla_obj,
+            color=color_obj,
             cantidad=cantidad,
             detalles_adicionales=detalles,
             centro_formacion=centro,
@@ -180,50 +149,11 @@ def crear_solicitud(request):
 
         Borrador.objects.filter(aprendiz=request.user).delete()
 
-        if solicitud.estado_solicitud == "aprobada":
-            pdf_bytes = generar_factura_pdf_bytes(solicitud)
-
-            # Contenido HTML opcional del correo
-            html_content = f"""
-            <html>
-            <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
-                <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
-                    <div style="padding:20px;">
-                        <p>Hola <strong>{solicitud.id_aprendiz.get_full_name()}</strong>,</p>
-                        <p>Tu solicitud <strong>#{solicitud.id_solicitud}</strong> ha sido creada con éxito.</p>
-                        <p>Adjunto encontrarás tu factura electrónica.</p>
-                        <p>Saludos,<br>El equipo de Dotapp</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """
-
-            text_content = (
-                f"Hola {solicitud.id_aprendiz.get_full_name()},\n\n"
-                f"Tu solicitud #{solicitud.id_solicitud} ha sido creada con éxito.\n"
-                f"Adjunto encontrarás tu factura electrónica.\n\n"
-                f"Saludos,\nEl equipo de Dotapp"
-            )
-
-            msg = EmailMultiAlternatives(
-                'Factura electrónica - Dotapp',
-                text_content,
-                'dotappsena@gmail.com',
-                [solicitud.id_aprendiz.correo],
-            )
-            msg.attach_alternative(html_content, "text/html")
-
-            # Adjuntar el PDF
-            msg.attach(f'factura_{solicitud.id_solicitud}.pdf', pdf_bytes, 'application/pdf')
-
-            # 🚀 Enviar el correo
-            msg.send(fail_silently=False)
-
         messages.success(request, "Solicitud creada exitosamente")
         return redirect("historial-solicitudes")
 
     return render(request, "aprendiz/creacion_solicitud.html")
+
 
 #vista para guardar borrador
 @login_required

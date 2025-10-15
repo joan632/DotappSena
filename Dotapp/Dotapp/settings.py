@@ -70,8 +70,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-#    "core.middleware.SaveLastTemplateMiddleware",
-#    "core.middleware.AmigableExceptionMiddleware",
+    "core.middleware.SaveLastTemplateMiddleware",
+    "core.middleware.AmigableExceptionMiddleware",
 ]
 
 ROOT_URLCONF = 'Dotapp.urls'
@@ -97,6 +97,7 @@ WSGI_APPLICATION = 'Dotapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -111,6 +112,15 @@ DATABASES = {
     }
 }
 
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+'''
 
 
 # Password validation
@@ -175,16 +185,20 @@ EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = "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"
 DEFAULT_FROM_EMAIL = "dotappsena@gmail.com"
 
+'''
 #smtp
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_PORT = 587
-#MAIL_USE_TLS = True
-#EMAIL_HOST_USER = 'dotappsena@gmail.com'          # tu cuenta
-#EMAIL_HOST_PASSWORD = 'jxry qpxy pdly ddsn'       # contraseña de 16 dígitos de Google
-#DEFAULT_FROM_EMAIL = 'dotappsena@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+MAIL_USE_TLS = True
+EMAIL_HOST_USER = 'dotappsena@gmail.com'          # tu cuenta
+EMAIL_HOST_PASSWORD = 'jxry qpxy pdly ddsn'       # contraseña de 16 dígitos de Google
+DEFAULT_FROM_EMAIL = 'dotappsena@gmail.com'
+'''
 
+#configuracion para restablecer contraseñas
+#el link dura 15 minutos
 PASSWORD_RESET_TIMEOUT = 900  # 15 minutos en segundos
 
 #configuracion de login

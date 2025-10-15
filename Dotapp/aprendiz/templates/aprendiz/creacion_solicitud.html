@@ -30,7 +30,7 @@
             <img src="{% static 'img/no-image.jpg' %}" alt="Sin imagen">
           {% endif %}
           
-          <figcaption><h1>{{ producto.nombre }}</h1></figcaption>
+          <figcaption><h1>{{ producto.tipo }}</h1></figcaption>
           <figcaption>Color: {{ producto.color }}</figcaption>
           <figcaption>Stock disponible: {{ producto.stock }}</figcaption>
           <figcaption>Tallas disponibles: {{ producto.talla }}</figcaption>
@@ -61,9 +61,11 @@
         <label for="tipo">Tipo de uniforme</label>
         <select name="tipo" id="tipo" required>
           <option value="">Selecciona un tipo de uniforme</option>
-          <option value="Polo" {% if borrador.tipo == 'Polo' %}selected{% endif %}>Polo</option>
-          <option value="Camiseta" {% if borrador.tipo == 'Camiseta' %}selected{% endif %}>Camiseta</option>
-          <option value="Chaqueta" {% if borrador.tipo == 'Chaqueta' %}selected{% endif %}>Chaqueta</option>
+          {% for tipo in tipos %}
+            <option value="{{ tipo.nombre }}" {% if borrador and borrador.tipo == tipo.nombre %}selected{% endif %}>
+              {{ tipo.nombre }}
+            </option>
+          {% endfor %}
         </select>
         <br>
 
@@ -71,10 +73,11 @@
         <label for="talla">Talla</label>
         <select name="talla" id="talla" required>
           <option value="">Selecciona una talla</option>
-          <option value="S" {% if borrador.talla == 'S' %}selected{% endif %}>S</option>
-          <option value="M" {% if borrador.talla == 'M' %}selected{% endif %}>M</option>
-          <option value="L" {% if borrador.talla == 'L' %}selected{% endif %}>L</option>
-          <option value="XL" {% if borrador.talla == 'XL' %}selected{% endif %}>XL</option>
+          {% for talla in tallas %}
+            <option value="{{ talla.nombre }}" {% if borrador and borrador.talla == talla.nombre %}selected{% endif %}>
+              {{ talla.nombre }}
+            </option>
+          {% endfor %}
         </select>
         <br>
 
@@ -82,12 +85,14 @@
         <label for="color">Color</label>
         <select name="color" id="color" required>
           <option value="">Selecciona un color</option>
-          <option value="Negro" {% if borrador.color == 'Negro' %}selected{% endif %}>Negro</option>
-          <option value="Blanco" {% if borrador.color == 'Blanco' %}selected{% endif %}>Blanco</option>
-          <option value="Azul" {% if borrador.color == 'Azul' %}selected{% endif %}>Azul</option>
-          <option value="Rosa" {% if borrador.color == 'Rosa' %}selected{% endif %}>Rosa</option>
+          {% for color in colores %}
+            <option value="{{ color.nombre }}" {% if borrador and borrador.color == color.nombre %}selected{% endif %}>
+              {{ color.nombre }}
+            </option>
+          {% endfor %}
         </select>
         <br>
+
 
         <!-- Cantidad -->
         <label for="cantidad">Cantidad</label>
@@ -102,9 +107,6 @@
         <select name="centro" id="centro" required>
           <option value="">Selecciona centro de formación</option>
           <option value="CEAI" {% if borrador.centro == 'CEAI' %}selected{% endif %}>Centro de Electricidad y Automatización Industrial</option>
-          <option value="CDTI" {% if borrador.centro == 'CDTI' %}selected{% endif %}>Centro de Diseño Tecnológico Industrial</option>
-          <option value="CC" {% if borrador.centro == 'CC' %}selected{% endif %}>Centro de la Construcción</option>
-          <option value="CGTS" {% if borrador.centro == 'CGTS' %}selected{% endif %}>Centro de Gestión Tecnológica de Servicios</option>
         </select>
         <br>
 
@@ -112,10 +114,10 @@
         <label for="programa">Programa</label>
         <select name="programa" id="programa" required>
           <option value="">Seleccione un programa</option>
-          <option value="TPS" {% if borrador.programa == 'TPS' %}selected{% endif %}>TPS</option>
-          <option value="ADSO" {% if borrador.programa == 'ADSO' %}selected{% endif %}>ADSO</option>
-          <option value="IA" {% if borrador.programa == 'IA' %}selected{% endif %}>IA</option>
-          <option value="RH" {% if borrador.programa == 'RH' %}selected{% endif %}>RH</option>
+          <option value="Tecnico en Programación de software" {% if borrador.programa == 'Tecnico en Programación de software' %}selected{% endif %}>Tecnico en Programación de software</option>
+          <option value="Tecnologo en Analisis y desarrollo de software" {% if borrador.programa == 'Tecnologo en Analisis y desarrollo de software' %}selected{% endif %}>Tecnologo en Analisis y desarrollo de software</option>
+          <option value="Tecnico en Recursos Humanos" {% if borrador.programa == 'Tecnico en Recursos Humanos' %}selected{% endif %}>Tecnico en Recursos Humanos</option>
+          <option value="Tecnologo en Electricidad Industrial" {% if borrador.programa == 'Tecnologo en Electricidad Industrial' %}selected{% endif %}>Tecnologo en Electricidad Industrial</option>
         </select>
         <br>
 

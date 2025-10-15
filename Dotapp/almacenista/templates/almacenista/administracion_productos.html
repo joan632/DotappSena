@@ -41,20 +41,21 @@
               <th>Acciones</th>
             </tr>
           </thead>
+
           <tbody>
             {% for producto in productos %}
             <tr>
               <td>{{ producto.id_producto }}</td>
               <td>
                 {% if producto.imagen %}
-                  <img src="{{ MEDIA_URL }}{{ producto.imagen }}" alt="Imagen del producto" width="100" height="100">
+                  <img src="{{ MEDIA_URL }}{{ producto.imagen }}" alt="Imagen del producto" width="100">
                 {% else %}
                   Sin imagen
                 {% endif %}
               </td>
-              <td>{{ producto.nombre }}</td>
-              <td>{{ producto.talla }}</td>
-              <td>{{ producto.color }}</td>
+              <td>{{ producto.tipo.nombre }}</td>
+              <td>{{ producto.talla.nombre }}</td>
+              <td>{{ producto.color.nombre }}</td>
               <td>{{ producto.stock }}</td>
               <td>{{ producto.precio }}</td>
               <td>
@@ -68,6 +69,7 @@
             </tr>
             {% endfor %}
           </tbody>
+
         </table>
 
       </div>
@@ -76,7 +78,7 @@
   </div>
 
   <!-- Modal de Editar -->
-  <div id="modalAccion" class="modal-gestion-producto" style="display:none;">
+  <div id="modalAccion" class="modal-gestion-producto">
     <div class="modal-content-gestion-producto">
       <span class="close">&times;</span>
             
@@ -92,7 +94,7 @@
   </div>
 
   <!-- Modal de Eliminar producto -->
-  <div id="modalEliminar" class="modal-gestion-producto" style="display:none;">
+  <div id="modalEliminar" class="modal-gestion-producto">
     <div class="modal-content-gestion-producto">
       <span class="close" id="cerrarEliminar">&times;</span>
 
@@ -116,14 +118,25 @@
       <h2>Agregar Producto</h2>
       <form id="formAgregar" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="text" name="nombre" placeholder="Nombre del producto" required />
-        <input type="number" name="precio" placeholder="Precio" min="0" step="0.01" required />
-        <input type="text" name="talla" placeholder="Talla" required />
-        <input type="text" name="color" placeholder="Color" required />
-        <input type="number" name="cantidad" placeholder="Cantidad disponible" min="1" required />
-        <label name="imagen">Imagen en formato PNG o JPEG</label>
-        <input type="file" name="imagen" accept="image/png, image/jpeg" required />
-        
+
+        <label for="inputTipo">Tipo:</label>
+        <input type="text" name="tipo" id="inputTipo" placeholder="Nombre del tipo" required />
+
+        <label for="inputTalla">Talla:</label>
+        <input type="text" name="talla" id="inputTalla" placeholder="Nombre de la talla" required />
+
+        <label for="inputColor">Color:</label>
+        <input type="text" name="color" id="inputColor" placeholder="Nombre del color" required />
+
+        <label for="inputPrecio">Precio:</label>
+        <input type="number" name="precio" id="inputPrecio" placeholder="Precio" min="0" step="0.01" required />
+
+        <label for="inputCantidad">Cantidad disponible:</label>
+        <input type="number" name="cantidad" id="inputCantidad" placeholder="Cantidad disponible" min="1" required />
+
+        <label for="inputImagen">Imagen en formato PNG o JPEG:</label>
+        <input type="file" id="inputImagen" name="imagen" accept="image/png, image/jpeg" required />
+
         <div class="modal-footer">
           <button type="submit" class="btn btn-guardar">Agregar</button>
           <button type="button" class="btn btn-cancelar">Cancelar</button>
@@ -131,6 +144,7 @@
       </form>
     </div>
   </div>
+
 
 {% endblock %}
 
@@ -188,34 +202,34 @@
 
           modalTitulo.textContent = "Editar producto";
           modalBody.innerHTML = `
-            <form id="formEditar">
-              <label>Nombre:</label>
-              <input type="text" name="nombre" required>
+            <form id="formEditar" enctype="multipart/form-data">
+              <label for="editarTipo">Tipo:</label>
+              <input type="text" name="tipo" id="editarTipo" required>
 
-              <label>Talla:</label>
-              <input type="text" name="talla" required>
+              <label for="editarTalla">Talla:</label>
+              <input type="text" name="talla" id="editarTalla" required>
 
-              <label>Color:</label>
-              <input type="text" name="color" required>
+              <label for="editarColor">Color:</label>
+              <input type="text" name="color" id="editarColor" required>
 
-              <label>Cantidad:</label>
-              <input type="number" name="cantidad" min="0" required>
+              <label for="editarCantidad">Cantidad:</label>
+              <input type="number" name="cantidad" id="editarCantidad" min="0" required>
 
-              <label>Precio:</label>
-              <input type="number" name="precio" min="0" required>
+              <label for="editarPrecio">Precio:</label>
+              <input type="number" name="precio" id="editarPrecio" min="0" step="0.01" required>
 
-              <label>Imagen:</label>
-              <input type="file" name="imagen">
+              <label for="editarImagen">Imagen:</label>
+              <input type="file" name="imagen" id="editarImagen">
             </form>
           `;
 
           // Precargar valores desde la fila de la tabla
           const fila = btn.closest("tr");
-          document.querySelector("#formEditar input[name='nombre']").value = fila.children[2].textContent.trim();
-          document.querySelector("#formEditar input[name='talla']").value = fila.children[3].textContent.trim();
-          document.querySelector("#formEditar input[name='color']").value = fila.children[4].textContent.trim();
-          document.querySelector("#formEditar input[name='cantidad']").value = parseFloat(fila.children[5].textContent.trim());
-          document.querySelector("#formEditar input[name='precio']").value = parseFloat(fila.children[6].textContent.trim());
+          document.querySelector("#editarTipo").value = fila.children[2].textContent.trim();
+          document.querySelector("#editarTalla").value = fila.children[3].textContent.trim();
+          document.querySelector("#editarColor").value = fila.children[4].textContent.trim();
+          document.querySelector("#editarCantidad").value = parseInt(fila.children[5].textContent.trim());
+          document.querySelector("#editarPrecio").value = parseFloat(fila.children[6].textContent.trim());
 
           modal.style.display = "block";
         });
@@ -229,12 +243,13 @@
       btnConfirmar.onclick = () => {
         const formData = new FormData(document.getElementById("formEditar"));
 
-        fetch(`/almacenista/productos/editar/${productoId}/`, {   // 👈 ajustado con prefijo
+        fetch(`/almacenista/productos/editar/${productoId}/`, {
           method: "POST",
           headers: { "X-CSRFToken": "{{ csrf_token }}" },
           body: formData
         }).then(res => {
           if (res.ok) location.reload();
+          else alert("Error al editar el producto.");
         });
 
         modal.style.display = "none";

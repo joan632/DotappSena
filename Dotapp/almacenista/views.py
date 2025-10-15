@@ -2,11 +2,54 @@ import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
-from core.models import Producto, Solicitud
+from core.models import Producto, Solicitud, TipoProducto, Talla, Color
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.conf import settings
 from django.urls import reverse
+import pdfkit
+from django.conf import settings
+from django.template.loader import render_to_string
+import base64
+from django.core.mail import EmailMultiAlternatives
+
+# Configuración de wkhtmltopdf en PythonAnywhere
+PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+
+def generar_factura_pdf_bytes(solicitud):
+    # Usar la ruta absoluta del archivo de la imagen
+    producto_abs_path = solicitud.id_producto.imagen.path
+
+    # Renderizar HTML con la ruta absoluta
+    html_factura = render_to_string('core/factura.html', {
+        's': solicitud,
+        'total': solicitud.cantidad * solicitud.id_producto.precio,
+        'producto_abs_path': producto_abs_path,
+    })
+
+    try:
+        options = {
+            'enable-local-file-access': '',
+            'orientation': 'Landscape',
+            'margin-top': '0mm',
+            'margin-bottom': '0mm',
+            'margin-left': '0mm',
+            'margin-right': '0mm',
+            'page-size': 'Letter',          # o 'A4', da igual
+            'disable-smart-shrinking': '',  # evita que achique el contenido
+            'zoom': '1.0',                  # asegura escala real
+            'print-media-type': '',         # aplica los estilos @page y @media print
+        }
+
+        # Generar PDF en memoria
+        pdf_bytes = pdfkit.from_string(html_factura, False, configuration=PDFKIT_CONFIG, options=options)
+        return pdf_bytes
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise e
+    
 
 
 # Vista para el panel de almacenista
@@ -21,8 +64,14 @@ def dashboard_almacenista(request):
 @login_required
 def administrar_productos(request):
     productos = Producto.objects.all()
+    tipos = TipoProducto.objects.all()
+    tallas = Talla.objects.all()
+    colores = Color.objects.all()
     return render(request, 'almacenista/administracion_productos.html', {
         'productos': productos,
+        'tipos': tipos,
+        'tallas': tallas,
+        'colores': colores,
         'MEDIA_URL': settings.MEDIA_URL
     })
 
@@ -31,17 +80,22 @@ def administrar_productos(request):
 @csrf_exempt
 def agregar_producto(request):
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')  # cambiar de 'tipo' a 'nombre'
-        precio = request.POST.get('precio')  # agregar campo precio
-        talla = request.POST.get('talla')
-        color = request.POST.get('color')
+        tipo_nombre = request.POST.get('tipo')
+        talla_nombre = request.POST.get('talla')
+        color_nombre = request.POST.get('color')
+        precio = request.POST.get('precio')
         stock = request.POST.get('cantidad')
         imagen_file = request.FILES.get('imagen')
 
-        if not all([nombre, precio, talla, color, stock, imagen_file]):
+        if not all([tipo_nombre, talla_nombre, color_nombre, precio, stock]):
             return JsonResponse({'status': 'error', 'message': 'Faltan datos'}, status=400)
 
-        # Guardar la imagen en media/productos
+        # Crear o recuperar los objetos relacionados
+        tipo_obj, _ = TipoProducto.objects.get_or_create(nombre=tipo_nombre)
+        talla_obj, _ = Talla.objects.get_or_create(nombre=talla_nombre)
+        color_obj, _ = Color.objects.get_or_create(nombre=color_nombre)
+
+        # Guardar la imagen
         imagen_ruta = ''
         if imagen_file:
             carpeta = os.path.join(settings.MEDIA_ROOT, 'productos')
@@ -53,10 +107,10 @@ def agregar_producto(request):
             imagen_ruta = f'productos/{imagen_file.name}'
 
         producto = Producto.objects.create(
-            nombre=nombre,
-            precio=precio,  # asegurarse de pasar el precio
-            talla=talla,
-            color=color,
+            tipo=tipo_obj,
+            precio=precio,
+            talla=talla_obj,
+            color=color_obj,
             stock=stock,
             imagen=imagen_ruta,
             almacenista=request.user
@@ -64,9 +118,7 @@ def agregar_producto(request):
 
         return JsonResponse({'status': 'ok', 'producto_id': producto.id_producto})
 
-    return JsonResponse({'status': 'error'}, status=400)
-
-
+    return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
 
 # Vista para editar productos
 @csrf_exempt
@@ -77,16 +129,25 @@ def editar_producto(request, producto_id):
         return JsonResponse({'status': 'error', 'message': 'Producto no encontrado'}, status=404)
 
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        precio = request.POST.get('precio')
-        talla = request.POST.get('talla')
-        color = request.POST.get('color')
+        tipo_nombre = request.POST.get('tipo')   # ahora viene el texto
+        talla_nombre = request.POST.get('talla')
+        color_nombre = request.POST.get('color')
         stock = request.POST.get('cantidad')
+        precio = request.POST.get('precio')
         imagen_file = request.FILES.get('imagen')
 
-        if nombre: producto.nombre = nombre
-        if talla: producto.talla = talla
-        if color: producto.color = color
+        # Actualizar FK usando get_or_create con nombre
+        if tipo_nombre:
+            tipo_obj, _ = TipoProducto.objects.get_or_create(nombre=tipo_nombre)
+            producto.tipo = tipo_obj
+        if talla_nombre:
+            talla_obj, _ = Talla.objects.get_or_create(nombre=talla_nombre)
+            producto.talla = talla_obj
+        if color_nombre:
+            color_obj, _ = Color.objects.get_or_create(nombre=color_nombre)
+            producto.color = color_obj
+
+        # Actualizar stock y precio
         if stock:
             try:
                 producto.stock = int(stock)
@@ -98,6 +159,7 @@ def editar_producto(request, producto_id):
             except ValueError:
                 pass
 
+        # Actualizar imagen si se envía
         if imagen_file:
             carpeta = os.path.join(settings.MEDIA_ROOT, 'productos')
             os.makedirs(carpeta, exist_ok=True)
@@ -108,44 +170,6 @@ def editar_producto(request, producto_id):
             producto.imagen = f'productos/{imagen_file.name}'
 
         producto.save()
-        return JsonResponse({'status': 'ok', 'producto_id': producto.id_producto})
-
-    return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
-
-    try:
-        producto = Producto.objects.get(id_producto=producto_id)
-    except Producto.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Producto no encontrado'}, status=404)
-
-    if request.method == 'POST':
-        # Actualizar solo los campos que vienen en el request
-        producto = Producto.objects.get(id_producto=producto_id)
-        
-        nombre = request.POST.get('nombre')
-        precio = request.POST.get('precio')
-        talla = request.POST.get('talla')
-        color = request.POST.get('color')
-        stock = request.POST.get('cantidad')
-        imagen_file = request.FILES.get('imagen')
-
-        # Actualizar solo si hay valor
-        if nombre: producto.nombre = nombre
-        if precio: producto.precio = precio
-        if talla: producto.talla = talla
-        if color: producto.color = color
-        if stock: producto.stock = stock
-
-        if imagen_file:
-            carpeta = os.path.join(settings.MEDIA_ROOT, 'productos')
-            os.makedirs(carpeta, exist_ok=True)
-            ruta_completa = os.path.join(carpeta, imagen_file.name)
-            with open(ruta_completa, 'wb+') as f:
-                for chunk in imagen_file.chunks():
-                    f.write(chunk)
-            producto.imagen = f'productos/{imagen_file.name}'
-
-        producto.save()
-
         return JsonResponse({'status': 'ok', 'producto_id': producto.id_producto})
 
     return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
@@ -170,6 +194,9 @@ def solicitudes_inventario(request):
     .select_related("id_aprendiz", "id_producto")
     .exclude(estado_solicitud__in=["cancelada", "despachada", "rechazada", "borrador", "entregada"])
     )
+    
+    # ordenar por fecha de solicitud
+    solicitudes = solicitudes.order_by("-fecha_solicitud")
     return render(request, 'almacenista/solicitudes_inventario.html', {"solicitudes": solicitudes})
 
 
@@ -206,17 +233,45 @@ def aprobar_solicitud(request, solicitud_id):
         solicitud.estado_solicitud = "aprobada"
         solicitud.save()
 
-    send_mail(
-        'Solicitud aprobada - Dotapp',
-        f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
-        f'¡Felicidades! Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido aprobada!\n'
-        f'En breve iniciaremos el despacho. Te avisaremos cuando el pedido esté listo.\n\n'
-        f'Gracias por usar Dotapp.\n\n'
-        f'Saludos,\nEl equipo de Dotapp',
-        'dotappsena@gmail.com',
-        [solicitud.id_aprendiz.correo],
-        fail_silently=False,
-    )
+        # Generar el PDF de la factura
+        pdf_bytes = generar_factura_pdf_bytes(solicitud)
+
+        # Contenido HTML opcional del correo
+        html_content = f"""
+        <html>
+        <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
+            <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
+                <div style="padding:20px;">
+                    <p>Hola <strong>{solicitud.id_aprendiz.get_full_name()}</strong>,</p>
+                    <p>Tu solicitud <strong>#{solicitud.id_solicitud}</strong> ha sido creada con éxito.</p>
+                    <p>Adjunto encontrarás tu factura electrónica.</p>
+                    <p>Saludos,<br>El equipo de Dotapp</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        text_content = (
+            f"Hola {solicitud.id_aprendiz.get_full_name()},\n\n"
+            f"Tu solicitud #{solicitud.id_solicitud} ha sido creada con éxito.\n"
+            f"Adjunto encontrarás tu factura electrónica.\n\n"
+            f"Saludos,\nEl equipo de Dotapp"
+        )
+
+        msg = EmailMultiAlternatives(
+            'Factura electrónica - Dotapp',
+            text_content,
+            'dotappsena@gmail.com',
+            [solicitud.id_aprendiz.correo],
+        )
+        msg.attach_alternative(html_content, "text/html")
+
+        # Adjuntar el PDF
+        msg.attach(f'factura_{solicitud.id_solicitud}.pdf', pdf_bytes, 'application/pdf')
+
+        # 🚀 Enviar el correo
+        msg.send(fail_silently=False)
 
     return redirect("solicitudes-inventario")
 

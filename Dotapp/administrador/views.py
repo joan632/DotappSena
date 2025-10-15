@@ -25,6 +25,9 @@ def administracion_usuarios(request):
 def historial_usuarios(request, id_usuario):
     usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
     solicitudes = usuario.solicitudes.all()
+    
+    # ordenar por fecha de solicitud
+    solicitudes = solicitudes.order_by("-fecha_solicitud")
     return render(
         request,
         "administrador/historial-de-usuario.html",

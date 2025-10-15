@@ -18,6 +18,9 @@ def solicitudes_pendientes(request):
     .select_related("id_aprendiz", "id_producto")
     .exclude(estado_solicitud__in=["cancelada", "pendiente", "rechazada", "borrador", "entregada", "aprobada"])
     )
+
+    # ordenar por fecha de solicitud
+    solicitudes = solicitudes.order_by("-fecha_solicitud")
     return render(request, 'despachador/Solicitudes_pendientes.html', {'solicitudes': solicitudes})
 
 @login_required

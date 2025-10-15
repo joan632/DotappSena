@@ -74,48 +74,56 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         return self.nombre
 
 
-#clase producto
+
+
+# Tabla de tipos de producto
+class TipoProducto(models.Model):
+    id_tipo = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+# Tabla de tallas
+class Talla(models.Model):
+    id_talla = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+# Tabla de colores
+class Color(models.Model):
+    id_color = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+# Tabla de productos
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=255)
-    descripcion = models.TextField(blank=True, null=True)
+    tipo = models.ForeignKey(
+        TipoProducto,
+        on_delete=models.CASCADE,
+        related_name='productos'
+    )
+    talla = models.ForeignKey(
+        Talla,
+        on_delete=models.CASCADE,
+        related_name='productos'
+    )
+    color = models.ForeignKey(
+        Color,
+        on_delete=models.CASCADE,
+        related_name='productos'
+    )
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    talla = models.CharField(max_length=255)
-    color = models.CharField(max_length=255)
     stock = models.PositiveIntegerField(default=0)
-    
-    # Guardaremos solo la ruta de la imagen
-    imagen = models.CharField(max_length=255, blank=True, null=True)
+    imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
 
     almacenista = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL, null=True, blank=True,
-        related_name="productos_creados",
-        limit_choices_to={'rol__nombre_rol': 'almacenista'}
-    )
-    administrador = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL, null=True, blank=True,
-        related_name="productos_administrados",
-        limit_choices_to={'rol__nombre_rol': 'administrador'}
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.nombre} - {self.talla} - {self.color}"
-    id_producto = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=100)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
-    imagen = models.ImageField(upload_to='productos/', blank=True, null=True)  # ahora sube a media/productos/
-    stock = models.PositiveIntegerField(default=0)
-    talla = models.CharField(max_length=20)
-    color = models.CharField(max_length=30)
-    
-    # Relación con usuarios
-    almacenista = models.ForeignKey(
-        Usuario,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -124,24 +132,22 @@ class Producto(models.Model):
     )
 
     administrador = models.ForeignKey(
-        Usuario,
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="productos_administrados",
         limit_choices_to={'rol__nombre_rol': 'administrador'}
     )
-    
-    # Fechas de creación y actualización
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.nombre} - {self.talla} - {self.color}"
+        return f"{self.tipo.nombre} - {self.talla.nombre} - {self.color.nombre}"
 
     @property
     def imagen_url(self):
-        """Devuelve la URL de la imagen si existe"""
         if self.imagen:
             return self.imagen.url
         return None
