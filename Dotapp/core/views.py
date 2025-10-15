@@ -42,7 +42,7 @@ def registro_aprendiz(request):
         messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
         return render(request, 'core/login.html')
 
-    return render(request, 'core/registro.html')
+    return render(request, 'core/Registro.html')
 
 #vista para login
 def login_view(request):
@@ -144,8 +144,8 @@ def password_reset_confirm(request, uidb64, token):
     return render(request, "core/password_reset.html", {
         "status": "error",
         "message": "El enlace no es válido o ha caducado."
-    })      
-    
+    })
+
 #vista para dashboard de administracion
 @login_required
 def dashboard_admin(request):

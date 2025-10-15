@@ -27,9 +27,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'django-insecure-bldz-ub#xxgikikqukz=oi6rool&z0c&a1$rw_ejzavj^bp1ov'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '.pythonanywhere.com',
+    'joan2004s.pythonanywhere.com'
+    ]
 
 
 
@@ -45,7 +50,7 @@ INSTALLED_APPS = [
 
     #Django Rest Framework
     'rest_framework',
-    
+
     #apps por rol
     'administrador',
     'almacenista',
@@ -65,8 +70,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "core.middleware.SaveLastTemplateMiddleware",
-    "core.middleware.AmigableExceptionMiddleware",
+#    "core.middleware.SaveLastTemplateMiddleware",
+#    "core.middleware.AmigableExceptionMiddleware",
 ]
 
 ROOT_URLCONF = 'Dotapp.urls'
@@ -139,13 +144,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-co'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Bogota'
+
+USE_TZ = True
 
 USE_I18N = True
 
 USE_L10N = True
-
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -164,14 +169,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.Usuario'
 
 #configuracion para usar el envio de email
+
+#sendgrid
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = "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"
+DEFAULT_FROM_EMAIL = "dotappsena@gmail.com"
+
+#smtp
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dotappsena@gmail.com'          # tu cuenta
-EMAIL_HOST_PASSWORD = 'jxry qpxy pdly ddsn'       # contraseña de 16 dígitos de Google
-DEFAULT_FROM_EMAIL = 'dotappsena@gmail.com'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_PORT = 587
+#MAIL_USE_TLS = True
+#EMAIL_HOST_USER = 'dotappsena@gmail.com'          # tu cuenta
+#EMAIL_HOST_PASSWORD = 'jxry qpxy pdly ddsn'       # contraseña de 16 dígitos de Google
+#DEFAULT_FROM_EMAIL = 'dotappsena@gmail.com'
 
 PASSWORD_RESET_TIMEOUT = 900  # 15 minutos en segundos
 
@@ -204,5 +216,5 @@ CSRF_FAILURE_VIEW = "core.views.csrf_error_redirect"
 
 
 # Configuración para URL absoluta del sitio
-SITE_URL = 'http://localhost:8000'   # cambiar en producción
+SITE_URL = 'https://joan2004s.pythonanywhere.com'  # cambiar en producción
 

@@ -26,48 +26,49 @@ from core.models import Solicitud, Producto, Borrador
 
 import base64
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from io import BytesIO
-import imgkit
-from django.conf import settings
 
 
-import base64
-import imgkit
+import pdfkit
 from django.conf import settings
 from django.template.loader import render_to_string
-from io import BytesIO
 
-# Ejecutable portable (Windows dev)
-IMGKIT_CONFIG = imgkit.config(
-    wkhtmltoimage=r'C:\DotappSENA\DOtapp\wkhtmltopdf\wkhtmltoimage.exe'
-)
+# Configuración de wkhtmltopdf en PythonAnywhere
+PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
 def generar_factura_pdf_bytes(solicitud):
-    print('>>> 3) Dentro de generar_factura_pdf_bytes')
-    producto_url = solicitud.id_producto.imagen.url
-    producto_abs_url = f"{settings.SITE_URL}{producto_url}"
-    print('>>> 4) URL absoluta:', producto_abs_url)
+    # Usar la ruta absoluta del archivo de la imagen
+    producto_abs_path = solicitud.id_producto.imagen.path
+
+    # Renderizar HTML con la ruta absoluta
+    html_factura = render_to_string('core/factura.html', {
+        's': solicitud,
+        'total': solicitud.cantidad * solicitud.id_producto.precio,
+        'producto_abs_path': producto_abs_path,
+    })
 
     try:
-        html_factura = render_to_string('core/factura.html', {
-            's': solicitud,
-            'total': solicitud.cantidad * solicitud.id_producto.precio,
-            'producto_abs_url': producto_abs_url,
-        })
-        print('>>> 5) HTML renderizado, tamaño:', len(html_factura))
+        options = {
+            'enable-local-file-access': '',
+            'orientation': 'Landscape',
+            'margin-top': '0mm',
+            'margin-bottom': '0mm',
+            'margin-left': '0mm',
+            'margin-right': '0mm',
+            'page-size': 'Letter',          # o 'A4', da igual
+            'disable-smart-shrinking': '',  # evita que achique el contenido
+            'zoom': '1.0',                  # asegura escala real
+            'print-media-type': '',         # aplica los estilos @page y @media print
+        }
 
-        pdf_bytes = imgkit.from_string(html_factura, False, {
-            'format': 'pdf',
-            'quiet': ''
-        }, config=IMGKIT_CONFIG)
-        print('>>> 6) PDF creado, tamaño:', len(pdf_bytes))
+        # Generar PDF en memoria
+        pdf_bytes = pdfkit.from_string(html_factura, False, configuration=PDFKIT_CONFIG, options=options)
         return pdf_bytes
 
     except Exception as e:
         import traceback
         traceback.print_exc()
         raise e
+
 
 
 
@@ -83,7 +84,7 @@ def bienvenido(request):
 @login_required
 def principal(request):
     return render(request, "aprendiz/principal.html", {
-        "usuario": request.user 
+        "usuario": request.user
     })
 
 #vista para logout del aprendiz (cerrar sesión)
@@ -96,20 +97,20 @@ def logout_view(request):
 @login_required
 def perfil(request):
     return render(request, "aprendiz/perfil.html", {
-        "usuario": request.user 
+        "usuario": request.user
     })
 
 #vista para actualizar perfil del aprendiz
 @login_required
 def actualizar_perfil(request):
     usuario = request.user
-    
+
     if request.method == 'POST':
         # Obtener los datos del formulario
         nuevo_nombre = request.POST.get('nombre')
         nuevo_apellido = request.POST.get('apellido')
         nuevo_correo = request.POST.get('correo')
-        
+
         # Validar y actualizar los campos si existen
         if nuevo_nombre:
             usuario.nombre = nuevo_nombre
@@ -117,13 +118,13 @@ def actualizar_perfil(request):
             usuario.apellido = nuevo_apellido
         if nuevo_correo:
             usuario.correo = nuevo_correo
-        
+
         # Guardar los cambios en la base de datos
         usuario.save()
-        
+
         # Redireccionar a la página de perfil después de guardar
-        return redirect('perfil-aprendiz') 
-    
+        return redirect('perfil-aprendiz')
+
     # Si la solicitud no es POST, simplemente renderiza la plantilla de perfil
     return render(request, 'perfil.html', {'usuario': usuario})
 
@@ -133,11 +134,12 @@ def solicitud_uniforme(request):
     borrador = Borrador.objects.filter(aprendiz=request.user).first()
     productos = Producto.objects.all()
     return render(request, 'aprendiz/creacion_solicitud.html', {
-        "productos": productos, 
+        "productos": productos,
         "borrador": borrador,
     })
 
-#vista para crear solicitud de uniforme
+
+# vista para crear solicitud de uniforme
 @login_required
 def crear_solicitud(request):
     if request.method == "POST":
@@ -150,23 +152,19 @@ def crear_solicitud(request):
         ficha = int(request.POST.get("ficha"))
         detalles = request.POST.get("detalles")
 
-        # Buscar el producto correspondiente
         try:
             producto = Producto.objects.get(nombre=tipo, talla=talla, color=color)
         except Producto.DoesNotExist:
-            return render(request, "aprendiz/creacion_solicitud.html", 
-            messages.warning(request, "El producto seleccionado no está disponible."))
-        
-         # Verificar stock disponible
+            messages.warning(request, "El producto seleccionado no está disponible.")
+            return redirect("solicitud-uniforme")
+
         if cantidad > producto.stock:
             messages.warning(
                 request,
-                f"No hay suficiente stock de {producto.nombre}. "
-                f"Solo quedan {producto.stock} unidades disponibles."
+                f"No hay suficiente stock de {producto.nombre}. Solo quedan {producto.stock} unidades."
             )
             return redirect("solicitud-uniforme")
-        
-        # Crear la solicitud
+
         solicitud = Solicitud.objects.create(
             id_aprendiz=request.user,
             id_producto=producto,
@@ -180,44 +178,34 @@ def crear_solicitud(request):
             estado_solicitud="pendiente",
         )
 
-        # ELIMINAR el borrador del usuario 
         Borrador.objects.filter(aprendiz=request.user).delete()
-        
 
-        # Generar la imagen de la factura
-        if solicitud.estado_solicitud == "pendiente":
-            print('>>> 1) Dentro de pendiente, voy a generar PDF')
+        if solicitud.estado_solicitud == "aprobada":
             pdf_bytes = generar_factura_pdf_bytes(solicitud)
-            print('>>> 2) PDF generado, tamaño:', len(pdf_bytes))
 
-            # Data-URI para embeber
-            data_uri = f"data:application/pdf;base64,{base64.b64encode(pdf_bytes).decode('utf-8')}"
-
-            # HTML del correo
+            # Contenido HTML opcional del correo
             html_content = f"""
             <html>
             <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
                 <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
-                <!-- PDF embebido -->
-                <iframe src="{data_uri}" width="100%" height="600" style="border:none;"></iframe>
-                <div style="padding:20px;">
-                    <p>Hola <strong>{solicitud.id_aprendiz.get_full_name}</strong>,</p>
-                    <p>Tu solicitud <strong>#{solicitud.id_solicitud}</strong> ha sido creada con éxito.</p>
-                    <p>Saludos,<br>El equipo de Dotapp</p>
-                </div>
+                    <div style="padding:20px;">
+                        <p>Hola <strong>{solicitud.id_aprendiz.get_full_name()}</strong>,</p>
+                        <p>Tu solicitud <strong>#{solicitud.id_solicitud}</strong> ha sido creada con éxito.</p>
+                        <p>Adjunto encontrarás tu factura electrónica.</p>
+                        <p>Saludos,<br>El equipo de Dotapp</p>
+                    </div>
                 </div>
             </body>
             </html>
             """
 
-            # Texto alternativo
             text_content = (
-                f"Hola {solicitud.id_aprendiz.get_full_name},\n\n"
-                f"Tu solicitud #{solicitud.id_solicitud} ha sido creada con éxito.\n\n"
+                f"Hola {solicitud.id_aprendiz.get_full_name()},\n\n"
+                f"Tu solicitud #{solicitud.id_solicitud} ha sido creada con éxito.\n"
+                f"Adjunto encontrarás tu factura electrónica.\n\n"
                 f"Saludos,\nEl equipo de Dotapp"
             )
 
-            # Crear correo
             msg = EmailMultiAlternatives(
                 'Factura electrónica - Dotapp',
                 text_content,
@@ -226,32 +214,16 @@ def crear_solicitud(request):
             )
             msg.attach_alternative(html_content, "text/html")
 
-            # ADJUNTAR el mismo PDF
+            # Adjuntar el PDF
             msg.attach(f'factura_{solicitud.id_solicitud}.pdf', pdf_bytes, 'application/pdf')
 
-            print('>>> 7) Preparando EmailMultiAlternatives')
-            msg.attach_alternative(html_content, "text/html")
-            msg.attach(f'factura_{solicitud.id_solicitud}.pdf', pdf_bytes, 'application/pdf')
-            print('>>> 8) Adjuntado, voy a enviar')
+            # 🚀 Enviar el correo
             msg.send(fail_silently=False)
-            print('>>> 9) ¡Correo enviado!')
-
-            # Enviar
-            msg.send(fail_silently=False)
-
-
-
-
-
-
-
 
         messages.success(request, "Solicitud creada exitosamente")
         return redirect("historial-solicitudes")
 
     return render(request, "aprendiz/creacion_solicitud.html")
-
-
 
 #vista para guardar borrador
 @login_required
@@ -277,7 +249,7 @@ def guardar_borrador(request):
     return redirect("solicitud-uniforme")
 
 
-#vista para historial de solicitudes                                    
+#vista para historial de solicitudes
 @login_required
 def historial_solicitudes(request):
     solicitudes = Solicitud.objects.filter(id_aprendiz=request.user)
