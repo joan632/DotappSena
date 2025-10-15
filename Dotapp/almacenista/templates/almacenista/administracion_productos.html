@@ -47,7 +47,7 @@
               <td>{{ producto.id_producto }}</td>
               <td>
                 {% if producto.imagen %}
-                  <img src="{{ MEDIA_URL }}{{ producto.imagen }}">
+                  <img src="{{ MEDIA_URL }}{{ producto.imagen }}" alt="Imagen del producto" width="100" height="100">
                 {% else %}
                   Sin imagen
                 {% endif %}
