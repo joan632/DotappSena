@@ -3,17 +3,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from core.models import Producto, Solicitud, TipoProducto, Talla, Color
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
 from django.conf import settings
 from django.urls import reverse
-#import pdfkit
+import pdfkit
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
+from django.http import JsonResponse, HttpResponse
+
 import json
 
-'''
+
 # Configuración de wkhtmltopdf en PythonAnywhere
 PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
@@ -51,7 +52,7 @@ def generar_factura_pdf_bytes(solicitud):
         traceback.print_exc()
         raise e
     
-'''
+
 
 # Vista para el panel de almacenista
 @login_required
@@ -122,16 +123,7 @@ def agregar_producto(request):
     return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
 
 
-
-
-
-
-
-
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponse
-
-
+# Vista para agregar tipos de productos
 @csrf_exempt
 def agregar_tipo(request):
     print("✅ Vista agregar_tipo llamada")
@@ -147,6 +139,7 @@ def agregar_tipo(request):
     return HttpResponse("Error", status=400)
 
 
+# Vista para agregar tallas de productos
 @csrf_exempt
 def agregar_talla(request):
     print("✅ Vista agregar_talla llamada")
@@ -162,6 +155,7 @@ def agregar_talla(request):
     return HttpResponse("Error", status=400)
 
 
+# Vista para agregar colores de productos
 @csrf_exempt
 def agregar_color(request):
     print("✅ Vista agregar_color llamada")
@@ -175,14 +169,6 @@ def agregar_color(request):
         else:
             print("⚠️ No se recibió nombre")
     return HttpResponse("Error", status=400)
-
-
-
-
-
-
-
-
 
 
 
@@ -325,8 +311,6 @@ def aprobar_solicitud(request, solicitud_id):
         solicitud.estado_solicitud = "aprobada"
         solicitud.save()
 
-    return redirect("solicitudes-inventario")
-'''
         # Generar el PDF de la factura
         pdf_bytes = generar_factura_pdf_bytes(solicitud)
 
@@ -378,7 +362,7 @@ def aprobar_solicitud(request, solicitud_id):
         messages.success(request, "Solicitud aprobada exitosamente.")
 
     return redirect("solicitudes-inventario")
-'''
+
 
 #vista para despachar solicitudes
 @login_required
