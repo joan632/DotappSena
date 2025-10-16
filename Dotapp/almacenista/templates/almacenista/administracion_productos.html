@@ -20,9 +20,15 @@
             <input type="text" id="buscador" placeholder="Buscar producto...">
           </div>
 
-          <!-- Botón que activa modal de agregar producto -->
-          <button id="btnAbrirAgregar" class="btn-agregar">Agregar Producto</button>
+          <div class="btn-producto-group">
+            <!-- Botón que activa modal de agregar producto -->
+            <button id="btnAbrirAgregar" class="btn-agregar">Agregar Producto</button>
 
+            <!-- Botón para abrir el modal de configuracion de productos -->
+            <button id="btnAbrirConfiguraciones" class="btn-config">
+              ⚙️ Configuraciones de Producto
+            </button>
+          </div>
         </div>
       </div>
 
@@ -81,7 +87,6 @@
   <div id="modalAccion" class="modal-gestion-producto">
     <div class="modal-content-gestion-producto">
       <span class="close">&times;</span>
-            
       <h2 id="modalTitulo"></h2>
       <div id="modalBody"></div>
 
@@ -89,9 +94,9 @@
         <button id="btnConfirmar" type="button" class="btn btn-guardar">Confirmar</button>
         <button id="btnCancelar" type="button" class="btn btn-cancelar">Cancelar</button>
       </div>
-        
     </div>
   </div>
+
 
   <!-- Modal de Eliminar producto -->
   <div id="modalEliminar" class="modal-gestion-producto">
@@ -120,13 +125,28 @@
         {% csrf_token %}
 
         <label for="inputTipo">Tipo:</label>
-        <input type="text" name="tipo" id="inputTipo" placeholder="Nombre del tipo" required />
+        <select name="tipo" id="inputTipo" required>
+          <option value="">Seleccione un tipo</option>
+          {% for tipo in tipos %}
+            <option value="{{ tipo.id_tipo }}">{{ tipo.nombre }}</option>
+          {% endfor %}
+        </select>
 
         <label for="inputTalla">Talla:</label>
-        <input type="text" name="talla" id="inputTalla" placeholder="Nombre de la talla" required />
+        <select name="talla" id="inputTalla" required>
+          <option value="">Seleccione una talla</option>
+          {% for talla in tallas %}
+            <option value="{{ talla.id_talla }}">{{ talla.nombre }}</option>
+          {% endfor %}
+        </select>
 
         <label for="inputColor">Color:</label>
-        <input type="text" name="color" id="inputColor" placeholder="Nombre del color" required />
+        <select name="color" id="inputColor" required>
+          <option value="">Seleccione un color</option>
+          {% for color in colores %}
+            <option value="{{ color.id_color }}">{{ color.nombre }}</option>
+          {% endfor %}
+        </select>
 
         <label for="inputPrecio">Precio:</label>
         <input type="number" name="precio" id="inputPrecio" placeholder="Precio" min="0" step="0.01" required />
@@ -145,72 +165,185 @@
     </div>
   </div>
 
+  <!-- Modal de configuraciones de productos -->
+  <div id="modalConfiguraciones" class="modal-gestion-producto">
+    <div class="modal-content-gestion-producto">
+      <span class="close">&times;</span>
+      <h2>⚙️ Configuraciones de Producto</h2>
+      <p>Puedes agregar nuevos tipos, tallas o colores de producto.</p>
 
+      <div class="form-section">
+        <div class="row">
+          <input id="nuevoTipo" type="text" placeholder="Nuevo tipo">
+          <button class="btn-add" onclick="agregarTipo()">Agregar Tipo</button>
+        </div>
+        <div class="row">
+          <input id="nuevaTalla" type="text" placeholder="Nueva talla">
+          <button class="btn-add" onclick="agregarTalla()">Agregar Talla</button>
+        </div>
+        <div class="row">
+          <input id="nuevoColor" type="text" placeholder="Nuevo color">
+          <button class="btn-add" onclick="agregarColor()">Agregar Color</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 {% endblock %}
 
 {% block scripts %}
 
-  <!-- Script de Modal Agregar Producto -->
+  <!-- script de configuraciones de productos -->
   <script>
-    const modalAgregar = document.getElementById("modalAgregar");
-    const btnAbrirAgregar = document.getElementById("btnAbrirAgregar");
-    const btnCerrarAgregar = modalAgregar.querySelector(".close");
-    const btnCancelarAgregar = modalAgregar.querySelector(".btn-cancelar");
-    const formAgregar = document.getElementById("formAgregar");
+    // 🧩 Mostrar / ocultar modal
+    const modalConfig = document.getElementById("modalConfiguraciones");
+    const btnAbrirConfig = document.getElementById("btnAbrirConfiguraciones");
+    const btnCerrarConfig = modalConfig.querySelector(".close");
 
-    // Abrir/cerrar modal
-    btnAbrirAgregar.onclick = () => modalAgregar.style.display = "block";
-    btnCerrarAgregar.onclick = () => modalAgregar.style.display = "none";
-    btnCancelarAgregar.onclick = () => modalAgregar.style.display = "none";
+    btnAbrirConfig.onclick = () => modalConfig.style.display = "block";
+    btnCerrarConfig.onclick = () => modalConfig.style.display = "none";
+    window.onclick = (e) => { if (e.target === modalConfig) modalConfig.style.display = "none"; };
 
-    // Guardar producto con fetch
-    formAgregar.onsubmit = e => {
-      e.preventDefault();
-      const formData = new FormData(formAgregar);
-      fetch("{% url 'agregar_producto' %}", {
+    // 🟢 Agregar Tipo
+    function agregarTipo() {
+      const tipo = document.getElementById('nuevoTipo').value.trim();
+      if (!tipo) return alert("⚠️ Ingresa un tipo");
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      fetch("{% url 'agregar_tipo' %}", {
         method: "POST",
-        headers: { "X-CSRFToken": "{{ csrf_token }}" },
-        body: formData
-      }).then(res => res.json())
-        .then(data => {
-          if (data.status === 'ok') {
-            alert("Producto agregado correctamente");
-            location.reload();
-          } else {
-            alert("Error al agregar producto");
-          }
-        });
-    };
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken,
+        },
+        body: new URLSearchParams({ nombre: tipo }),
+        credentials: "same-origin"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        alert("✅ Tipo agregado correctamente");
+        document.getElementById('nuevoTipo').value = "";
+      })
+      .catch(() => alert("⚠️ Error al enviar los datos"));
+    }
+
+    // 🟣 Agregar Talla
+    function agregarTalla() {
+      const talla = document.getElementById('nuevaTalla').value.trim();
+      if (!talla) return alert("⚠️ Ingresa una talla");
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      fetch("{% url 'agregar_talla' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken,
+        },
+        body: new URLSearchParams({ nombre: talla }),
+        credentials: "same-origin"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        alert("✅ Talla agregada correctamente");
+        document.getElementById('nuevaTalla').value = "";
+      })
+      .catch(() => alert("⚠️ Error al enviar los datos"));
+    }
+
+    // 🔵 Agregar Color
+    function agregarColor() {
+      const color = document.getElementById('nuevoColor').value.trim();
+      if (!color) return alert("⚠️ Ingresa un color");
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      fetch("{% url 'agregar_color' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken,
+        },
+        body: new URLSearchParams({ nombre: color }),
+        credentials: "same-origin"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        alert("✅ Color agregado correctamente");
+        document.getElementById('nuevoColor').value = "";
+      })
+      .catch(() => alert("⚠️ Error al enviar los datos"));
+    }
   </script>
 
-  <!-- Modal de editar producto -->
+
+  <!-- script de agregar producto -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const modal = document.getElementById("modalAccion");
+      // Datos de Django pasados como JSON
+      const tipos = JSON.parse(document.getElementById('tipos-data').textContent);
+      const tallas = JSON.parse(document.getElementById('tallas-data').textContent);
+      const colores = JSON.parse(document.getElementById('colores-data').textContent);
+
+      // --- MODAL AGREGAR ---
+      const modalAgregar = document.getElementById("modalAgregar");
+      const btnAbrirAgregar = document.getElementById("btnAbrirAgregar");
+      const btnCerrarAgregar = modalAgregar.querySelector(".close");
+      const btnCancelarAgregar = modalAgregar.querySelector(".btn-cancelar");
+      const formAgregar = document.getElementById("formAgregar");
+
+      btnAbrirAgregar.onclick = () => modalAgregar.style.display = "block";
+      btnCerrarAgregar.onclick = () => modalAgregar.style.display = "none";
+      btnCancelarAgregar.onclick = () => modalAgregar.style.display = "none";
+
+      formAgregar.onsubmit = e => {
+        e.preventDefault();
+        const formData = new FormData(formAgregar);
+        fetch("/almacenista/agregar-producto/", {
+          method: "POST",
+          headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value },
+          body: formData
+        }).then(res => res.json())
+          .then(data => {
+            if (data.status === 'ok') {
+              alert("Producto agregado correctamente");
+              location.reload();
+            } else {
+              alert("Error al agregar producto");
+            }
+          });
+      };
+
+      // --- MODAL EDITAR ---
+      const modalEditar = document.getElementById("modalAccion");
       const modalTitulo = document.getElementById("modalTitulo");
       const modalBody = document.getElementById("modalBody");
       const btnConfirmar = document.getElementById("btnConfirmar");
       const btnCancelar = document.getElementById("btnCancelar");
-      const btnCerrar = document.querySelector("#modalAccion .close");
+      const btnCerrar = modalEditar.querySelector(".close");
 
       let productoId = null;
 
-      // Botón de editar (se distingue con clase js-editar)
       document.querySelectorAll(".js-editar").forEach(btn => {
         btn.addEventListener("click", () => {
           productoId = btn.dataset.id;
-
           modalTitulo.textContent = "Editar producto";
+
+          // Construir formulario con selects
           modalBody.innerHTML = `
             <form id="formEditar" enctype="multipart/form-data">
               <label for="editarTipo">Tipo:</label>
-              <input type="text" name="tipo" id="editarTipo" required>
+              <select name="tipo" id="editarTipo" required>
+                <option value="">Seleccione un tipo</option>
+              </select>
 
               <label for="editarTalla">Talla:</label>
-              <input type="text" name="talla" id="editarTalla" required>
+              <select name="talla" id="editarTalla" required>
+                <option value="">Seleccione una talla</option>
+              </select>
 
               <label for="editarColor">Color:</label>
-              <input type="text" name="color" id="editarColor" required>
+              <select name="color" id="editarColor" required>
+                <option value="">Seleccione un color</option>
+              </select>
 
               <label for="editarCantidad">Cantidad:</label>
               <input type="number" name="cantidad" id="editarCantidad" min="0" required>
@@ -223,41 +356,67 @@
             </form>
           `;
 
-          // Precargar valores desde la fila de la tabla
-          const fila = btn.closest("tr");
-          document.querySelector("#editarTipo").value = fila.children[2].textContent.trim();
-          document.querySelector("#editarTalla").value = fila.children[3].textContent.trim();
-          document.querySelector("#editarColor").value = fila.children[4].textContent.trim();
-          document.querySelector("#editarCantidad").value = parseInt(fila.children[5].textContent.trim());
-          document.querySelector("#editarPrecio").value = parseFloat(fila.children[6].textContent.trim());
+          const selectTipo = document.getElementById("editarTipo");
+          const selectTalla = document.getElementById("editarTalla");
+          const selectColor = document.getElementById("editarColor");
 
-          modal.style.display = "block";
+          tipos.forEach(t => selectTipo.appendChild(new Option(t.nombre, t.id_tipo)));
+          tallas.forEach(t => selectTalla.appendChild(new Option(t.nombre, t.id_talla)));
+          colores.forEach(c => selectColor.appendChild(new Option(c.nombre, c.id_color)));
+
+          // Precargar valores desde la fila
+          const fila = btn.closest("tr");
+          selectTipo.value = fila.dataset.tipoId;
+          selectTalla.value = fila.dataset.tallaId;
+          selectColor.value = fila.dataset.colorId;
+          document.getElementById("editarCantidad").value = parseInt(fila.children[5].textContent.trim());
+          document.getElementById("editarPrecio").value = parseFloat(fila.children[6].textContent.trim());
+
+          modalEditar.style.display = "block";
         });
       });
 
-      // Botones del modal
-      btnCancelar.onclick = () => modal.style.display = "none";
-      btnCerrar.onclick = () => modal.style.display = "none";
+      btnCancelar.onclick = () => modalEditar.style.display = "none";
+      btnCerrar.onclick = () => modalEditar.style.display = "none";
 
-      // Confirmar edición
       btnConfirmar.onclick = () => {
         const formData = new FormData(document.getElementById("formEditar"));
-
         fetch(`/almacenista/productos/editar/${productoId}/`, {
           method: "POST",
-          headers: { "X-CSRFToken": "{{ csrf_token }}" },
+          headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value },
           body: formData
         }).then(res => {
           if (res.ok) location.reload();
           else alert("Error al editar el producto.");
         });
-
-        modal.style.display = "none";
+        modalEditar.style.display = "none";
       };
     });
   </script>
 
-  <!-- Modal de eliminar producto -->
+  <!-- script de editar producto -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById("modalAgregar");
+        const btnAbrir = document.getElementById("btnAbrirAgregar");
+        const btnCerrar = modal.querySelector(".close");
+        const btnCancelar = modal.querySelector(".btn-cancelar");
+
+        btnAbrir.onclick = () => modal.style.display = "block";
+        btnCerrar.onclick = () => modal.style.display = "none";
+        btnCancelar.onclick = () => modal.style.display = "none";
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.onclick = (e) => {
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+    });
+  </script>
+
+
+  <!-- script de eliminar producto -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const modalEliminar = document.getElementById("modalEliminar");
@@ -286,7 +445,7 @@
       btnEliminarConfirmar.onclick = () => {
         fetch(`/almacenista/productos/eliminar/${productoId}/`, {
           method: "POST",
-          headers: { "X-CSRFToken": "{{ csrf_token }}" }
+          headers: { "X-CSRFToken": "TibWfsgf4cwatC2yFGdKj8Z0rIXHbeM2Lnd4d4GvqfzAEGTyLi49rK0Hm3bizcS4" }
         }).then(res => {
           if (res.ok) {
             alert("Producto eliminado correctamente");

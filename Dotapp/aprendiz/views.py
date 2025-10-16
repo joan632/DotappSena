@@ -201,46 +201,40 @@ def cancelar_solicitud(request, solicitud_id):
         solicitud.estado_solicitud = "cancelada"
         solicitud.save()
 
-    # Contenido HTML del correo
-    html_content = f"""
-        <html>
-        <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
-            <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
-                <div style="padding:20px;">
-                    f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
-                    f'Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido cancelada.\n'
-                    f'Si deseas hacer un nuevo pedido, créalo desde nuestro sitio web.\n\n'
-                    f'https://joan2004s.pythonanywhere.com/ \n\n'
-                    f'Saludos,\nEl equipo de Dotapp',
-                    'dotappsena@gmail.com',
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-
-    # Contenido texto opcional del correo
     text_content = (
-        f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
-        f'Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido cancelada.\n'
-        f'Si deseas hacer un nuevo pedido, créalo desde nuestro sitio web.\n\n'
-        f'https://joan2004s.pythonanywhere.com/ \n\n'
-        f'Saludos,\nEl equipo de Dotapp',
-        'dotappsena@gmail.com',
+        f"Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n"
+        f"Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido cancelada.\n"
+        f"Si deseas hacer un nuevo pedido, créalo desde nuestro sitio web.\n\n"
+        f"https://joan2004s.pythonanywhere.com/\n\n"
+        f"Saludos,\nEl equipo de Dotapp"
     )
 
-    # Configurar el correo
+    html_content = f"""
+    <html>
+    <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
+        <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
+            <div style="padding:20px;">
+                Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},<br><br>
+                Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido cancelada.<br>
+                Si deseas hacer un nuevo pedido, créalo desde nuestro sitio web.<br><br>
+                <a href="https://joan2004s.pythonanywhere.com/">Dotapp</a><br><br>
+                Saludos,<br>El equipo de Dotapp
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
     msg = EmailMultiAlternatives(
         'Solicitud cancelada - Dotapp',
         text_content,
         'dotappsena@gmail.com',
         [solicitud.id_aprendiz.correo],
     )
-
-    # Adjuntar el contenido HTML
     msg.attach_alternative(html_content, "text/html")
 
-    # 🚀 Enviar el correo
+    # ⚡ Esto hará que Django muestre el error completo en pantalla
     msg.send(fail_silently=False)
 
     return redirect("historial-solicitudes")
+
