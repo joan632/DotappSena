@@ -3,6 +3,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from core.models import Solicitud
+from django.contrib import messages
 # Create your views here.
 
 @login_required
@@ -32,36 +33,34 @@ def entregar_solicitud(request, solicitud_id):
         solicitud.estado_solicitud = "entregada"
         solicitud.save()
 
-    send_mail(
-        
 
-    )
-
-    # Contenido HTML del correo
-    html_content = f"""
-        <html>
-        <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
-            <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
-                <div style="padding:20px;">
-                    f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
-                    f'Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido ENTREGADA.\n'
-                    f'Gracias por usar Dotapp. ¡Esperamos verte pronto!\n\n'
-                    f'Saludos,\nEl equipo de Dotapp',
-                    'dotappsena@gmail.com',
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-
-    # Contenido texto opcional del correo
+    # Contenido texto del correo
     text_content = (
         f'Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},\n\n'
         f'Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido ENTREGADA.\n'
         f'Gracias por usar Dotapp. ¡Esperamos verte pronto!\n\n'
-        f'Saludos,\nEl equipo de Dotapp',
-        'dotappsena@gmail.com',
+        f"Si deseas hacer un nuevo pedido, créalo desde nuestro sitio web.\n\n"
+        f'https://joan2004s.pythonanywhere.com/ \n\n'
+        f'Muchas gracias por tu paciencia.\n\n'
+        f'Saludos,\nEl equipo de Dotapp'
     )
+
+    # Contenido HTML del correo
+    html_content = f"""
+    <html>
+    <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
+        <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
+            <div style="padding:20px;">
+                Hola {solicitud.id_aprendiz.get_full_name() or solicitud.id_aprendiz.username},<br><br>
+                Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido ENTREGADA.<br>
+                Si deseas hacer un nuevo pedido, créalo desde nuestro sitio web.<br><br>
+                <a href="https://joan2004s.pythonanywhere.com/">Dotapp</a><br><br>
+                Saludos,<br>El equipo de Dotapp
+            </div>
+        </div>
+    </body>
+    </html>
+    """
 
     # Configurar el correo
     msg = EmailMultiAlternatives(
@@ -76,5 +75,7 @@ def entregar_solicitud(request, solicitud_id):
 
     # 🚀 Enviar el correo
     msg.send(fail_silently=False)
+
+    messages.success(request, "Solicitud entregada exitosamente.")
 
     return redirect("solicitudes_pendientes")

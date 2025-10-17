@@ -103,21 +103,25 @@ class Color(models.Model):
 # Tabla de productos
 class Producto(models.Model):
     id_producto = models.AutoField(primary_key=True)
+   
     tipo = models.ForeignKey(
         TipoProducto,
         on_delete=models.CASCADE,
         related_name='productos'
     )
+
     talla = models.ForeignKey(
         Talla,
         on_delete=models.CASCADE,
         related_name='productos'
     )
+
     color = models.ForeignKey(
         Color,
         on_delete=models.CASCADE,
         related_name='productos'
     )
+
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
     imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
@@ -153,6 +157,31 @@ class Producto(models.Model):
         return None
 
 
+
+# Tabla de Centros de Formación
+class CentroFormacion(models.Model):
+    id_centro = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+
+# Tabla de Programas de Formación
+class Programa(models.Model):
+    id_programa = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255, unique=True)
+    centro = models.ForeignKey(
+        CentroFormacion,
+        on_delete=models.CASCADE,
+        related_name="programas"
+    )
+
+    def __str__(self):
+        return f"{self.nombre} ({self.centro.nombre})"
+
+
+
 #clase Solicitud
 from django.utils.timezone import now
 
@@ -163,8 +192,9 @@ class Solicitud(models.Model):
 
     cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     detalles_adicionales = models.TextField(blank=True, null=True)
-    talla = models.CharField(max_length=255, blank=False, null=False)  
-    color = models.CharField(max_length=255, blank=False, null=False)  
+    talla = models.ForeignKey(Talla, on_delete=models.PROTECT)
+    color = models.ForeignKey(Color, on_delete=models.PROTECT)
+
 
     ESTADOS = [
         ('pendiente', 'Pendiente'),
@@ -177,8 +207,18 @@ class Solicitud(models.Model):
     
     estado_solicitud = models.CharField(max_length=255, choices=ESTADOS, default='pendiente')
 
-    centro_formacion = models.CharField(max_length=255, blank=False, null=False)
-    programa = models.CharField(max_length=255, blank=False, null=False)
+    centro_formacion = models.ForeignKey(
+        "CentroFormacion",
+        on_delete=models.PROTECT,
+        related_name="solicitudes"
+    )
+
+    programa = models.ForeignKey(
+        "Programa",
+        on_delete=models.PROTECT,
+        related_name="solicitudes"
+    )
+
     ficha = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     id_aprendiz = models.ForeignKey(
@@ -226,20 +266,22 @@ class Solicitud(models.Model):
 
 #clase Borrador
 class Borrador(models.Model):
-    """Copia ligera de Solicitud sin restricciones de FK ni stock."""
     id_borrador = models.AutoField(primary_key=True)
     aprendiz = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    tipo     = models.CharField(max_length=255, blank=True)
-    talla    = models.CharField(max_length=255,  blank=True)
-    color    = models.CharField(max_length=255, blank=True)
+    tipo = models.CharField(max_length=255, blank=True)
+    talla = models.CharField(max_length=255, blank=True)
+    color = models.CharField(max_length=255, blank=True)
     cantidad = models.PositiveIntegerField(default=0)
-    centro   = models.CharField(max_length=255, blank=True)
-    programa = models.CharField(max_length=255, blank=True)
-    ficha    = models.PositiveIntegerField(null=True, blank=True)
+    centro = models.ForeignKey(CentroFormacion, on_delete=models.SET_NULL, null=True, blank=True)
+    programa = models.ForeignKey(Programa, on_delete=models.SET_NULL, null=True, blank=True)
+    ficha = models.PositiveIntegerField(null=True, blank=True)
     detalles = models.TextField(blank=True)
 
     creado = models.DateTimeField(auto_now_add=True)
     actualizado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Borrador {self.id} – {self.aprendiz}"
+        return f"Borrador {self.id_borrador}"
+
+
+

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-card">
+        <h1>Algo salió mal</h1>
+        <p>Estamos teniendo problemas técnicos. Por favor, vuelve a intentarlo más tarde.</p>
+        <a href="{% url 'login' %}">Ir al inicio de sesión</a>
+    </div>
+</div>
+{% endblock %}

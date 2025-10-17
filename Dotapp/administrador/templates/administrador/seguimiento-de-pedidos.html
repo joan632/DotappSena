@@ -32,6 +32,11 @@
             </form>
           </div>
 
+          <!-- Botón para abrir el modal de configuraciones Adicionales -->
+          <button id="btnAbrirConfiguraciones" class="btn-config">
+            ⚙️ Configuraciones Adicionales
+          </button>
+
           <!-- Botones de exportación -->
           <div class="export-buttons">
             <a href="{% url 'exportar_pdf' %}?buscar={{ request.GET.buscar }}&estado={{ request.GET.estado }}&usuario={{ request.GET.usuario }}" class="btn-export pdf">
@@ -97,9 +102,128 @@
 
     </div>
   </div>
+
+  <!-- Modal -->
+  <div id="modalConfiguraciones" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>⚙️ Configuraciones Adicionales</h2>
+      <p>Puedes agregar nuevos centros o programas de formación.</p>
+
+      <!-- CSRF token para fetch -->
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+      <!-- Agregar Centro -->
+      <div class="form-row">
+        <input id="nuevoCentro" type="text" placeholder="Nuevo centro de formación">
+        <button class="btn-add" id="btnAgregarCentro">Agregar Centro</button>
+      </div>
+      <br>
+
+      <p>Selecciona el centro de formación:</p>
+
+      <!-- Agregar Programa -->
+      <div class="form-row">
+        <select id="centroSelect">
+          {% for c in centros %}
+            <option value="{{ c.id_centro }}">{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+        <input id="nuevoPrograma" type="text" placeholder="Nuevo programa de formación">
+        <button class="btn-add" id="btnAgregarPrograma">Agregar Programa</button>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}
 
 {% block scripts %}
+  <!-- Script para configuraciones adicionales -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById("modalConfiguraciones");
+      const btnAbrir = document.getElementById("btnAbrirConfiguraciones");
+      const btnCerrar = modal.querySelector(".close");
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      // Abrir modal
+      btnAbrir.addEventListener("click", () => modal.style.display = "block");
+
+      // Cerrar modal
+      btnCerrar.addEventListener("click", () => modal.style.display = "none");
+      window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+
+      // Agregar Centro
+      document.getElementById("btnAgregarCentro").addEventListener("click", () => {
+        const nombre = document.getElementById("nuevoCentro").value.trim();
+        if (!nombre) return alert("⚠️ Ingresa un nombre de centro");
+
+        fetch("{% url 'agregar_centro' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": csrfToken,
+          },
+          body: new URLSearchParams({ nombre })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) throw new Error(data.error || "Error desconocido");
+          alert("✅ Centro agregado correctamente");
+
+          // Limpiar input
+          document.getElementById("nuevoCentro").value = "";
+
+          // Actualizar select
+          const select = document.getElementById("centroSelect");
+          const option = document.createElement("option");
+          option.value = data.id_centro;
+          option.textContent = data.nombre;
+          select.appendChild(option);
+          option.selected = true;
+        })
+        .catch(err => alert("⚠️ Error: " + err.message));
+      });
+
+      // Agregar Programa
+      document.getElementById("btnAgregarPrograma").addEventListener("click", () => {
+        const nombre = document.getElementById("nuevoPrograma").value.trim();
+        const centroId = document.getElementById("centroSelect").value;
+        if (!nombre) return alert("⚠️ Ingresa un nombre de programa");
+        if (!centroId) return alert("⚠️ Selecciona un centro");
+
+        fetch("{% url 'agregar_programa' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": csrfToken,
+          },
+          body: new URLSearchParams({ nombre, centro_id: centroId })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) throw new Error(data.error || "Error desconocido");
+          alert("✅ Programa agregado correctamente");
+
+          // Limpiar input
+          document.getElementById("nuevoPrograma").value = "";
+
+          // Si tienes un select de programas, lo actualizas aquí
+          const programaSelect = document.getElementById("programaSelect");
+          if (programaSelect) {
+            const option = document.createElement("option");
+            option.value = data.id_programa;
+            option.textContent = data.nombre;
+            programaSelect.appendChild(option);
+            option.selected = true;
+          }
+        })
+        .catch(err => alert("⚠️ Error: " + err.message));
+      });
+    });
+  </script>
+
+
   <script>
     const tableScroll = document.getElementById('tableScroll');
     const slideSync   = document.getElementById('slideSync');

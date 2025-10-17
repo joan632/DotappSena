@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.http import JsonResponse
-from core.models import Usuario, Rol, Solicitud, Borrador
+from django.http import JsonResponse, HttpResponse
+from core.models import Usuario, Rol, Solicitud, Borrador, CentroFormacion, Programa
 
 #vista de panel de administrador
 @login_required
@@ -105,6 +105,8 @@ def seguimiento_pedidos(request):
     buscar = request.GET.get("buscar", "").strip()
     estado = request.GET.get("estado", "").strip()
 
+    CentroFormacion.objects.all()  # Asegura que la tabla exista
+
     # queryset base
     solicitudes = Solicitud.objects.select_related("id_aprendiz", "id_producto").all()
     # Agrega esto:
@@ -128,7 +130,66 @@ def seguimiento_pedidos(request):
         "borradores": borradores,
         "buscar": buscar,
         "estado": estado,
+        "centros": CentroFormacion.objects.all()
     })
+
+
+# 🟢 Agregar Centro de Formación
+@csrf_exempt
+def agregar_centro(request):
+    if request.method == "POST":
+        nombre = request.POST.get("nombre", "").strip()
+        if not nombre:
+            return JsonResponse({"success": False, "error": "No se envió nombre"}, status=400)
+        
+        centro, created = CentroFormacion.objects.get_or_create(nombre=nombre)
+        return JsonResponse({
+            "success": True,
+            "created": created,
+            "id_centro": centro.id_centro,
+            "nombre": centro.nombre
+        })
+    return JsonResponse({"success": False, "error": "Método no permitido"}, status=405)
+
+
+# 🟡 Agregar Programa
+@csrf_exempt
+def agregar_programa(request):
+    if request.method == "POST":
+        nombre = request.POST.get("nombre", "").strip()
+        centro_id = request.POST.get("centro_id")
+        if not nombre:
+            return JsonResponse({"success": False, "error": "No se envió nombre"}, status=400)
+        if not centro_id:
+            return JsonResponse({"success": False, "error": "No se envió centro_id"}, status=400)
+
+        try:
+            centro = CentroFormacion.objects.get(id_centro=centro_id)
+        except CentroFormacion.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Centro no existe"}, status=400)
+
+        programa, created = Programa.objects.get_or_create(nombre=nombre, centro=centro)
+        return JsonResponse({
+            "success": True,
+            "created": created,
+            "id_programa": programa.id_programa,
+            "nombre": programa.nombre,
+            "centro": centro.nombre
+        })
+
+    return JsonResponse({"success": False, "error": "Método no permitido"}, status=405)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 from django.http import HttpResponse

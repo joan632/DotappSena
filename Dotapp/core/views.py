@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from core.models import Usuario
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
+from django.core.mail import EmailMultiAlternatives
 
 User = get_user_model()
 
@@ -102,16 +103,47 @@ def password_reset_request(request):
             reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
         )
 
-        send_mail(
-            'Recupera tu contraseña',
+            # Contenido texto opcional del correo
+        text_content = (
             f'Hola,\n\nRecibimos una solicitud para restablecer tu contraseña en DotAppSena. '
             f'Para crear una nueva contraseña visita el siguiente enlace (válido 15 minutos):\n\n'
             f'{reset_url}\n\n'
             f'Si no solicitaste este cambio, simplemente ignora este correo.\n\n'
-            f'Saludos,\nEl equipo de Dotapp',
+            f'Saludos,\nEl equipo de Dotapp'
+        )
+
+        # Contenido HTML del correo
+        html_content = f"""
+        <html>
+        <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
+            <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
+                <div style="padding:20px;">
+                    Hola,<br><br>
+                    Recibimos una solicitud para restablecer tu contraseña en DotAppSena.<br>
+                    Para crear una nueva contraseña visita el siguiente enlace (válido 15 minutos):<br><br>
+                    <a href="{reset_url}">Restablecer contraseña</a><br><br>
+                    Si no solicitaste este cambio, simplemente ignora este correo.<br><br>
+                    <br>
+                    Saludos,<br>El equipo de Dotapp
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        msg = EmailMultiAlternatives(
+            'Recupera tu contraseña',
+            text_content,
             'dotappsena@gmail.com',
-            [email],
-            fail_silently=False,
+            [email]
+        )
+        msg.attach_alternative(html_content, "text/html")
+
+        msg.send(fail_silently=False)
+
+        send_mail(
+            
+
         )
         return JsonResponse({"status": "ok"})
 

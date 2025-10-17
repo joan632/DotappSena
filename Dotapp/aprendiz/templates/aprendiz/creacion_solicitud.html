@@ -100,26 +100,27 @@
           <input type="number" id="cantidad" name="cantidad" step="1" min="1" required placeholder="" value="{{ borrador.cantidad|default:'' }}">
           <label for="cantidad">Digite la cantidad</label>
         </div>
-        <br>
+        
 
-        <!-- Centro de formación -->
+        <!-- Centro -->
         <label for="centro">Centro de formación</label>
         <select name="centro" id="centro" required>
-          <option value="">Selecciona centro de formación</option>
-          <option value="CEAI" {% if borrador.centro == 'CEAI' %}selected{% endif %}>Centro de Electricidad y Automatización Industrial</option>
+            <option value="">Selecciona centro de formación</option>
+            {% for centro in centros %}
+                <option value="{{ centro.id_centro }}" {% if borrador and borrador.centro and borrador.centro.id_centro == centro.id_centro %}selected{% endif %}>
+                    {{ centro.nombre }}
+                </option>
+            {% endfor %}
         </select>
         <br>
 
         <!-- Programa -->
         <label for="programa">Programa</label>
-        <select name="programa" id="programa" required>
-          <option value="">Seleccione un programa</option>
-          <option value="Tecnico en Programación de software" {% if borrador.programa == 'Tecnico en Programación de software' %}selected{% endif %}>Tecnico en Programación de software</option>
-          <option value="Tecnologo en Analisis y desarrollo de software" {% if borrador.programa == 'Tecnologo en Analisis y desarrollo de software' %}selected{% endif %}>Tecnologo en Analisis y desarrollo de software</option>
-          <option value="Tecnico en Recursos Humanos" {% if borrador.programa == 'Tecnico en Recursos Humanos' %}selected{% endif %}>Tecnico en Recursos Humanos</option>
-          <option value="Tecnologo en Electricidad Industrial" {% if borrador.programa == 'Tecnologo en Electricidad Industrial' %}selected{% endif %}>Tecnologo en Electricidad Industrial</option>
+        <select name="programa" id="programa" data-selected="{% if borrador and borrador.programa %}{{ borrador.programa.id_programa }}{% endif %}" required>
+            <option value="">Seleccione un programa</option>
         </select>
         <br>
+
 
         <!-- Ficha -->
         <label for="ficha">Ficha</label>
@@ -224,6 +225,47 @@
     });
   </script>
 
+
+  <!-- Script para cargar programas bergen el centro seleccionado -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const centroSelect = document.getElementById('centro');
+        const programaSelect = document.getElementById('programa');
+
+        function cargarProgramas() {
+            const centroId = centroSelect.value;
+            programaSelect.innerHTML = '<option value="">Seleccione un programa</option>';
+            if (!centroId) return;
+
+            fetch(`/aprendiz/ajax/programas_por_centro/?centro_id=${centroId}`)
+                .then(res => res.json())
+                .then(data => {
+                    data.programas.forEach(prog => {
+                        const option = document.createElement('option');
+                        option.value = prog.id_programa;
+                        option.textContent = prog.nombre;
+                        programaSelect.appendChild(option);
+                    });
+
+                    // Seleccionar el programa del borrador si existe
+                    const selectedPrograma = programaSelect.dataset.selected;
+                    if (selectedPrograma) {
+                        programaSelect.value = selectedPrograma;
+                    }
+                });
+        }
+
+        centroSelect.addEventListener('change', () => {
+            cargarProgramas();
+        });
+
+        // Cargar al iniciar si ya hay centro seleccionado en el borrador
+        if (centroSelect.value) cargarProgramas();
+    });
+  </script>
+
+
+  
   <!-- Script para manejar el tamaño del textarea automaticamente -->
   <script>
     const textarea = document.getElementById('detalles');

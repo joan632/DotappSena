@@ -7,10 +7,10 @@ from django.conf import settings
 from django.urls import reverse
 import pdfkit
 from django.conf import settings
-from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
+from django.template.loader import render_to_string
 
 import json
 
@@ -62,20 +62,27 @@ def dashboard_almacenista(request):
     return render(request, "almacenista/dashboard_almacenista.html")
 
 
-# Vista para la administración de productos
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+
 @login_required
 def administrar_productos(request):
     productos = Producto.objects.all()
-    tipos = TipoProducto.objects.all()
-    tallas = Talla.objects.all()
-    colores = Color.objects.all()
+    tipos = list(TipoProducto.objects.all().values('id_tipo', 'nombre'))
+    tallas = list(Talla.objects.all().values('id_talla', 'nombre'))
+    colores = list(Color.objects.all().values('id_color', 'nombre'))
+
     return render(request, 'almacenista/administracion_productos.html', {
         'productos': productos,
-        'tipos': tipos,
-        'tallas': tallas,
-        'colores': colores,
-        'MEDIA_URL': settings.MEDIA_URL
+        'tipos': TipoProducto.objects.all(),
+        'tallas': Talla.objects.all(),
+        'colores': Color.objects.all(),
+        'MEDIA_URL': settings.MEDIA_URL,
+        'tipos_json': json.dumps(tipos, cls=DjangoJSONEncoder),
+        'tallas_json': json.dumps(tallas, cls=DjangoJSONEncoder),
+        'colores_json': json.dumps(colores, cls=DjangoJSONEncoder),
     })
+
 
 
 # Vista para agregar productos
@@ -121,6 +128,27 @@ def agregar_producto(request):
         return JsonResponse({'status': 'ok', 'producto_id': producto.id_producto})
 
     return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
+
+
+#vista para configurar productos
+from django.db.models import Value, CharField, F
+
+@login_required
+def config_productos(request):
+    tipos = list(
+        TipoProducto.objects.annotate(cat=Value('T', CharField()))
+        .values('id_tipo', 'nombre', 'cat')
+    )
+    tallas = list(
+        Talla.objects.annotate(cat=Value('L', CharField()))
+        .values('id_talla', 'nombre', 'cat')
+    )
+    colores = list(
+        Color.objects.annotate(cat=Value('C', CharField()))
+        .values('id_color', 'nombre', 'cat')
+    )
+    return render(request, 'almacenista/config_productos.html',
+                  {'tipos': tipos, 'tallas': tallas, 'colores': colores})
 
 
 # Vista para agregar tipos de productos
@@ -354,7 +382,7 @@ def aprobar_solicitud(request, solicitud_id):
         msg.attach_alternative(html_content, "text/html")
 
         # Adjuntar el PDF
-        msg.attach(f'factura_solicitud_{solicitud.estado_solicitud}.pdf', pdf_bytes, 'application/pdf')
+        msg.attach(f'factura_{solicitud.estado_solicitud}.pdf', pdf_bytes, 'application/pdf')
 
         # 🚀 Enviar el correo
         msg.send(fail_silently=False)

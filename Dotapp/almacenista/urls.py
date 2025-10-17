@@ -11,6 +11,7 @@ urlpatterns = [
     path("Rechazar/<int:solicitud_id>/", views.rechazar_solicitud, name="rechazar-solicitud"),
     path("Aprobar/<int:solicitud_id>/", views.aprobar_solicitud, name="aprobar-solicitud"),
     path("Despachar/<int:solicitud_id>/", views.despachar_solicitud, name="despachar-solicitud"),
+    path('almacenista/config-productos/', views.config_productos, name='config_productos'),
     path("agregar_tipo/", views.agregar_tipo, name="agregar_tipo"),
     path("agregar_talla/", views.agregar_talla, name="agregar_talla"),
     path("agregar_color/", views.agregar_color, name="agregar_color"),

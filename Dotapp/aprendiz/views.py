@@ -23,7 +23,7 @@ from django.http import HttpResponse
 from io import BytesIO
 import imgkit
 from PIL import Image, ImageDraw, ImageFont   # solo si la usas para otra cosa
-from core.models import Solicitud, Producto, Borrador, TipoProducto, Talla, Color
+from core.models import Solicitud, Producto, Borrador, TipoProducto, Talla, Color, CentroFormacion, Programa
 
 
 
@@ -90,51 +90,64 @@ def solicitud_uniforme(request):
     TipoProductos = TipoProducto.objects.all()
     Tallas = Talla.objects.all()
     Colores = Color.objects.all()
+    Centros = CentroFormacion.objects.all()
+    programas = Programa.objects.all()
     return render(request, 'aprendiz/creacion_solicitud.html', {
         "productos": productos,
         "tipos": TipoProductos,
         "tallas": Tallas,
         "colores": Colores,
         "borrador": borrador,
+        "centros": Centros,
+        "programas": programas
     })
+
+
+# Vista para filtrar programas por centro (AJAX)
+
+def ajax_programas_por_centro(request):
+    centro_id = request.GET.get("centro_id")
+    programas = []
+    if centro_id:
+        programas = Programa.objects.filter(centro_id=centro_id).values("id_programa", "nombre")
+    return JsonResponse({"programas": list(programas)})
 
 
 # vista para crear solicitud de uniforme
 @login_required
 def crear_solicitud(request):
     if request.method == "POST":
+        # --- procesas los datos del formulario ---
         tipo_str = request.POST.get("tipo")
         talla_str = request.POST.get("talla")
         color_str = request.POST.get("color")
-        cantidad = int(request.POST.get("cantidad"))
-        centro = request.POST.get("centro")
-        programa = request.POST.get("programa")
-        ficha = int(request.POST.get("ficha"))
-        detalles = request.POST.get("detalles")
+        cantidad = int(request.POST.get("cantidad") or 0)
+        centro_id = request.POST.get("centro")
+        programa_id = request.POST.get("programa")
+        ficha = int(request.POST.get("ficha") or 0)
+        detalles = request.POST.get("detalles") or ""
 
-        # Obtener instancias de modelos relacionados
-        try:
-            tipo_obj = TipoProducto.objects.get(nombre=tipo_str)
-            talla_obj = Talla.objects.get(nombre=talla_str)
-            color_obj = Color.objects.get(nombre=color_str)
-        except (TipoProducto.DoesNotExist, Talla.DoesNotExist, Color.DoesNotExist):
-            messages.warning(request, "El tipo, talla o color seleccionado no existe.")
+        # --- obtener objetos relacionados ---
+        tipo_obj = TipoProducto.objects.filter(nombre=tipo_str).first()
+        talla_obj = Talla.objects.filter(nombre=talla_str).first()
+        color_obj = Color.objects.filter(nombre=color_str).first()
+        centro_obj = CentroFormacion.objects.filter(id_centro=centro_id).first() if centro_id else None
+        programa_obj = Programa.objects.filter(id_programa=programa_id).first() if programa_id else None
+
+        if not tipo_obj or not talla_obj or not color_obj or not centro_obj or not programa_obj:
+            messages.warning(request, "Faltan datos o datos inválidos.")
             return redirect("solicitud-uniforme")
 
-        # Obtener el producto
-        try:
-            producto = Producto.objects.get(tipo=tipo_obj, talla=talla_obj, color=color_obj)
-        except Producto.DoesNotExist:
+        producto = Producto.objects.filter(tipo=tipo_obj, talla=talla_obj, color=color_obj).first()
+        if not producto:
             messages.warning(request, "El producto seleccionado no está disponible.")
             return redirect("solicitud-uniforme")
 
         if cantidad > producto.stock:
-            messages.warning(
-                request,
-                f"No hay suficiente stock de {producto.tipo.nombre}. Solo quedan {producto.stock} unidades."
-            )
+            messages.warning(request, f"No hay suficiente stock. Solo quedan {producto.stock} unidades.")
             return redirect("solicitud-uniforme")
 
+        # --- crear solicitud ---
         solicitud = Solicitud.objects.create(
             id_aprendiz=request.user,
             id_producto=producto,
@@ -142,19 +155,19 @@ def crear_solicitud(request):
             color=color_obj,
             cantidad=cantidad,
             detalles_adicionales=detalles,
-            centro_formacion=centro,
-            programa=programa,
+            centro_formacion=centro_obj,
+            programa=programa_obj,
             ficha=ficha,
             estado_solicitud="pendiente",
         )
 
+        # --- eliminar borrador ---
         Borrador.objects.filter(aprendiz=request.user).delete()
 
         messages.success(request, "Solicitud creada exitosamente")
         return redirect("historial-solicitudes")
 
-    return render(request, "aprendiz/creacion_solicitud.html")
-
+    return redirect("solicitud-uniforme")
 
 #vista para guardar borrador
 @login_required
@@ -162,17 +175,19 @@ def guardar_borrador(request):
     if request.method != "POST":
         return redirect("solicitud-uniforme")
 
-    # update_or_create: solo un borrador por usuario
+    centro = CentroFormacion.objects.filter(id_centro=request.POST.get("centro")).first() if request.POST.get("centro") else None
+    programa = Programa.objects.filter(id_programa=request.POST.get("programa")).first() if request.POST.get("programa") else None
+
     Borrador.objects.update_or_create(
         aprendiz=request.user,
         defaults={
-            "tipo"    : request.POST.get("tipo")   or "",
-            "talla"   : request.POST.get("talla")  or "",
-            "color"   : request.POST.get("color")  or "",
+            "tipo": request.POST.get("tipo") or "",
+            "talla": request.POST.get("talla") or "",
+            "color": request.POST.get("color") or "",
             "cantidad": int(request.POST.get("cantidad") or 0),
-            "centro"  : request.POST.get("centro") or "",
-            "programa": request.POST.get("programa") or "",
-            "ficha"   : int(request.POST.get("ficha") or 0) or None,
+            "centro": centro,
+            "programa": programa,
+            "ficha": int(request.POST.get("ficha") or 0),
             "detalles": request.POST.get("detalles") or "",
         }
     )
