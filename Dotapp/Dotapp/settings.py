@@ -103,7 +103,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'joan2004s$dotapp',
         'USER': 'joan2004s',
-        'PASSWORD': 'Dotapp01092025',
+        'PASSWORD': 'Dotappsena01092025',
         'HOST': 'joan2004s.mysql.pythonanywhere-services.com',
         'PORT': '3306',
         'OPTIONS': {
