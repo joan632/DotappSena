@@ -1442,7 +1442,7 @@ footer p {
   .login-card, .registro-card { max-width: 70%; }
   .registro-link button { font-size: 1em; padding: 10px; }
   .btn-back { font-size: 20px; }
-  #slideSync h1 {   
+  .slide h1 {   
     font-size: 20px;  /* Reducir más el tamaño */  
     max-width: 90vw;  /* Limitar ancho máximo */  
     word-wrap: break-word;  /* Romper palabras largas */  
