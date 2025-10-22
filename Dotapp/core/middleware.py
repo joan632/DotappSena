@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 
+# Middleware para guardar el template en memoria
 class SaveLastTemplateMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -13,6 +14,7 @@ class SaveLastTemplateMiddleware:
         return response
 
 
+# Middleware para manejar las excepciones
 class AmigableExceptionMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -34,3 +36,5 @@ class AmigableExceptionMiddleware:
 
         # 3. Fallback: login
         return redirect('login')
+    
+

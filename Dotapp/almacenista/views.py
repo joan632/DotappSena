@@ -51,7 +51,7 @@ def generar_factura_pdf_bytes(solicitud):
         import traceback
         traceback.print_exc()
         raise e
-    
+
 
 
 # Vista para el panel de almacenista
@@ -338,7 +338,7 @@ def aprobar_solicitud(request, solicitud_id):
     if solicitud.estado_solicitud == "pendiente":
         solicitud.estado_solicitud = "aprobada"
         solicitud.save()
-
+        
         # Generar el PDF de la factura
         pdf_bytes = generar_factura_pdf_bytes(solicitud)
 

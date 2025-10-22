@@ -159,6 +159,11 @@
     function filtrarTabla() {
       const texto = normalizarTexto(inputBuscar.value);
       const rol = selectRol.value;
+      let coincidencias = 0;
+
+      // 🔹 Eliminar mensaje anterior si existe
+      const filaMensaje = document.getElementById("filaMensaje");
+      if (filaMensaje) filaMensaje.remove();
 
       for (let fila of tabla.rows) {
         const id = normalizarTexto(fila.cells[0].textContent);
@@ -170,16 +175,33 @@
         const coincideTexto =
           id.includes(texto) ||
           nombre.includes(texto) ||
+          apellido.includes(texto) ||
           correo.includes(texto);
 
         const coincideRol = rol === "" || rolFila === rol;
 
-        fila.style.display = coincideTexto && coincideRol ? "" : "none";
+        const visible = coincideTexto && coincideRol;
+        fila.style.display = visible ? "" : "none";
+
+        if (visible) coincidencias++;
+      }
+
+      // 🔹 Si no hay coincidencias, agregar una fila de mensaje
+      if (coincidencias === 0) {
+        const fila = tabla.insertRow();
+        fila.id = "filaMensaje";
+
+        const celda = fila.insertCell();
+        celda.colSpan = 7; // ajusta al número de columnas
+        celda.textContent = "No se encontraron resultados.";
+        celda.style.textAlign = "center";
+        celda.style.fontWeight = "bold";
+        celda.style.color = "#666";
       }
     }
 
-    // Eventos: búsqueda en vivo y filtrado por rol
-    inputBuscar.addEventListener("keyup", filtrarTabla);
+    // Escuchar cambios
+    inputBuscar.addEventListener("input", filtrarTabla);
     selectRol.addEventListener("change", filtrarTabla);
 
   </script>
@@ -213,6 +235,12 @@
     document.querySelectorAll(".editar").forEach(btn => {
       btn.addEventListener("click", function() {
         filaSeleccionada = this.closest("tr");
+
+        // 🚫 Evitar editar si está inactivo
+        if (filaSeleccionada.classList.contains("inactivo")) {
+          alert("El usuario se encuentra inactivo.");
+          return;
+        }
         
         document.getElementById("editId").value = filaSeleccionada.cells[0].textContent.trim();
         document.getElementById("editNombre").value = filaSeleccionada.cells[1].textContent.trim();
@@ -284,6 +312,11 @@
     document.querySelectorAll(".eliminar").forEach(btn => {
       btn.addEventListener("click", function() {
         filaAEliminar = this.closest("tr");
+        // 🚫 Evitar eliminar si está inactivo
+        if (filaAEliminar.classList.contains("inactivo")) {
+          alert("El usuario se encuentra inactivo.");
+          return;
+        }
         const nombre = filaAEliminar.cells[1].textContent;
         const apellido = filaAEliminar.cells[2].textContent;
         textoEliminar.textContent = `¿Seguro que deseas eliminar al usuario "${nombre} ${apellido}"?`;

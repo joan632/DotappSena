@@ -303,6 +303,95 @@ img.logo {
   object-fit: contain;
 }
 
+/* Contenedor del círculo y mensaje */
+.contenedor-circulo {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  max-width: fit-content;
+  margin-left: 92%;
+  margin-top: 20px;
+  margin-right: 20px;
+  margin-bottom: none;
+  bottom: 125px;
+  background-color: transparent !important;
+}
+
+/* Mensaje que aparece al pasar el mouse */
+.mensaje-ayuda {
+  visibility: hidden;
+  background-color: none !important;
+  color: var(--text) !important;
+  padding: 6px 10px;
+  border-radius: 4px;
+  position: absolute;
+  right: 75%; /* coloca el mensaje a la izquierda del círculo */
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* Mostrar mensaje al pasar el mouse */
+.contenedor-circulo:hover .mensaje-ayuda {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* SVG general */
+.circulo {
+  width: 40px;
+  height: 40px;
+}
+
+/* Borde del círculo */
+.borde-circulo {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 4;
+}
+
+/* Signo de interrogación dentro del círculo */
+.signo-pregunta {
+  fill: var(--primary);
+  font-family: Arial, sans-serif;
+  font-size: 60px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.circulo:hover .borde-circulo {
+  fill: var(--primary) !important;
+}
+
+.circulo:hover .signo-pregunta {
+  fill: var(--card) !important;
+}
+
+.manual-card{
+  top: 10px;
+  right: 10px;
+  margin-top: 50px;
+  text-align: center;
+  z-index: 1000;
+  cursor: pointer;
+  font-size: 2em;
+  background: none;
+  border: none;
+  color: var(--primary);
+}
+
+.manual-card p{
+  color: var(--text);
+  margin: 15px 15px 50px 15px;
+  font-weight: bold;
+}
+
+
 /* Notificaciones */
 .notifications {
   position: fixed;

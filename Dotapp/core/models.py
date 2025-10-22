@@ -180,11 +180,9 @@ class Programa(models.Model):
     def __str__(self):
         return f"{self.nombre} ({self.centro.nombre})"
 
-
-
-#clase Solicitud
 from django.utils.timezone import now
 
+# Tabla de Solicitudes
 class Solicitud(models.Model):
     id_solicitud = models.AutoField(primary_key=True)
     fecha_solicitud = models.DateTimeField(auto_now_add=True)
@@ -192,9 +190,26 @@ class Solicitud(models.Model):
 
     cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     detalles_adicionales = models.TextField(blank=True, null=True)
-    talla = models.ForeignKey(Talla, on_delete=models.PROTECT)
-    color = models.ForeignKey(Color, on_delete=models.PROTECT)
 
+    # === Campos híbridos ===
+    tipo = models.ForeignKey("TipoProducto", on_delete=models.SET_NULL, null=True)
+    tipo_nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    talla = models.ForeignKey("Talla", on_delete=models.SET_NULL, null=True)
+    talla_nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    color = models.ForeignKey("Color", on_delete=models.SET_NULL, null=True)
+    color_nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    centro_formacion = models.ForeignKey("CentroFormacion", on_delete=models.SET_NULL, null=True)
+    centro_nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    programa = models.ForeignKey("Programa", on_delete=models.SET_NULL, null=True)
+    programa_nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    ficha = models.PositiveIntegerField(default=0)
+    id_aprendiz = models.ForeignKey("Usuario", on_delete=models.CASCADE, related_name="solicitudes")
+    id_producto = models.ForeignKey("Producto", on_delete=models.PROTECT, related_name="solicitudes")
 
     ESTADOS = [
         ('pendiente', 'Pendiente'),
@@ -202,41 +217,24 @@ class Solicitud(models.Model):
         ('rechazada', 'Rechazada'),
         ('entregada', 'Entregada'),
         ('cancelada', 'Cancelada'),
-        ('despachada', 'Despachada')
+        ('despachada', 'Despachada'),
     ]
-    
+
     estado_solicitud = models.CharField(max_length=255, choices=ESTADOS, default='pendiente')
 
-    centro_formacion = models.ForeignKey(
-        "CentroFormacion",
-        on_delete=models.PROTECT,
-        related_name="solicitudes"
-    )
-
-    programa = models.ForeignKey(
-        "Programa",
-        on_delete=models.PROTECT,
-        related_name="solicitudes"
-    )
-
-    ficha = models.PositiveIntegerField(default=0, blank=False, null=False)
-
-    id_aprendiz = models.ForeignKey(
-        "Usuario",
-        on_delete=models.CASCADE,
-        related_name="solicitudes"
-    )
-
-    id_producto = models.ForeignKey(
-        "Producto",
-        on_delete=models.CASCADE,
-        related_name="solicitudes"
-    )
-
-    def __str__(self):
-        return f"Solicitud {self.id_solicitud} - {self.estado_solicitud}"
-
     def save(self, *args, **kwargs):
+        # Copia los nombres actuales al guardar (solo si existen)
+        if self.tipo:
+            self.tipo_nombre = self.tipo.nombre
+        if self.talla:
+            self.talla_nombre = self.talla.nombre
+        if self.color:
+            self.color_nombre = self.color.nombre
+        if self.centro_formacion:
+            self.centro_nombre = self.centro_formacion.nombre
+        if self.programa:
+            self.programa_nombre = self.programa.nombre
+
         # Si cambia de estado y aún no tiene fecha de finalización, asignarla
         if self.estado_solicitud in ("despachada", "entregada"):
             self.fecha_finalizacion = now()
@@ -262,6 +260,64 @@ class Solicitud(models.Model):
             producto = self.id_producto
             producto.stock -= self.cantidad
             producto.save()
+
+
+
+
+'''
+class Solicitud(models.Model):
+    id_solicitud = models.AutoField(primary_key=True)
+    fecha_solicitud = models.DateTimeField(auto_now_add=True)
+    fecha_finalizacion = models.DateTimeField(null=True, blank=True)
+
+    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    detalles_adicionales = models.TextField(blank=True, null=True)
+    tipo = models.CharField(max_length=255)
+    talla = models.CharField(max_length=255)
+    color = models.CharField(max_length=255)
+
+
+    ESTADOS = [
+        ('pendiente', 'Pendiente'),
+        ('aprobada', 'Aprobada'),
+        ('rechazada', 'Rechazada'),
+        ('entregada', 'Entregada'),
+        ('cancelada', 'Cancelada'),
+        ('despachada', 'Despachada')
+    ]
+    
+    estado_solicitud = models.CharField(max_length=255, choices=ESTADOS, default='pendiente')
+
+    centro_formacion = models.CharField(max_length=255)
+    programa = models.CharField(max_length=255)
+
+    ficha = models.PositiveIntegerField(default=0, blank=False, null=False)
+
+    id_aprendiz = models.ForeignKey(
+        "Usuario",
+        on_delete=models.CASCADE,
+        related_name="solicitudes"
+    )
+
+    id_producto = models.ForeignKey(
+        "Producto",
+        on_delete=models.PROTECT,
+        related_name="solicitudes"
+    )
+
+    def __str__(self):
+        return f"Solicitud {self.id_solicitud} - {self.estado_solicitud}"
+
+    def save(self, *args, **kwargs):
+        # Si cambia de estado y aún no tiene fecha de finalización, asignarla
+        if self.estado_solicitud in ("despachada", "entregada"):
+            self.fecha_finalizacion = now()
+        elif self.estado_solicitud in ("aprobada", "rechazada", "cancelada") and not self.fecha_finalizacion:
+            self.fecha_finalizacion = now()
+
+        super().save(*args, **kwargs)
+'''
+
 
 
 #clase Borrador

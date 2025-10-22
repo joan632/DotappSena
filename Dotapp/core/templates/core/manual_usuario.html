@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manual de Usuario{% endblock %}
+
+{% block content %}
+
+<div class="manual-card">
+    <div class="sticky-sync-wrapper">
+        <!-- Flecha atrás -->
+        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+          ←
+        </button>
+        
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" style="width: 100px; height: 100px;">
+          <h1>Manual de Usuario</h1>
+        </div>
+    </div>
+
+    <video controls autoplay controlsList="nodownload" style="width: 700px; height: 400px;">
+        <source src="{% static 'img/manual.mp4' %}" type="video/mp4">
+    </video>
+    <br>
+    <p>
+            Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos. ¡Estamos aqui para ayudarte!
+            <br>
+            ¡Gracias por usar DotApp SENA!
+            <br>
+            Atentamente,
+            <br>
+            El equipo de DotApp SENA
+    </p>
+</div>
+
+{% endblock %}

@@ -76,6 +76,9 @@ def actualizar_perfil(request):
         # Guardar los cambios en la base de datos
         usuario.save()
 
+        # Mostrar mensaje de éxito
+        messages.success(request, 'Perfil actualizado correctamente.')
+
         # Redireccionar a la página de perfil después de guardar
         return redirect('perfil-aprendiz')
 
@@ -113,7 +116,7 @@ def ajax_programas_por_centro(request):
     return JsonResponse({"programas": list(programas)})
 
 
-# vista para crear solicitud de uniforme
+'''
 @login_required
 def crear_solicitud(request):
     if request.method == "POST":
@@ -144,22 +147,24 @@ def crear_solicitud(request):
             return redirect("solicitud-uniforme")
 
         if cantidad > producto.stock:
-            messages.warning(request, f"No hay suficiente stock. Solo quedan {producto.stock} unidades.")
+            messages.warning(request, f"No hay suficiente stock. Solo queda {producto.stock} unidad{'es' if producto.stock != 1 else ''}.")
             return redirect("solicitud-uniforme")
 
         # --- crear solicitud ---
         solicitud = Solicitud.objects.create(
             id_aprendiz=request.user,
-            id_producto=producto,
-            talla=talla_obj,
-            color=color_obj,
+            tipo=tipo_obj.nombre,
+            talla=talla_obj.nombre,
+            color=color_obj.nombre,
             cantidad=cantidad,
             detalles_adicionales=detalles,
-            centro_formacion=centro_obj,
-            programa=programa_obj,
+            centro_formacion=centro_obj.nombre,
+            programa=programa_obj.nombre,
             ficha=ficha,
             estado_solicitud="pendiente",
+            id_producto=producto
         )
+
 
         # --- eliminar borrador ---
         Borrador.objects.filter(aprendiz=request.user).delete()
@@ -168,6 +173,73 @@ def crear_solicitud(request):
         return redirect("historial-solicitudes")
 
     return redirect("solicitud-uniforme")
+
+'''
+
+@login_required
+def crear_solicitud(request):
+    if request.method == "POST":
+        # --- Procesar datos del formulario ---
+        tipo_str = request.POST.get("tipo")
+        talla_str = request.POST.get("talla")
+        color_str = request.POST.get("color")
+        cantidad = int(request.POST.get("cantidad") or 0)
+        centro_id = request.POST.get("centro")
+        programa_id = request.POST.get("programa")
+        ficha = int(request.POST.get("ficha") or 0)
+        detalles = request.POST.get("detalles") or ""
+
+        # --- Obtener objetos relacionados ---
+        tipo_obj = TipoProducto.objects.filter(nombre=tipo_str).first()
+        talla_obj = Talla.objects.filter(nombre=talla_str).first()
+        color_obj = Color.objects.filter(nombre=color_str).first()
+        centro_obj = CentroFormacion.objects.filter(id_centro=centro_id).first() if centro_id else None
+        programa_obj = Programa.objects.filter(id_programa=programa_id).first() if programa_id else None
+
+        # Validaciones
+        if not all([tipo_obj, talla_obj, color_obj, centro_obj, programa_obj]):
+            messages.warning(request, "Faltan datos o algunos son inválidos.")
+            return redirect("solicitud-uniforme")
+
+        # Buscar producto correspondiente
+        producto = Producto.objects.filter(tipo=tipo_obj, talla=talla_obj, color=color_obj).first()
+        if not producto:
+            messages.warning(request, "El producto seleccionado no está disponible.")
+            return redirect("solicitud-uniforme")
+
+        if cantidad > producto.stock:
+            messages.warning(request, f"No hay suficiente stock. Solo quedan {producto.stock} unidad(es).")
+            return redirect("solicitud-uniforme")
+
+        # --- Crear solicitud correctamente ---
+        solicitud = Solicitud.objects.create(
+            id_aprendiz=request.user,
+            tipo=tipo_obj,
+            talla=talla_obj,
+            color=color_obj,
+            cantidad=cantidad,
+            detalles_adicionales=detalles,
+            centro_formacion=centro_obj,
+            programa=programa_obj,
+            ficha=ficha,
+            estado_solicitud="pendiente",
+            id_producto=producto
+        )
+
+        # El método save() del modelo se encarga de copiar los nombres (tipo_nombre, color_nombre, etc.)
+
+        # --- Eliminar borrador ---
+        Borrador.objects.filter(aprendiz=request.user).delete()
+
+        messages.success(request, "Solicitud creada exitosamente.")
+        return redirect("historial-solicitudes")
+
+    # Si no es POST
+    return redirect("solicitud-uniforme")
+
+
+
+
 
 #vista para guardar borrador
 @login_required
@@ -199,10 +271,8 @@ def guardar_borrador(request):
 @login_required
 def historial_solicitudes(request):
     solicitudes = Solicitud.objects.filter(id_aprendiz=request.user)
-    productos = Producto.objects.all()
     return render(request, "aprendiz/historial_solicitudes.html", {
         "solicitudes": solicitudes,
-        "productos": productos
     })
 
 

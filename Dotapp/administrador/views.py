@@ -26,6 +26,7 @@ def historial_usuarios(request, id_usuario):
     usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
     solicitudes = usuario.solicitudes.all()
     
+    
     # ordenar por fecha de solicitud
     solicitudes = solicitudes.order_by("-fecha_solicitud")
     return render(
@@ -37,13 +38,16 @@ def historial_usuarios(request, id_usuario):
         }
     )
 
-#vista de editar usuario
+# vista de editar usuario
 @login_required
 def editar_usuario(request, id_usuario):
     usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
 
+    # 🚫 Bloquear edición si está inactivo
+    if not usuario.is_active:
+        return JsonResponse({"success": False, "error": "El usuario está inactivo y no puede ser editado."}, status=403)
+
     if request.method == "POST":
-        # Solo actualizamos si hay valor enviado
         nombre = request.POST.get("nombre")
         apellido = request.POST.get("apellido")
         correo = request.POST.get("correo")
@@ -55,7 +59,7 @@ def editar_usuario(request, id_usuario):
             usuario.apellido = apellido
         if correo:
             usuario.correo = correo
-        if rol_id:  # Solo actualizamos el rol si se envía
+        if rol_id:
             usuario.rol_id = int(rol_id)
 
         usuario.save()
@@ -75,6 +79,11 @@ def eliminar_usuario(request, id):
     if request.method == "POST":
         try:
             usuario = Usuario.objects.get(pk=id)
+
+            # 🚫 Bloquear eliminación si está inactivo
+            if not usuario.is_active:
+                return JsonResponse({"success": False, "error": "No se puede eliminar un usuario inactivo."}, status=403)
+
             usuario.delete()
             return JsonResponse({"success": True})
         except Usuario.DoesNotExist:

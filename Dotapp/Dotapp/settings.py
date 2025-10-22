@@ -51,14 +51,14 @@ INSTALLED_APPS = [
     #Django Rest Framework
     'rest_framework',
 
+    #app central
+    'core',
+
     #apps por rol
     'administrador',
     'almacenista',
     'aprendiz',
-    'despachador',
-
-    #app central
-    'core',
+    'despachador',   
 ]
 
 # Middleware
@@ -188,7 +188,7 @@ DEFAULT_FROM_EMAIL = "dotappsena@gmail.com"
 '''
 #smtp
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 MAIL_USE_TLS = True
@@ -232,3 +232,13 @@ CSRF_FAILURE_VIEW = "core.views.csrf_error_redirect"
 # Configuración para URL absoluta del sitio
 SITE_URL = 'https://joan2004s.pythonanywhere.com'  # cambiar en producción
 
+
+
+# Tiempo de expiración de sesión por inactividad (en segundos)  
+SESSION_COOKIE_AGE = 1800  # 30 minutos 
+  
+# La sesión expira cuando el navegador se cierra  
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  
+  
+# Actualiza la cookie de sesión en cada request (resetea el timer de inactividad)  
+SESSION_SAVE_EVERY_REQUEST = True

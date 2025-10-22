@@ -73,9 +73,9 @@
             {% for solicitud in solicitudes %}
             <tr data-id="{{ solicitud.id_solicitud }}">
               <td>{{ solicitud.id_solicitud }}</td>
-              <td>{{ solicitud.fecha_solicitud|date:"Y-m-d" }}</td>
+              <td>{{ solicitud.fecha_solicitud}}</td>
               <td>{{ solicitud.id_aprendiz.get_full_name }}</td>
-              <td>{{ solicitud.id_producto.tipo }}</td>
+              <td>{{ solicitud.tipo }}</td>
               <td>{{ solicitud.talla }}</td>
               <td>{{ solicitud.color }}</td>
               <td>{{ solicitud.cantidad }}</td>
@@ -84,7 +84,11 @@
               <td>{{ solicitud.ficha }}</td>
               <td>{{ solicitud.detalles_adicionales }}</td>
               <td>
-                  {{ solicitud.fecha_finalizacion|date:"Y-m-d" }}
+                {% if solicitud.fecha_finalizacion %}
+                  {{ solicitud.fecha_finalizacion}}
+                {% else %}
+                  ---------
+                {% endif %}
               </td>
               <td>{{ solicitud.estado_solicitud|title }}</td>
             </tr>

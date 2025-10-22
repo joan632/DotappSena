@@ -69,7 +69,9 @@ def login_view(request):
 
     return render(request, 'core/login.html')
 
-
+#vista para manual de usuario
+def manual(request):
+    return render(request, 'core/manual_usuario.html')
 
 #solicitud de correo
 # core/views.py
@@ -140,11 +142,7 @@ def password_reset_request(request):
         msg.attach_alternative(html_content, "text/html")
 
         msg.send(fail_silently=False)
-
-        send_mail(
-            
-
-        )
+        
         return JsonResponse({"status": "ok"})
 
     # GET → muestra el formulario para poner el correo

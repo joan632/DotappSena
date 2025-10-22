@@ -6,10 +6,19 @@
 {% block content %}
 <div class="login-container">
   <div class="login-card">
+
     <div>
       <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo">
+      
+      <button class="contenedor-circulo" type="button" onclick="window.location.href='{% url 'manual' %}'">
+        <div class="mensaje-ayuda">¿Necesitas ayuda?</div>
+        <svg class="circulo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle class="borde-circulo" cx="50" cy="50" r="45"/>
+          <text class="signo-pregunta" x="50" y="60">?</text>
+        </svg>
+      </button>
     </div>
-    <h1>Iniciar Sesión</h1>
+    <h1 style="margin-top: -50px;">Iniciar Sesión</h1>
 
     <form method="POST" action="{% url 'login' %}">
       {% csrf_token %}
