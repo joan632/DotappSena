@@ -1472,6 +1472,7 @@ footer p {
   .notifications { right: 30%; }
   .login-card, .registro-card { max-width: 70%; }
   .registro-link button { font-size: 1em; padding: 10px; }
+<<<<<<< HEAD
 
   .manual-card{max-width: 100%}
   .manual-card video{ width: 300px !important; height: 200px !important;}
@@ -1485,6 +1486,17 @@ footer p {
     word-wrap: break-word;
     white-space: normal;
     max-width: 100%;
+=======
+  .btn-back { font-size: 20px; }
+  .slide h1 {   
+    font-size: 20px;  /* Reducir más el tamaño */  
+    max-width: 90vw;  /* Limitar ancho máximo */  
+    word-wrap: break-word;  /* Romper palabras largas */  
+    overflow-wrap: break-word;  /* Compatibilidad adicional */  
+    white-space: normal;  /* Permitir múltiples líneas */  
+    line-height: 1.2;  /* Ajustar altura de línea */  
+    padding: 0 10px;  /* Agregar padding lateral */  
+>>>>>>> 4d87b0c7a82160dabb131b1b5e73808bd185befd
   }
 
   .filtros input, .filtros select { font-size: 10px; padding: 4px 6px; }
