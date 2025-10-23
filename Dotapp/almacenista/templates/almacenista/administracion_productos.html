@@ -25,8 +25,8 @@
             <button id="btnAbrirAgregar" class="btn-agregar">Agregar Producto</button>
 
             <!-- Botón para abrir el modal de configuracion de productos -->
-            <button id="btnAbrirConfiguraciones" class="btn-config">
-              ⚙️ Configuraciones de Producto
+            <button onclick="window.location.href='{% url 'gestion_palabras' %}'" class="btn-config">
+              ⚙️ Configuraciones Adicionales
             </button>
           </div>
         </div>
@@ -164,38 +164,6 @@
       </form>
     </div>
   </div>
-
-  <!-- Modal de configuraciones de productos -->
-  <div id="modalConfiguraciones" class="modal-gestion-producto">
-    <div class="modal-content-gestion-producto">
-      <span class="close">&times;</span>
-      <h2>⚙️ Configuraciones de Producto</h2>
-      <p>Puedes agregar nuevos tipos, tallas o colores de producto.</p>
-
-      <div class="form-section">
-        
-        <div class="row">
-          <input id="nuevoTipo" type="text" placeholder="Nuevo tipo">
-          <button class="btn-add" onclick="agregarTipo()">Agregar Tipo</button>
-        </div>
-
-        <div class="row">
-          <input id="nuevaTalla" type="text" placeholder="Nueva talla">
-          <button class="btn-add" onclick="agregarTalla()">Agregar Talla</button>
-        </div>
-        
-        <div class="row">
-          <input id="nuevoColor" type="text" placeholder="Nuevo color">
-          <button class="btn-add" onclick="agregarColor()">Agregar Color</button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <script id="tipos-data" type="application/json">{{ tipos_json|safe }}</script>
-  <script id="tallas-data" type="application/json">{{ tallas_json|safe }}</script>
-  <script id="colores-data" type="application/json">{{ colores_json|safe }}</script>
   
 {% endblock %}
 
@@ -411,86 +379,6 @@
     });
   </script>
 
-  <!-- script de configuraciones de productos -->
-  <script>
-    // 🧩 Mostrar / ocultar modal
-    const modalConfig = document.getElementById("modalConfiguraciones");
-    const btnAbrirConfig = document.getElementById("btnAbrirConfiguraciones");
-    const btnCerrarConfig = modalConfig.querySelector(".close");
-
-    btnAbrirConfig.onclick = () => modalConfig.style.display = "block";
-    btnCerrarConfig.onclick = () => modalConfig.style.display = "none";
-    window.onclick = (e) => { if (e.target === modalConfig) modalConfig.style.display = "none"; };
-
-    // 🟢 Agregar Tipo
-    function agregarTipo() {
-      const tipo = document.getElementById('nuevoTipo').value.trim();
-      if (!tipo) return alert("⚠️ Ingresa un tipo");
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-      fetch("{% url 'agregar_tipo' %}", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-CSRFToken": csrfToken,
-        },
-        body: new URLSearchParams({ nombre: tipo }),
-        credentials: "same-origin"
-      })
-      .then(res => {
-        if (!res.ok) throw new Error();
-        alert("✅ Tipo agregado correctamente");
-        document.getElementById('nuevoTipo').value = "";
-      })
-      .catch(() => alert("⚠️ Error al enviar los datos"));
-    }
-
-    // 🟣 Agregar Talla
-    function agregarTalla() {
-      const talla = document.getElementById('nuevaTalla').value.trim();
-      if (!talla) return alert("⚠️ Ingresa una talla");
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-      fetch("{% url 'agregar_talla' %}", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-CSRFToken": csrfToken,
-        },
-        body: new URLSearchParams({ nombre: talla }),
-        credentials: "same-origin"
-      })
-      .then(res => {
-        if (!res.ok) throw new Error();
-        alert("✅ Talla agregada correctamente");
-        document.getElementById('nuevaTalla').value = "";
-      })
-      .catch(() => alert("⚠️ Error al enviar los datos"));
-    }
-
-    // 🔵 Agregar Color
-    function agregarColor() {
-      const color = document.getElementById('nuevoColor').value.trim();
-      if (!color) return alert("⚠️ Ingresa un color");
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-      fetch("{% url 'agregar_color' %}", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-CSRFToken": csrfToken,
-        },
-        body: new URLSearchParams({ nombre: color }),
-        credentials: "same-origin"
-      })
-      .then(res => {
-        if (!res.ok) throw new Error();
-        alert("✅ Color agregado correctamente");
-        document.getElementById('nuevoColor').value = "";
-      })
-      .catch(() => alert("⚠️ Error al enviar los datos"));
-    }
-  </script>
 
   <!-- Script para sincronizar el slider con la tabla -->
   <script>

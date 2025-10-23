@@ -331,7 +331,7 @@ img.logo {
   white-space: nowrap;
   opacity: 0;
   transition: opacity 0.3s;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   pointer-events: none;
 }
@@ -389,6 +389,37 @@ img.logo {
   color: var(--text);
   margin: 15px 15px 50px 15px;
   font-weight: bold;
+}
+
+.manual-buttons{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.manual-buttons button{
+  display: flex;
+  position: relative;
+  text-align: center;
+  z-index: 1000;
+  cursor: pointer;
+  font-size: 0.8em;
+  background: var(--primary);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 20px;
+  color: var(--card);
+  font-weight: bold;
+}
+
+.manual-buttons button:hover{
+  background: var(--muted);
+  color: var(--card);
+  translate: 0 -3px;
 }
 
 
@@ -1441,8 +1472,21 @@ footer p {
   .notifications { right: 30%; }
   .login-card, .registro-card { max-width: 70%; }
   .registro-link button { font-size: 1em; padding: 10px; }
-  .btn-back { font-size: 20px; }
-  #slideSync h1 { font-size: 25px; }
+
+  .manual-card{max-width: 100%}
+  .manual-card video{ width: 300px !important; height: 200px !important;}
+
+  .btn-back { 
+    font-size: 20px;
+  }
+
+  #slideSync h1 { 
+    font-size: 25px; 
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+  }
+
   .filtros input, .filtros select { font-size: 10px; padding: 4px 6px; }
   .btn-export { font-size: 12px; padding: 8px 12px; }
   .usuarios-table, .solicitudes-table, .seguimiento-pedidos-table, .historial-usuario-table { min-width: 400%; font-size: 0.6rem; }
@@ -1451,6 +1495,27 @@ footer p {
   .system-error h1 { font-size: 3rem !important; margin-top: 50%; }
   .system-error p { font-size: 2rem !important; }
   .system-error a { padding: 8px 16px; font-size: 1rem; margin-bottom: 20%; }
+  .mensaje-ayuda {
+    font-family: 'poppins', sans-serif;
+    font-size: 11px;
+  }
+
+  .manual-buttons{
+    display: flex;
+    flex-direction: column;
+  }
+
+  footer p{
+    font-size: 0.800rem ;
+  }
+
+  .manual-buttons{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    justify-items: center;
+  }
+
   .btn-config {
     background-color: var(--muted);
     color: var(--card);

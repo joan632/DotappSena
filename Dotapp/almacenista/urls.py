@@ -15,4 +15,7 @@ urlpatterns = [
     path("agregar_tipo/", views.agregar_tipo, name="agregar_tipo"),
     path("agregar_talla/", views.agregar_talla, name="agregar_talla"),
     path("agregar_color/", views.agregar_color, name="agregar_color"),
+    path("gestion_palabras/", views.gestion_palabras, name="gestion_palabras"),
+    path("api/tablas/", views.listado_tablas, name="listado_tablas"),
+    path('api/eliminar-palabra/', views.eliminar_palabra, name='eliminar_palabra'),
 ]

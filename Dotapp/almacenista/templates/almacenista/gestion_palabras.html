@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="welcome-container">
+  <div class="admin-card">
+    <div class="sticky-sync-wrapper">
+      <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">←</button>
+      <div class="slide" id="slideSync">
+        <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+        <h1>Gestión de Palabras</h1>
+        <p>Agrega nuevos tipos, tallas o colores de producto.</p>
+        <p>Puedes agregar nuevos centros o programas de formación.</p>
+
+        <div class="btn-container">
+          <!-- Botón para abrir el modal de configuracion de productos -->
+          <button id="btnAbrirConfiguraciones" class="btn-config">
+            ⚙️ Configuraciones de Producto
+          </button>
+
+          <!-- Botón para abrir el modal de configuraciones Adicionales -->
+          <button id="btnAbrirConfiguracionesAdicionales" class="btn-config">
+            ⚙️ Configuraciones Adicionales
+          </button>
+        </div>
+        <br><br>
+
+        <div class="filtros">
+            <input type="text" id="txt_palabra" placeholder="Palabra" />
+            
+            <select id="selTabla">
+                <option value="">Seleccione una tabla</option>
+                <option value="centros">Centros</option>
+                <option value="programas">Programas</option>
+                <option value="tipos">Tipos de producto</option>
+                <option value="tallas">Tallas</option>
+                <option value="colores">Colores</option>
+            </select>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="table-scroll" id="tableScroll">
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                <th>Id</th>
+                <th>Palabra</th>
+                <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-palabras">
+                {% include "almacenista/_tbody_fragment.html" %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+  </div>
+</div>
+
+    <!-- Modal de configuraciones de productos -->
+    <div id="modalConfiguraciones" class="modal-gestion-producto">
+        <div class="modal-content-gestion-producto">
+        <span class="close">&times;</span>
+        <h2>⚙️ Configuraciones de Producto</h2>
+        <p>Puedes agregar nuevos tipos, tallas o colores de producto.</p>
+
+        <div class="form-section">
+            {% csrf_token %}
+
+            <div class="row">
+            <input id="nuevoTipo" type="text" placeholder="Nuevo tipo">
+            <button class="btn-add" onclick="agregarTipo()">Agregar Tipo</button>
+            </div>
+
+            <div class="row">
+            <input id="nuevaTalla" type="text" placeholder="Nueva talla">
+            <button class="btn-add" onclick="agregarTalla()">Agregar Talla</button>
+            </div>
+            
+            <div class="row">
+            <input id="nuevoColor" type="text" placeholder="Nuevo color">
+            <button class="btn-add" onclick="agregarColor()">Agregar Color</button>
+            </div>
+
+        </div>
+        </div>
+    </div>
+
+    <script id="tipos-data" type="application/json">{{ tipos_json|safe }}</script>
+    <script id="tallas-data" type="application/json">{{ tallas_json|safe }}</script>
+    <script id="colores-data" type="application/json">{{ colores_json|safe }}</script>
+
+
+    <!-- Modal -->
+    <div id="modalConfiguracionesAdicionales" class="modal">
+        <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>⚙️ Configuraciones Adicionales</h2>
+        <p>Puedes agregar nuevos centros o programas de formación.</p>
+
+        <!-- CSRF token para fetch -->
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+        <!-- Agregar Centro -->
+        <div class="form-row">
+            <input id="nuevoCentro" type="text" placeholder="Nuevo centro de formación">
+            <button class="btn-add" id="btnAgregarCentro">Agregar Centro</button>
+        </div>
+        <br>
+
+        <p>Selecciona el centro de formación:</p>
+
+        <!-- Agregar Programa -->
+        <div class="form-row">
+            <select id="centroSelect">
+            {% for c in centros %}
+                <option value="{{ c.id_centro }}">{{ c.nombre }}</option>
+            {% endfor %}
+            </select>
+            <input id="nuevoPrograma" type="text" placeholder="Nuevo programa de formación">
+            <button class="btn-add" id="btnAgregarPrograma">Agregar Programa</button>
+        </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('selTabla').addEventListener('change', async function(){
+    const t = this.value;
+    if (!t) return;
+
+    const resp = await fetch(`{% url 'listado_tablas' %}?tabla=${t}&fmt=html`);
+    const html = await resp.text();
+    document.getElementById('tbody-palabras').innerHTML = html;
+    });
+
+    document.getElementById('tbody-palabras').addEventListener('click', async e => {
+    if (!e.target.classList.contains('js-eliminar')) return;
+    const id = e.target.dataset.id;
+    const tabla = document.getElementById('selTabla').value;
+    if (!tabla || !confirm('¿Eliminar esta palabra?')) return;
+
+    const res = await fetch(`{% url 'eliminar_palabra' %}?tabla=${tabla}&id=${id}`, {
+        method: 'POST',
+        headers: {'X-CSRFToken': '{{ csrf_token }}'}
+    });
+    if (res.ok) {
+        document.getElementById('selTabla').dispatchEvent(new Event('change'));
+    } else {
+        alert('Error al eliminar');
+    }
+    });
+</script>
+
+<script>
+    let tablaActual   = '';
+    let datosOriginales = [];
+
+    /* carga inicial */
+    document.getElementById('selTabla').addEventListener('change', async function(){
+        tablaActual = this.value;
+        if (!tablaActual) return;
+
+        const resp = await fetch(`{% url 'listado_tablas' %}?tabla=${tablaActual}&fmt=html`);
+        const html = await resp.text();
+        document.getElementById('tbody-palabras').innerHTML = html;
+
+        /* guardar datos en memoria */
+        const rows = document.querySelectorAll('#tbody-palabras tr[data-id]');
+        datosOriginales = Array.from(rows).map(tr => ({
+            pk     : tr.dataset.id,               // ← pk
+            nombre : tr.cells[1].textContent.trim()
+        }));
+    });
+
+    /* filtro en tiempo real */
+    document.getElementById('txt_palabra').addEventListener('input', () => {
+        const q = document.getElementById('txt_palabra').value.trim().toLowerCase();
+        const tbody = document.getElementById('tbody-palabras');
+
+        let html = '';
+        datosOriginales
+            .filter(item => item.nombre.toLowerCase().includes(q))
+            .forEach(item => {
+                html += `
+                <tr data-id="${item.pk}">                       <!-- pk -->
+                <td>${item.pk}</td>                           <!-- pk -->
+                <td>${item.nombre}</td>
+                <td>
+                    <button class="eliminar-btn js-eliminar" data-id="${item.pk}">Eliminar</button>
+                </td>
+                </tr>`;
+            });
+
+        tbody.innerHTML = html || '<tr><td colspan="3" class="text-center">Sin coincidencias.</td></tr>';
+    });
+
+    /* eliminar (delegado) */
+    document.getElementById('tbody-palabras').addEventListener('click', async e => {
+        if (!e.target.classList.contains('js-eliminar')) return;
+        const pk = e.target.dataset.id;
+        if (!tablaActual || !confirm('¿Eliminar esta palabra?')) return;
+
+        try {
+            const res = await fetch(`{% url 'eliminar_palabra' %}?tabla=${tablaActual}&id=${pk}`, {
+                method : 'POST',
+                headers: {'X-CSRFToken': '{{ csrf_token }}'}
+            });
+
+            // primero leemos el JSON
+            const data = await res.json();
+
+            if (res.ok && data.ok) {          // éxito
+                document.getElementById('selTabla').dispatchEvent(new Event('change'));
+                document.getElementById('txt_palabra').value = '';
+            } else {                            // error controlado por nosotros
+                alert(data.error || 'Error al eliminar');
+            }
+        } catch (err) {                         // error de red / 500
+            console.error(err);
+            alert('Error al eliminar');
+        }
+    });
+</script>
+
+
+  <!-- script de configuraciones de productos -->
+  <script>
+    // 🧩 Mostrar / ocultar modal
+    const modalConfig = document.getElementById("modalConfiguraciones");
+    const btnAbrirConfig = document.getElementById("btnAbrirConfiguraciones");
+    const btnCerrarConfig = modalConfig.querySelector(".close");
+
+    btnAbrirConfig.onclick = () => modalConfig.style.display = "block";
+    btnCerrarConfig.onclick = () => modalConfig.style.display = "none";
+    window.onclick = (e) => { if (e.target === modalConfig) modalConfig.style.display = "none"; };
+
+    // 🟢 Agregar Tipo
+    function agregarTipo() {
+      const tipo = document.getElementById('nuevoTipo').value.trim();
+      if (!tipo) return alert("⚠️ Ingresa un tipo");
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      fetch("{% url 'agregar_tipo' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken,
+        },
+        body: new URLSearchParams({ nombre: tipo }),
+        credentials: "same-origin"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        alert("✅ Tipo agregado correctamente");
+        document.getElementById('nuevoTipo').value = "";
+      })
+      .catch(() => alert("⚠️ Error al enviar los datos"));
+    }
+
+    // 🟣 Agregar Talla
+    function agregarTalla() {
+      const talla = document.getElementById('nuevaTalla').value.trim();
+      if (!talla) return alert("⚠️ Ingresa una talla");
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      fetch("{% url 'agregar_talla' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken,
+        },
+        body: new URLSearchParams({ nombre: talla }),
+        credentials: "same-origin"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        alert("✅ Talla agregada correctamente");
+        document.getElementById('nuevaTalla').value = "";
+      })
+      .catch(() => alert("⚠️ Error al enviar los datos"));
+    }
+
+    // 🔵 Agregar Color
+    function agregarColor() {
+      const color = document.getElementById('nuevoColor').value.trim();
+      if (!color) return alert("⚠️ Ingresa un color");
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      fetch("{% url 'agregar_color' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken,
+        },
+        body: new URLSearchParams({ nombre: color }),
+        credentials: "same-origin"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        alert("✅ Color agregado correctamente");
+        document.getElementById('nuevoColor').value = "";
+      })
+      .catch(() => alert("⚠️ Error al enviar los datos"));
+    }
+  </script>
+
+  <!-- Script para configuraciones adicionales -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById("modalConfiguracionesAdicionales");
+      const btnAbrir = document.getElementById("btnAbrirConfiguracionesAdicionales");
+      const btnCerrar = modal.querySelector(".close");
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      // Abrir modal
+      btnAbrir.addEventListener("click", () => modal.style.display = "block");
+
+      // Cerrar modal
+      btnCerrar.addEventListener("click", () => modal.style.display = "none");
+      window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+
+      // Agregar Centro
+      document.getElementById("btnAgregarCentro").addEventListener("click", () => {
+        const nombre = document.getElementById("nuevoCentro").value.trim();
+        if (!nombre) return alert("⚠️ Ingresa un nombre de centro");
+
+        fetch("{% url 'agregar_centro' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": csrfToken,
+          },
+          body: new URLSearchParams({ nombre })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) throw new Error(data.error || "Error desconocido");
+          alert("✅ Centro agregado correctamente");
+
+          // Limpiar input
+          document.getElementById("nuevoCentro").value = "";
+
+          // Actualizar select
+          const select = document.getElementById("centroSelect");
+          const option = document.createElement("option");
+          option.value = data.id_centro;
+          option.textContent = data.nombre;
+          select.appendChild(option);
+          option.selected = true;
+        })
+        .catch(err => alert("⚠️ Error: " + err.message));
+      });
+
+      // Agregar Programa
+      document.getElementById("btnAgregarPrograma").addEventListener("click", () => {
+        const nombre = document.getElementById("nuevoPrograma").value.trim();
+        const centroId = document.getElementById("centroSelect").value;
+        if (!nombre) return alert("⚠️ Ingresa un nombre de programa");
+        if (!centroId) return alert("⚠️ Selecciona un centro");
+
+        fetch("{% url 'agregar_programa' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": csrfToken,
+          },
+          body: new URLSearchParams({ nombre, centro_id: centroId })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.success) throw new Error(data.error || "Error desconocido");
+          alert("✅ Programa agregado correctamente");
+
+          // Limpiar input
+          document.getElementById("nuevoPrograma").value = "";
+
+          // Si tienes un select de programas, lo actualizas aquí
+          const programaSelect = document.getElementById("programaSelect");
+          if (programaSelect) {
+            const option = document.createElement("option");
+            option.value = data.id_programa;
+            option.textContent = data.nombre;
+            programaSelect.appendChild(option);
+            option.selected = true;
+          }
+        })
+        .catch(err => alert("⚠️ Error: " + err.message));
+      });
+    });
+  </script>
+
+{% endblock %}

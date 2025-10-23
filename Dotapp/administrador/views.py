@@ -151,6 +151,9 @@ def agregar_centro(request):
         if not nombre:
             return JsonResponse({"success": False, "error": "No se envió nombre"}, status=400)
         
+        # Normalización: cada palabra con inicial mayúscula
+        nombre = nombre.title()
+
         centro, created = CentroFormacion.objects.get_or_create(nombre=nombre)
         return JsonResponse({
             "success": True,
@@ -176,6 +179,9 @@ def agregar_programa(request):
             centro = CentroFormacion.objects.get(id_centro=centro_id)
         except CentroFormacion.DoesNotExist:
             return JsonResponse({"success": False, "error": "Centro no existe"}, status=400)
+        
+        # Normalización: cada palabra con inicial mayúscula
+        nombre = nombre.title()
 
         programa, created = Programa.objects.get_or_create(nombre=nombre, centro=centro)
         return JsonResponse({

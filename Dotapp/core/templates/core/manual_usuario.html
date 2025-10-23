@@ -14,6 +14,7 @@
         
         <div class="slide" id="slideSync">
           <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" style="width: 100px; height: 100px;">
+          <br><br>
           <h1>Manual de Usuario</h1>
         </div>
     </div>
@@ -22,15 +23,77 @@
         <source src="{% static 'img/manual.mp4' %}" type="video/mp4">
     </video>
     <br>
-    <p>
-            Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos. ¡Estamos aqui para ayudarte!
-            <br>
-            ¡Gracias por usar DotApp SENA!
-            <br>
-            Atentamente,
-            <br>
-            El equipo de DotApp SENA
-    </p>
+
+    <div class="manual-buttons">
+      <button data-rol="admin">Administrador</button>
+      <button data-rol="alma">Almacenista</button>
+      <button data-rol="desp">Despachador</button>
+      <button data-rol="apren">Aprendiz</button>
+    </div>
+
+    <!-- =====  CONTENIDOS  ===== -->
+    <div id="cont-manual" style="margin-top:30px;">
+      <!-- Administrador -->
+      <div class="manual-content" data-content="admin" style="display:none;">
+        <h2>Manual Administrador</h2>
+        <video controls controlsList="nodownload" style="width:700px; height:400px;">
+          <source src="{% static 'img/manual_admin.mp4' %}" type="video/mp4">
+        </video>
+        <p>Explicación específica para <strong>Administrador</strong>.</p>
+      </div>
+
+      <!-- Almacenista -->
+      <div class="manual-content" data-content="alma" style="display:none;">
+        <h2>Manual Almacenista</h2>
+        <video controls controlsList="nodownload" style="width:700px; height:400px;">
+          <source src="{% static 'img/manual_almacenista.mp4' %}" type="video/mp4">
+        </video>
+        <p>Explicación específica para <strong>Almacenista</strong>.</p>
+      </div>
+
+      <!-- Despachador -->
+      <div class="manual-content" data-content="desp" style="display:none;">
+        <h2>Manual Despachador</h2>
+        <video controls controlsList="nodownload" style="width:700px; height:400px;">
+          <source src="{% static 'img/manual_despachador.mp4' %}" type="video/mp4">
+        </video>
+        <p>Explicación específica para <strong>Despachador</strong>.</p>
+      </div>
+
+      <!-- Aprendiz -->
+      <div class="manual-content" data-content="apren" style="display:none;">
+        <h2>Manual Aprendiz</h2>
+        <video controls controlsList="nodownload" style="width:700px; height:400px;">
+          <source src="{% static 'img/manual_aprendiz.mp4' %}" type="video/mp4">
+        </video>
+        <p>Explicación específica para <strong>Aprendiz</strong>.</p>
+      </div>
+    </div>
+
+
+
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const botones   = document.querySelectorAll('.manual-buttons button');
+    const contenidos = document.querySelectorAll('.manual-content');
+
+    botones.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const rol = btn.dataset.rol;
+
+        // oculta todos
+        contenidos.forEach(c => c.style.display = 'none');
+
+        // muestra el que corresponde
+        const target = document.querySelector(`.manual-content[data-content="${rol}"]`);
+        if (target) target.style.display = 'block';
+      });
+    });
+  });
+</script>
 {% endblock %}

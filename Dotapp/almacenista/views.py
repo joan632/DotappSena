@@ -1,11 +1,12 @@
 import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from core.models import Producto, Solicitud, TipoProducto, Talla, Color
+from core.models import Producto, Solicitud, TipoProducto, Talla, Color, CentroFormacion, Programa
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.urls import reverse
-import pdfkit
+#import pdfkit
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
@@ -14,7 +15,7 @@ from django.template.loader import render_to_string
 
 import json
 
-
+'''
 # Configuración de wkhtmltopdf en PythonAnywhere
 PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
@@ -53,7 +54,8 @@ def generar_factura_pdf_bytes(solicitud):
         raise e
 
 
-
+'''
+        
 # Vista para el panel de almacenista
 @login_required
 def dashboard_almacenista(request):
@@ -151,16 +153,65 @@ def config_productos(request):
                   {'tipos': tipos, 'tallas': tallas, 'colores': colores})
 
 
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.http import HttpResponse, JsonResponse
+
+TABLAS = {
+    "centros":   CentroFormacion,
+    "programas": Programa,
+    "tipos":     TipoProducto,
+    "tallas":    Talla,
+    "colores":   Color,
+}
+
+def listado_tablas(request):
+    tabla = request.GET.get("tabla")
+    modelo = TABLAS.get(tabla)
+    if not modelo:
+        return JsonResponse({"error": "Tabla no válida"}, status=400)
+
+    registros = modelo.objects.all()
+
+    if request.GET.get("fmt") == "html":
+        html = render_to_string("almacenista/_tbody_fragment.html", {"objetos": registros})
+        return HttpResponse(html)
+
+    data = [{"id": obj.pk, "nombre": obj.nombre} for obj in registros]
+    return JsonResponse({"items": data})
+
+
+@require_POST
+def eliminar_palabra(request):
+    try:
+        tabla = request.GET.get('tabla')
+        modelo = TABLAS.get(tabla)
+        if not modelo:
+            return JsonResponse({'error': 'Tabla inválida'}, status=400)
+
+        obj = get_object_or_404(modelo, pk=request.GET.get('id'))
+        obj.delete()
+        return JsonResponse({'ok': True})          # 200 por defecto
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+
+
+@login_required
+def gestion_palabras(request):
+    return render(request, 'almacenista/gestion_palabras.html')
+
+
+
+
 # Vista para agregar tipos de productos
 @csrf_exempt
 def agregar_tipo(request):
-    print("✅ Vista agregar_tipo llamada")
     if request.method == 'POST':
-        print("🟢 Datos recibidos:", request.POST)
         nombre = request.POST.get('nombre')
         if nombre:
+            nombre = nombre.strip().capitalize()
             TipoProducto.objects.create(nombre=nombre)
-            print("💾 Guardado:", nombre)
             return HttpResponse("OK")
         else:
             print("⚠️ No se recibió nombre")
@@ -170,13 +221,11 @@ def agregar_tipo(request):
 # Vista para agregar tallas de productos
 @csrf_exempt
 def agregar_talla(request):
-    print("✅ Vista agregar_talla llamada")
     if request.method == 'POST':
-        print("🟢 Datos recibidos:", request.POST)
         nombre = request.POST.get('nombre')
         if nombre:
+            nombre = nombre.strip().upper()
             Talla.objects.create(nombre=nombre)
-            print("💾 Guardado:", nombre)
             return HttpResponse("OK")
         else:
             print("⚠️ No se recibió nombre")
@@ -186,13 +235,11 @@ def agregar_talla(request):
 # Vista para agregar colores de productos
 @csrf_exempt
 def agregar_color(request):
-    print("✅ Vista agregar_color llamada")
     if request.method == 'POST':
-        print("🟢 Datos recibidos:", request.POST)
         nombre = request.POST.get('nombre')
         if nombre:
+            nombre = nombre.strip().capitalize()
             Color.objects.create(nombre=nombre)
-            print("💾 Guardado:", nombre)
             return HttpResponse("OK")
         else:
             print("⚠️ No se recibió nombre")
@@ -338,7 +385,9 @@ def aprobar_solicitud(request, solicitud_id):
     if solicitud.estado_solicitud == "pendiente":
         solicitud.estado_solicitud = "aprobada"
         solicitud.save()
-        
+    return redirect("solicitudes-inventario")
+
+'''        
         # Generar el PDF de la factura
         pdf_bytes = generar_factura_pdf_bytes(solicitud)
 
@@ -390,7 +439,7 @@ def aprobar_solicitud(request, solicitud_id):
         messages.success(request, "Solicitud aprobada exitosamente.")
 
     return redirect("solicitudes-inventario")
-
+'''
 
 #vista para despachar solicitudes
 @login_required
