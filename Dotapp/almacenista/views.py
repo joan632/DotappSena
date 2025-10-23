@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.urls import reverse
-#import pdfkit
+import pdfkit
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
@@ -15,7 +15,7 @@ from django.template.loader import render_to_string
 
 import json
 
-'''
+
 # Configuración de wkhtmltopdf en PythonAnywhere
 PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
@@ -54,7 +54,7 @@ def generar_factura_pdf_bytes(solicitud):
         raise e
 
 
-'''
+
         
 # Vista para el panel de almacenista
 @login_required
@@ -385,9 +385,8 @@ def aprobar_solicitud(request, solicitud_id):
     if solicitud.estado_solicitud == "pendiente":
         solicitud.estado_solicitud = "aprobada"
         solicitud.save()
-    return redirect("solicitudes-inventario")
 
-'''        
+        
         # Generar el PDF de la factura
         pdf_bytes = generar_factura_pdf_bytes(solicitud)
 
@@ -439,7 +438,7 @@ def aprobar_solicitud(request, solicitud_id):
         messages.success(request, "Solicitud aprobada exitosamente.")
 
     return redirect("solicitudes-inventario")
-'''
+
 
 #vista para despachar solicitudes
 @login_required

@@ -27,7 +27,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'django-insecure-bldz-ub#xxgikikqukz=oi6rool&z0c&a1$rw_ejzavj^bp1ov'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -70,8 +70,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-#    "core.middleware.SaveLastTemplateMiddleware",
-#    "core.middleware.AmigableExceptionMiddleware",
+    "core.middleware.SaveLastTemplateMiddleware",
+    "core.middleware.AmigableExceptionMiddleware",
 ]
 
 ROOT_URLCONF = 'Dotapp.urls'
@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'Dotapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -119,7 +119,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+'''
 
 
 
@@ -226,7 +226,7 @@ MESSAGE_TAGS = {
     messages.ERROR: "error",
 }
 
-#CSRF_FAILURE_VIEW = "core.views.csrf_error_redirect"
+CSRF_FAILURE_VIEW = "core.views.csrf_error_redirect"
 
 
 # Configuración para URL absoluta del sitio
