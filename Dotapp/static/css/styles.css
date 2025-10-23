@@ -1475,6 +1475,12 @@ footer p {
 
   .manual-card{max-width: 100%}
   .manual-card video{ width: 300px !important; height: 200px !important;}
+  .manual-card p{ 
+    font-size: 1.2em !important; 
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+  }
 
   .btn-back { 
     font-size: 20px;
@@ -1497,7 +1503,7 @@ footer p {
   .system-error a { padding: 8px 16px; font-size: 1rem; margin-bottom: 20%; }
   .mensaje-ayuda {
     font-family: 'poppins', sans-serif;
-    font-size: 11px;
+    font-size: 10px;
   }
 
   footer p{
