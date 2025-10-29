@@ -27,7 +27,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'django-insecure-bldz-ub#xxgikikqukz=oi6rool&z0c&a1$rw_ejzavj^bp1ov'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -70,8 +70,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "core.middleware.SaveLastTemplateMiddleware",
-    "core.middleware.AmigableExceptionMiddleware",
+#    "core.middleware.SaveLastTemplateMiddleware",
+#    "core.middleware.AmigableExceptionMiddleware",
 ]
 
 ROOT_URLCONF = 'Dotapp.urls'
@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'Dotapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -119,7 +119,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-'''
+
 
 
 
@@ -183,19 +183,7 @@ AUTH_USER_MODEL = 'core.Usuario'
 #sendgrid
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = "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"
-DEFAULT_FROM_EMAIL = "dotappsena@gmail.com"
-
-'''
-#smtp
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-MAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dotappsena@gmail.com'          # tu cuenta
-EMAIL_HOST_PASSWORD = 'jxry qpxy pdly ddsn'       # contraseña de 16 dígitos de Google
-DEFAULT_FROM_EMAIL = 'dotappsena@gmail.com'
-'''
+DEFAULT_FROM_EMAIL = "e.lfc.joan.vargas@cali.edu.co"
 
 #configuracion para restablecer contraseñas
 #el link dura 15 minutos
@@ -226,7 +214,7 @@ MESSAGE_TAGS = {
     messages.ERROR: "error",
 }
 
-CSRF_FAILURE_VIEW = "core.views.csrf_error_redirect"
+#CSRF_FAILURE_VIEW = "core.views.csrf_error_redirect"
 
 
 # Configuración para URL absoluta del sitio

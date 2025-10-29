@@ -29,6 +29,7 @@
               <th>ID_solicitud</th>
               <th>Aprendiz</th>
               <th>Centro de formación</th>
+              <th>Programa</th>
               <th>Ficha</th>
               <th>Fecha de finalización</th>
               <th>Estado</th>
@@ -40,7 +41,8 @@
             <tr data-id="{{ solicitud.id_solicitud }}">
               <td>{{ solicitud.id_solicitud }}</td>
               <td>{{ solicitud.id_aprendiz.nombre }} {{ solicitud.id_aprendiz.apellido }}</td>
-              <td>{{ solicitud.centro_formacion }}</td>
+              <td>{{ solicitud.centro_nombre }}</td>
+              <td>{{ solicitud.programa_nombre }}</td>
               <td>{{ solicitud.ficha }}</td>
               <td>{{ solicitud.fecha_finalizacion }}</td>
               <td class="estado">{{ solicitud.estado_solicitud }}</td>
@@ -53,7 +55,7 @@
             </tr>
             {% empty %}
             <tr>
-              <td colspan="7" style="text-align: center;">
+              <td colspan="8" style="text-align: center;">
                 No hay pedidos pendientes por entregar.
               </td>
             </tr>

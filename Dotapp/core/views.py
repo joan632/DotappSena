@@ -4,6 +4,8 @@ from core.models import Usuario
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -16,7 +18,7 @@ def registro_aprendiz(request):
         password = request.POST.get('password')
         confirmar_password = request.POST.get('confirmar-contrasena')
 
-        # Validaciones previas sin tocar DB
+        # Validaciones previas
         if password != confirmar_password:
             messages.error(request, "Las contraseñas no coinciden.")
             return render(request, 'core/registro.html')
@@ -25,11 +27,20 @@ def registro_aprendiz(request):
             messages.error(request, "La contraseña debe tener al menos 8 caracteres.")
             return render(request, 'core/registro.html')
 
+        # Validar formato de correo
         try:
-            if Usuario.objects.filter(correo=correo).exists():
-                messages.error(request, "Este correo ya está registrado.")
-                return redirect('login')
+            validate_email(correo)
+        except ValidationError:
+            messages.error(request, "El correo ingresado no tiene un formato válido.")
+            return render(request, 'core/registro.html')
 
+        # Verificar si el correo ya existe
+        if Usuario.objects.filter(correo=correo).exists():
+            messages.error(request, "Este correo ya está registrado.")
+            return redirect('login')
+
+        # Crear usuario
+        try:
             Usuario.objects.create_user(
                 nombre=nombre,
                 apellido=apellido,
@@ -43,7 +54,8 @@ def registro_aprendiz(request):
         messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
         return render(request, 'core/login.html')
 
-    return render(request, 'core/Registro.html')
+    return render(request, 'core/registro.html')
+
 
 #vista para login
 def login_view(request):

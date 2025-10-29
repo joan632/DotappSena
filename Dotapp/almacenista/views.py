@@ -19,6 +19,7 @@ import json
 # Configuración de wkhtmltopdf en PythonAnywhere
 PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
+
 def generar_factura_pdf_bytes(solicitud):
     # Usar la ruta absoluta del archivo de la imagen
     producto_abs_path = solicitud.id_producto.imagen.path
@@ -69,7 +70,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 @login_required
 def administrar_productos(request):
-    productos = Producto.objects.all()
+    productos = Producto.objects.order_by('stock')
     tipos = list(TipoProducto.objects.all().values('id_tipo', 'nombre'))
     tallas = list(Talla.objects.all().values('id_talla', 'nombre'))
     colores = list(Color.objects.all().values('id_color', 'nombre'))
@@ -133,7 +134,7 @@ def agregar_producto(request):
 
 
 #vista para configurar productos
-from django.db.models import Value, CharField, F
+from django.db.models import Value, CharField
 
 @login_required
 def config_productos(request):
@@ -152,10 +153,6 @@ def config_productos(request):
     return render(request, 'almacenista/config_productos.html',
                   {'tipos': tipos, 'tallas': tallas, 'colores': colores})
 
-
-from django.shortcuts import render
-from django.template.loader import render_to_string
-from django.http import HttpResponse, JsonResponse
 
 TABLAS = {
     "centros":   CentroFormacion,
@@ -303,15 +300,21 @@ def editar_producto(request, producto_id):
 
 
 # Vista para eliminar productos
-@csrf_exempt
-def eliminar_producto(request, producto_id):
-    try:
-        producto = Producto.objects.get(id_producto=producto_id)
-    except Producto.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Producto no encontrado'}, status=404)
+from django.http import JsonResponse
+from django.db.models import ProtectedError
 
-    producto.delete()
-    return JsonResponse({'status': 'ok'})
+def eliminar_producto(request, id):
+    if request.method == "POST":
+        try:
+            producto = Producto.objects.get(pk=id)
+            producto.delete()
+            return JsonResponse({"status": "ok", "message": "Producto eliminado correctamente."})
+        except ProtectedError:
+            return JsonResponse({"status": "error", "message": "No se puede eliminar este producto porque está asociado a una o más solicitudes."})
+        except Producto.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "El producto no existe."})
+    return JsonResponse({"status": "error", "message": "Método no permitido."})
+
 
 
 #vista para solicitudes de inventario
@@ -365,7 +368,7 @@ def rechazar_solicitud(request, solicitud_id):
     msg = EmailMultiAlternatives(
         'Solicitud rechazada - Dotapp',
         text_content,
-        'dotappsena@gmail.com',
+        'e.lfc.joan.vargas@cali.edu.co',
         [solicitud.id_aprendiz.correo],
     )
     msg.attach_alternative(html_content, "text/html")
@@ -385,21 +388,26 @@ def aprobar_solicitud(request, solicitud_id):
     if solicitud.estado_solicitud == "pendiente":
         solicitud.estado_solicitud = "aprobada"
         solicitud.save()
-
         
-        # Generar el PDF de la factura
-        pdf_bytes = generar_factura_pdf_bytes(solicitud)
 
-        # Contenido HTML del correo
+
+        try:
+            # 🧾 Generar el PDF de la factura
+            pdf_bytes = generar_factura_pdf_bytes(solicitud)
+        except Exception as e:
+            messages.error(request, f"Error al generar la factura: {e}")
+            return redirect("solicitudes-inventario")
+
+        # ✉️ Contenido HTML del correo
         html_content = f"""
         <html>
         <body style="font-family:Arial,Helvetica,sans-serif; background:#f7f7f7; padding:20px;">
             <div style="max-width:600px; margin:auto; background:white; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,.1);">
                 <div style="padding:20px;">
                     <p>Hola <strong>{solicitud.id_aprendiz.get_full_name()}</strong>,</p>
-                    <p>Felicidades, Tu solicitud con el ID: <strong>#{solicitud.id_solicitud}</strong> ha sido aprobada.</p>
+                    <p>Felicidades, tu solicitud con el ID: <strong>#{solicitud.id_solicitud}</strong> ha sido aprobada.</p>
                     <p>Adjunto encontrarás tu factura electrónica.</p>
-                    <p>Si tienes dudas, puedes revisar todos los detalles en nuestra página web:</p>
+                    <p>Puedes revisar los detalles en nuestra página web:</p>
                     <a href="https://joan2004s.pythonanywhere.com/">Dotapp</a>
                     <p>Saludos,<br>El equipo de Dotapp</p>
                 </div>
@@ -408,34 +416,32 @@ def aprobar_solicitud(request, solicitud_id):
         </html>
         """
 
-        # Contenido texto opcional del correo
+        # 🧾 Versión texto plano
         text_content = (
             f"Hola {solicitud.id_aprendiz.get_full_name()},\n\n"
-            f"Felicidades, Tu solicitud con el ID: #{solicitud.id_solicitud} ha sido aprobada.\n"
+            f"Felicidades, tu solicitud con el ID: #{solicitud.id_solicitud} ha sido aprobada.\n"
             f"Adjunto encontrarás tu factura electrónica.\n\n"
-            f"Si tienes dudas, puedes revisar todos los detalles en nuestra pagina web.\n\n"
-            f"https://joan2004s.pythonanywhere.com/ \n\n"
+            f"Consulta más detalles en nuestra página web:\n"
+            f"https://joan2004s.pythonanywhere.com/\n\n"
             f"Saludos,\nEl equipo de Dotapp"
         )
 
-        # Configurar el correo
+        # 💌 Crear correo
         msg = EmailMultiAlternatives(
             'Solicitud aprobada - Dotapp',
             text_content,
-            'dotappsena@gmail.com',
+            'e.lfc.joan.vargas@cali.edu.co',
             [solicitud.id_aprendiz.correo],
         )
-
-        # Adjuntar el contenido HTML
         msg.attach_alternative(html_content, "text/html")
+        msg.attach(f'factura_{solicitud.id_solicitud}.pdf', pdf_bytes, 'application/pdf')
 
-        # Adjuntar el PDF
-        msg.attach(f'factura_{solicitud.estado_solicitud}.pdf', pdf_bytes, 'application/pdf')
-
-        # 🚀 Enviar el correo
-        msg.send(fail_silently=False)
-
-        messages.success(request, "Solicitud aprobada exitosamente.")
+        try:
+            # 🚀 Enviar correo
+            msg.send(fail_silently=False)
+            messages.success(request, "Solicitud aprobada exitosamente y factura enviada al aprendiz.")
+        except Exception as e:
+            messages.error(request, f"La solicitud fue aprobada, pero no se pudo enviar el correo: {e}")
 
     return redirect("solicitudes-inventario")
 
@@ -480,7 +486,7 @@ def despachar_solicitud(request, solicitud_id):
     msg = EmailMultiAlternatives(
         'Solicitud despachada - Dotapp',
         text_content,
-        'dotappsena@gmail.com',
+        'e.lfc.joan.vargas@cali.edu.co',
         [solicitud.id_aprendiz.correo],
     )
     msg.attach_alternative(html_content, "text/html")

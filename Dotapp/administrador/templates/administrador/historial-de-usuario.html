@@ -46,7 +46,6 @@
               <th>Talla</th>
               <th>Color</th>
               <th>Cantidad</th>
-              <th>Detalles adicionales</th>
               <th>Centro de formación</th>
               <th>Programa</th>
               <th>Ficha</th>
@@ -60,13 +59,12 @@
             <tr data-id="{{ solicitud.id_solicitud }}">
               <td>{{ solicitud.id_solicitud }}</td>
               <td>{{ solicitud.fecha_solicitud }}</td>
-              <td>{{ solicitud.tipo }}</td>
-              <td>{{ solicitud.talla }}</td>
-              <td>{{ solicitud.color }}</td>
+              <td>{{ solicitud.tipo_nombre }}</td>
+              <td>{{ solicitud.talla_nombre }}</td>
+              <td>{{ solicitud.color_nombre }}</td>
               <td>{{ solicitud.cantidad }}</td>
-              <td>{{ solicitud.detalles_adicionales }}</td>
-              <td>{{ solicitud.centro_formacion }}</td>
-              <td>{{ solicitud.programa }}</td>
+              <td>{{ solicitud.centro_nombre }}</td>
+              <td>{{ solicitud.programa_nombre }}</td>
               <td>{{ solicitud.ficha }}</td>
               <td>{{ solicitud.detalles_adicionales }}</td>
               <td>
@@ -79,7 +77,7 @@
               <td>{{ solicitud.estado_solicitud }}</td>
               {% empty %}
                 <tr>
-                  <td colspan="13" style="text-align: center; font-weight: bold; color: gray;">
+                  <td colspan="12" style="text-align: center; font-weight: bold; color: gray;">
                     El usuario no registra solicitudes
                   </td>
                 </tr>

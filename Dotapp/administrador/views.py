@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse, HttpResponse
 from core.models import Usuario, Rol, Solicitud, Borrador, CentroFormacion, Programa
+from django.contrib import messages
 
 #vista de panel de administrador
 @login_required
@@ -228,7 +229,7 @@ def exportar_pdf(request):
             Q(id_solicitud__icontains=buscar)
             | Q(fecha_solicitud__icontains=buscar)
             | Q(id_aprendiz__nombre__icontains=buscar)
-            | Q(id_producto__nombre__icontains=buscar)
+            | Q(tipo_nombre__icontains=buscar)
             | Q(talla__icontains=buscar)
             | Q(color__icontains=buscar)
             | Q(cantidad__icontains=buscar)
@@ -287,12 +288,12 @@ def exportar_pdf(request):
             str(s.id_solicitud),
              s.fecha_solicitud.strftime("%Y-%m-%d") if s.fecha_solicitud else "",
             str(s.id_aprendiz.get_full_name() if hasattr(s.id_aprendiz, "get_full_name") else s.id_aprendiz),
-            str(s.id_producto.nombre if s.id_producto else ""),
-            str(s.talla),
-            str(s.color),
+            str(s.tipo_nombre),
+            str(s.talla_nombre),
+            str(s.color_nombre),
             str(s.cantidad),
-            str(s.centro_formacion),
-            str(s.programa),
+            str(s.centro_nombre),
+            str(s.programa_nombre),
             str(s.ficha),
             Paragraph(str(s.detalles_adicionales), estilo_celda),
              s.fecha_finalizacion.strftime("%Y-%m-%d") if s.fecha_finalizacion else "",
@@ -355,12 +356,12 @@ def exportar_excel(request):
             Q(id_solicitud__icontains=buscar)
             | Q(fecha_solicitud__icontains=buscar)
             | Q(id_aprendiz__nombre__icontains=buscar)
-            | Q(id_producto__nombre__icontains=buscar)
-            | Q(talla__icontains=buscar)
-            | Q(color__icontains=buscar)
+            | Q(tipo_nombre__icontains=buscar)
+            | Q(talla_nombre__icontains=buscar)
+            | Q(color_nombre__icontains=buscar)
             | Q(cantidad__icontains=buscar)
-            | Q(centro_formacion__icontains=buscar)
-            | Q(programa__icontains=buscar)
+            | Q(centro_nombre__icontains=buscar)
+            | Q(programa_nombre__icontains=buscar)
             | Q(ficha__icontains=buscar)
             | Q(detalles_adicionales__icontains=buscar)
             | Q(fecha_finalizacion__icontains=buscar)
@@ -410,12 +411,12 @@ def exportar_excel(request):
             solicitud.id_solicitud,
             fecha_solicitud,
             solicitud.id_aprendiz.get_full_name() if solicitud.id_aprendiz else "",
-            solicitud.id_producto.nombre if solicitud.id_producto else "",
-            solicitud.talla,
-            solicitud.color,
+            solicitud.tipo_nombre,
+            solicitud.talla_nombre,
+            solicitud.color_nombre,
             solicitud.cantidad,
-            solicitud.centro_formacion,
-            solicitud.programa,
+            solicitud.centro_nombre,
+            solicitud.programa_nombre,
             solicitud.ficha,
             solicitud.detalles_adicionales or "",
             fecha_finalizacion,

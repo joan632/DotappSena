@@ -89,7 +89,7 @@ def actualizar_perfil(request):
 @login_required
 def solicitud_uniforme(request):
     borrador = Borrador.objects.filter(aprendiz=request.user).first()
-    productos = Producto.objects.all()
+    productos = Producto.objects.filter(stock__gte=1).order_by('-stock')
     TipoProductos = TipoProducto.objects.all()
     Tallas = Talla.objects.all()
     Colores = Color.objects.all()

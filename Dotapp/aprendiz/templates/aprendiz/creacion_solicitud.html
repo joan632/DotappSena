@@ -25,9 +25,9 @@
         {% for producto in productos %}
         <figure class="slide">
           {% if producto.imagen %}
-            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+            <img src="{{ producto.imagen.url }}" alt="{{ producto.tipo }}">
           {% else %}
-            <img src="{% static 'img/no-image.jpg' %}" alt="Sin imagen">
+            <img src="{% static 'img/no-image.png' %}" alt="Imagen no disponible">
           {% endif %}
           
           <figcaption><h1>{{ producto.tipo }}</h1></figcaption>

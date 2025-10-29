@@ -837,7 +837,10 @@ input[name="imagen"]::-webkit-file-upload-button {
   justify-content: center;
   align-items: flex-start;
   align-items: center;
+  min-height: 100vh;
+  padding: 10px;
 }
+
 .perfil-card {
   background: var(--card);
   padding: 40px;

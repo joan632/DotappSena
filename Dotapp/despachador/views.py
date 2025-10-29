@@ -66,7 +66,7 @@ def entregar_solicitud(request, solicitud_id):
     msg = EmailMultiAlternatives(
         'Solicitud entregada - Dotapp',
         text_content,
-        'dotappsena@gmail.com',
+        'e.lfc.joan.vargas@cali.edu.co',
         [solicitud.id_aprendiz.correo],
     )
 

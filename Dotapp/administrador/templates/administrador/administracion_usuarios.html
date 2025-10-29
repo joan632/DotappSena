@@ -289,6 +289,7 @@
 
           const rolSeleccionado = document.querySelector(`#editRol option[value="${formData.get("rol")}"]`).text;
           filaSeleccionada.cells[4].textContent = rolSeleccionado;
+          alert("Usuario editado correctamente.");
         }
         modal.style.display = "none";
       })
@@ -342,6 +343,7 @@
           if(data.success){
             // Eliminamos la fila del frontend
             filaAEliminar.remove();
+            alert("Usuario eliminado correctamente.");
           } else {
             alert("No se pudo eliminar el usuario: " + data.error);
           }
@@ -393,10 +395,12 @@
                 fila.classList.add("inactivo");
                 fila.cells[4].textContent = `${fila.cells[4].textContent} (Inactivo)`;
                 btn.textContent = "Activar";
+                alert("Usuario desactivado correctamente.");
               } else {
                 fila.classList.remove("inactivo");
                 fila.cells[4].textContent = fila.cells[4].textContent.replace(" (Inactivo)", "");
                 btn.textContent = "Desactivar";
+                alert("Usuario activado correctamente.");
               }
             } else {
               alert("No se pudo cambiar el estado: " + data.error);

@@ -320,15 +320,30 @@
       btnCerrarEliminar.onclick = () => modalEliminar.style.display = "none";
 
       btnEliminarConfirmar.onclick = async () => {
-        await fetch(`/almacenista/productos/eliminar/${idEliminar}/`, {
-          method: "POST",
-          headers: {
-            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+        try {
+          const res = await fetch(`/almacenista/productos/eliminar/${idEliminar}/`, {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+          });
+
+          const data = await res.json();
+
+          if (data.status === "ok") {
+            alert(data.message);
+            location.reload();
+          } else {
+            alert(`❌ ${data.message}`);
           }
-        });
-        alert("Producto eliminado");
-        location.reload();
+        } catch (error) {
+          alert("❌ Error al intentar eliminar el producto. Intenta nuevamente.");
+          console.error(error);
+        }
+
+        modalEliminar.style.display = "none";
       };
+
 
       // ✅ Validación de imagen
       const validarImagen = (input) => {
@@ -342,8 +357,8 @@
         const img = new Image();
         img.src = URL.createObjectURL(archivo);
         img.onload = () => {
-          if (img.width > 225 || img.height > 225) {
-            alert(`❌ Máximo 225x225 px. Tu imagen: ${img.width}x${img.height}`);
+          if (img.width > 1000 || img.height > 1000) {
+            alert(`❌ Máximo 1000pxx1000px. Tu imagen: ${img.width}x${img.height}`);
             input.value = "";
           }
         };
