@@ -70,8 +70,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-#    "core.middleware.SaveLastTemplateMiddleware",
-#    "core.middleware.AmigableExceptionMiddleware",
+    "core.middleware.SaveLastTemplateMiddleware",
+    "core.middleware.AmigableExceptionMiddleware",
 ]
 
 ROOT_URLCONF = 'Dotapp.urls'
@@ -216,7 +216,7 @@ MESSAGE_TAGS = {
     messages.ERROR: "error",
 }
 
-#CSRF_FAILURE_VIEW = "core.views.csrf_error_redirect"
+CSRF_FAILURE_VIEW = "core.views.csrf_error_redirect"
 
 
 # Configuración para URL absoluta del sitio
