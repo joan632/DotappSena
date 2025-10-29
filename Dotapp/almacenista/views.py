@@ -368,7 +368,7 @@ def rechazar_solicitud(request, solicitud_id):
     msg = EmailMultiAlternatives(
         'Solicitud rechazada - Dotapp',
         text_content,
-        'e.lfc.joan.vargas@cali.edu.co',
+        'dotappsena@gmail.com',
         [solicitud.id_aprendiz.correo],
     )
     msg.attach_alternative(html_content, "text/html")
@@ -430,7 +430,7 @@ def aprobar_solicitud(request, solicitud_id):
         msg = EmailMultiAlternatives(
             'Solicitud aprobada - Dotapp',
             text_content,
-            'e.lfc.joan.vargas@cali.edu.co',
+            'dotappsena@gmail.com',
             [solicitud.id_aprendiz.correo],
         )
         msg.attach_alternative(html_content, "text/html")
@@ -486,7 +486,7 @@ def despachar_solicitud(request, solicitud_id):
     msg = EmailMultiAlternatives(
         'Solicitud despachada - Dotapp',
         text_content,
-        'e.lfc.joan.vargas@cali.edu.co',
+        'dotappsena@gmail.com',
         [solicitud.id_aprendiz.correo],
     )
     msg.attach_alternative(html_content, "text/html")

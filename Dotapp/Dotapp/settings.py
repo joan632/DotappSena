@@ -183,7 +183,8 @@ AUTH_USER_MODEL = 'core.Usuario'
 #sendgrid
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = "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"
-DEFAULT_FROM_EMAIL = "e.lfc.joan.vargas@cali.edu.co"
+DEFAULT_FROM_EMAIL = "dotappsena@gmail.com"
+
 
 
 #configuracion para restablecer contraseñas
