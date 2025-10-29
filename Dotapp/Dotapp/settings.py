@@ -27,7 +27,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'django-insecure-bldz-ub#xxgikikqukz=oi6rool&z0c&a1$rw_ejzavj^bp1ov'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -184,7 +184,6 @@ AUTH_USER_MODEL = 'core.Usuario'
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = "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"
 DEFAULT_FROM_EMAIL = "e.lfc.joan.vargas@cali.edu.co"
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 
 #configuracion para restablecer contraseñas
