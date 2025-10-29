@@ -21,18 +21,18 @@ def registro_aprendiz(request):
         # Validaciones previas
         if password != confirmar_password:
             messages.error(request, "Las contraseñas no coinciden.")
-            return render(request, 'core/registro.html')
+            return render(request, 'core/Registro.html')
 
         if len(password) < 8:
             messages.error(request, "La contraseña debe tener al menos 8 caracteres.")
-            return render(request, 'core/registro.html')
+            return render(request, 'core/Registro.html')
 
         # Validar formato de correo
         try:
             validate_email(correo)
         except ValidationError:
             messages.error(request, "El correo ingresado no tiene un formato válido.")
-            return render(request, 'core/registro.html')
+            return render(request, 'core/Registro.html')
 
         # Verificar si el correo ya existe
         if Usuario.objects.filter(correo=correo).exists():
@@ -49,12 +49,12 @@ def registro_aprendiz(request):
             )
         except Exception:
             messages.error(request, "Error, intente nuevamente.")
-            return render(request, 'core/registro.html')
+            return render(request, 'core/Registro.html')
 
         messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
         return render(request, 'core/login.html')
 
-    return render(request, 'core/registro.html')
+    return render(request, 'core/Registro.html')
 
 
 #vista para login
