@@ -48,24 +48,20 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('core.urls')),
     path('aprendiz/', include('aprendiz.urls')),
     path('administrador/', include('administrador.urls')),
     path('almacenista/', include('almacenista.urls')),
     path('despachador/', include('despachador.urls')),
-    path('', RedirectView.as_view(pattern_name='login', permanent=False)),
-
+    path('', RedirectView.as_view(pattern_name='login', permanent=False)),  # redirige raíz a login
+    path('error/', include('core.urls')),  # solo para errores si quieres
 ]
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
-
 handler404 = 'core.views.error_404_view'
 handler500 = 'core.views.error_500_view'
 handler403 = 'core.views.error_403_view'
 handler400 = 'core.views.error_400_view'
-
 
