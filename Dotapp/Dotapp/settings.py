@@ -193,6 +193,7 @@ PASSWORD_RESET_TIMEOUT = 900  # 15 minutos en segundos
 
 #configuracion de login
 LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard_admin/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # C:\DotappSENA\DotappSENA\settings.py
