@@ -1,0 +1,282 @@
+\doxysection{Referencia del espacio de nombres almacenista.\+views}
+\hypertarget{namespacealmacenista_1_1views}{}\label{namespacealmacenista_1_1views}\index{almacenista.views@{almacenista.views}}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a45585c26e24211d25bded2f8723febcd}{dashboard\+\_\+almacenista}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_ad714a5f16c0cb3c64f3bbef01bac82e1}{administrar\+\_\+productos}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a91ac99326cbff57ffa7d8c4ad7c2f7bb}{agregar\+\_\+centro}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a0a7b991460bd94629c1ab8fe65e40995}{agregar\+\_\+programa}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_ab38dcb2b850e784f7556bd988e3dde10}{agregar\+\_\+producto}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a8c909a6d51eba9bf1a9dcb21a4a7e6ec}{config\+\_\+productos}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_ab23139b1cab1a6950a3188991d52bc33}{listado\+\_\+tablas}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_aba7f95b5ecaa37a67e2725e5223fa4f2}{eliminar\+\_\+palabra}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a4a1ba0694262af0f66f920180c61247b}{gestion\+\_\+palabras}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a81ba13678ca8da5b06b40782a4398320}{agregar\+\_\+tipo}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_abd81bb96c71daf4eb6991bb6cf760b3d}{agregar\+\_\+talla}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a5d690eb62b83f8e07e7acfd24efd311c}{agregar\+\_\+color}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_abea0e06cbfa39d4ced91568ce6215228}{editar\+\_\+producto}} (request, producto\+\_\+id)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a9148ffdeafca263a0ec75ceb32ecc151}{eliminar\+\_\+producto}} (request, producto\+\_\+id)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_af80703fac2efb8c86f266fafc515de87}{solicitudes\+\_\+inventario}} (request)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_aee0c2e861970076ee050df736ce60d02}{rechazar\+\_\+solicitud}} (request, solicitud\+\_\+id)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a39cc36109bc40e9cf2fc7f6111262b44}{aprobar\+\_\+solicitud}} (request, solicitud\+\_\+id)
+\item 
+\mbox{\hyperlink{namespacealmacenista_1_1views_a12baeb4c3e3ff051026745be28243280}{despachar\+\_\+solicitud}} (request, solicitud\+\_\+id)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+dict \mbox{\hyperlink{namespacealmacenista_1_1views_a57b51d8109c6ac3811ea0c63eb4a023a}{TABLAS}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Vistas para la aplicación de Almacenista.
+
+Este módulo contiene todas las vistas relacionadas con las funcionalidades
+disponibles para los usuarios con rol de almacenista, incluyendo:
+- Gestión de productos e inventario
+- Aprobación y rechazo de solicitudes
+- Gestión de tipos, tallas, colores, centros y programas
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{namespacealmacenista_1_1views_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{namespacealmacenista_1_1views_ad714a5f16c0cb3c64f3bbef01bac82e1}\index{almacenista.views@{almacenista.views}!administrar\_productos@{administrar\_productos}}
+\index{administrar\_productos@{administrar\_productos}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{administrar\_productos()}{administrar\_productos()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_ad714a5f16c0cb3c64f3bbef01bac82e1} 
+almacenista.\+views.\+administrar\+\_\+productos (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para administrar productos del inventario.
+
+Muestra todos los productos con sus tipos, tallas, colores y stock disponible.
+Proporciona datos en formato JSON para uso con JavaScript.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza la página de administración de productos
+\end{DoxyVerb}
+ \Hypertarget{namespacealmacenista_1_1views_a91ac99326cbff57ffa7d8c4ad7c2f7bb}\index{almacenista.views@{almacenista.views}!agregar\_centro@{agregar\_centro}}
+\index{agregar\_centro@{agregar\_centro}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{agregar\_centro()}{agregar\_centro()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a91ac99326cbff57ffa7d8c4ad7c2f7bb} 
+almacenista.\+views.\+agregar\+\_\+centro (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_a5d690eb62b83f8e07e7acfd24efd311c}\index{almacenista.views@{almacenista.views}!agregar\_color@{agregar\_color}}
+\index{agregar\_color@{agregar\_color}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{agregar\_color()}{agregar\_color()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a5d690eb62b83f8e07e7acfd24efd311c} 
+almacenista.\+views.\+agregar\+\_\+color (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_ab38dcb2b850e784f7556bd988e3dde10}\index{almacenista.views@{almacenista.views}!agregar\_producto@{agregar\_producto}}
+\index{agregar\_producto@{agregar\_producto}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{agregar\_producto()}{agregar\_producto()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_ab38dcb2b850e784f7556bd988e3dde10} 
+almacenista.\+views.\+agregar\+\_\+producto (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para agregar un nuevo producto al inventario.
+
+Crea un nuevo producto con tipo, talla, color, precio, stock e imagen.
+Retorna una respuesta JSON con el estado de la operación.
+
+Args:
+    request: Objeto HttpRequest con los datos del formulario (POST)
+    
+Returns:
+    JsonResponse: Estado de la operación (ok o error)
+\end{DoxyVerb}
+ \Hypertarget{namespacealmacenista_1_1views_a0a7b991460bd94629c1ab8fe65e40995}\index{almacenista.views@{almacenista.views}!agregar\_programa@{agregar\_programa}}
+\index{agregar\_programa@{agregar\_programa}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{agregar\_programa()}{agregar\_programa()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a0a7b991460bd94629c1ab8fe65e40995} 
+almacenista.\+views.\+agregar\+\_\+programa (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_abd81bb96c71daf4eb6991bb6cf760b3d}\index{almacenista.views@{almacenista.views}!agregar\_talla@{agregar\_talla}}
+\index{agregar\_talla@{agregar\_talla}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{agregar\_talla()}{agregar\_talla()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_abd81bb96c71daf4eb6991bb6cf760b3d} 
+almacenista.\+views.\+agregar\+\_\+talla (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_a81ba13678ca8da5b06b40782a4398320}\index{almacenista.views@{almacenista.views}!agregar\_tipo@{agregar\_tipo}}
+\index{agregar\_tipo@{agregar\_tipo}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{agregar\_tipo()}{agregar\_tipo()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a81ba13678ca8da5b06b40782a4398320} 
+almacenista.\+views.\+agregar\+\_\+tipo (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_a39cc36109bc40e9cf2fc7f6111262b44}\index{almacenista.views@{almacenista.views}!aprobar\_solicitud@{aprobar\_solicitud}}
+\index{aprobar\_solicitud@{aprobar\_solicitud}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{aprobar\_solicitud()}{aprobar\_solicitud()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a39cc36109bc40e9cf2fc7f6111262b44} 
+almacenista.\+views.\+aprobar\+\_\+solicitud (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{solicitud\+\_\+id}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para aprobar una solicitud pendiente.
+
+Cambia el estado de la solicitud de "pendiente" a "aprobada".
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    solicitud_id: ID de la solicitud a aprobar
+    
+Returns:
+    HttpResponseRedirect: Redirige a la página de solicitudes de inventario
+\end{DoxyVerb}
+ \Hypertarget{namespacealmacenista_1_1views_a8c909a6d51eba9bf1a9dcb21a4a7e6ec}\index{almacenista.views@{almacenista.views}!config\_productos@{config\_productos}}
+\index{config\_productos@{config\_productos}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{config\_productos()}{config\_productos()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a8c909a6d51eba9bf1a9dcb21a4a7e6ec} 
+almacenista.\+views.\+config\+\_\+productos (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_a45585c26e24211d25bded2f8723febcd}\index{almacenista.views@{almacenista.views}!dashboard\_almacenista@{dashboard\_almacenista}}
+\index{dashboard\_almacenista@{dashboard\_almacenista}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{dashboard\_almacenista()}{dashboard\_almacenista()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a45585c26e24211d25bded2f8723febcd} 
+almacenista.\+views.\+dashboard\+\_\+almacenista (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista del panel principal del almacenista.
+
+Verifica que el usuario tenga rol de administrador o almacenista.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza el dashboard o redirige si no tiene permisos
+\end{DoxyVerb}
+ \Hypertarget{namespacealmacenista_1_1views_a12baeb4c3e3ff051026745be28243280}\index{almacenista.views@{almacenista.views}!despachar\_solicitud@{despachar\_solicitud}}
+\index{despachar\_solicitud@{despachar\_solicitud}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{despachar\_solicitud()}{despachar\_solicitud()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a12baeb4c3e3ff051026745be28243280} 
+almacenista.\+views.\+despachar\+\_\+solicitud (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{solicitud\+\_\+id}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para despachar una solicitud aprobada.
+
+Cambia el estado de la solicitud de "aprobada" a "despachada"
+y envía un correo de notificación al aprendiz.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    solicitud_id: ID de la solicitud a despachar
+    
+Returns:
+    HttpResponseRedirect: Redirige a la página de solicitudes de inventario
+\end{DoxyVerb}
+ \Hypertarget{namespacealmacenista_1_1views_abea0e06cbfa39d4ced91568ce6215228}\index{almacenista.views@{almacenista.views}!editar\_producto@{editar\_producto}}
+\index{editar\_producto@{editar\_producto}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{editar\_producto()}{editar\_producto()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_abea0e06cbfa39d4ced91568ce6215228} 
+almacenista.\+views.\+editar\+\_\+producto (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{producto\+\_\+id}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para editar un producto existente.
+
+Permite modificar tipo, talla, color, precio, stock e imagen de un producto.
+Retorna una respuesta JSON con el estado de la operación.
+
+Args:
+    request: Objeto HttpRequest con los datos del formulario (POST)
+    producto_id: ID del producto a editar
+    
+Returns:
+    JsonResponse: Estado de la operación (ok o error)
+\end{DoxyVerb}
+ \Hypertarget{namespacealmacenista_1_1views_aba7f95b5ecaa37a67e2725e5223fa4f2}\index{almacenista.views@{almacenista.views}!eliminar\_palabra@{eliminar\_palabra}}
+\index{eliminar\_palabra@{eliminar\_palabra}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{eliminar\_palabra()}{eliminar\_palabra()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_aba7f95b5ecaa37a67e2725e5223fa4f2} 
+almacenista.\+views.\+eliminar\+\_\+palabra (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_a9148ffdeafca263a0ec75ceb32ecc151}\index{almacenista.views@{almacenista.views}!eliminar\_producto@{eliminar\_producto}}
+\index{eliminar\_producto@{eliminar\_producto}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{eliminar\_producto()}{eliminar\_producto()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a9148ffdeafca263a0ec75ceb32ecc151} 
+almacenista.\+views.\+eliminar\+\_\+producto (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{producto\+\_\+id}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_a4a1ba0694262af0f66f920180c61247b}\index{almacenista.views@{almacenista.views}!gestion\_palabras@{gestion\_palabras}}
+\index{gestion\_palabras@{gestion\_palabras}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{gestion\_palabras()}{gestion\_palabras()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a4a1ba0694262af0f66f920180c61247b} 
+almacenista.\+views.\+gestion\+\_\+palabras (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_ab23139b1cab1a6950a3188991d52bc33}\index{almacenista.views@{almacenista.views}!listado\_tablas@{listado\_tablas}}
+\index{listado\_tablas@{listado\_tablas}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{listado\_tablas()}{listado\_tablas()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_ab23139b1cab1a6950a3188991d52bc33} 
+almacenista.\+views.\+listado\+\_\+tablas (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespacealmacenista_1_1views_aee0c2e861970076ee050df736ce60d02}\index{almacenista.views@{almacenista.views}!rechazar\_solicitud@{rechazar\_solicitud}}
+\index{rechazar\_solicitud@{rechazar\_solicitud}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{rechazar\_solicitud()}{rechazar\_solicitud()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_aee0c2e861970076ee050df736ce60d02} 
+almacenista.\+views.\+rechazar\+\_\+solicitud (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{solicitud\+\_\+id}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para rechazar una solicitud pendiente.
+
+Cambia el estado de la solicitud a "rechazada", devuelve el stock
+al inventario y envía un correo de notificación al aprendiz.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    solicitud_id: ID de la solicitud a rechazar
+    
+Returns:
+    HttpResponseRedirect: Redirige a la página de solicitudes de inventario
+\end{DoxyVerb}
+ \Hypertarget{namespacealmacenista_1_1views_af80703fac2efb8c86f266fafc515de87}\index{almacenista.views@{almacenista.views}!solicitudes\_inventario@{solicitudes\_inventario}}
+\index{solicitudes\_inventario@{solicitudes\_inventario}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{solicitudes\_inventario()}{solicitudes\_inventario()}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_af80703fac2efb8c86f266fafc515de87} 
+almacenista.\+views.\+solicitudes\+\_\+inventario (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para mostrar las solicitudes pendientes de revisión.
+
+Muestra todas las solicitudes que no están canceladas, despachadas,
+rechazadas o entregadas, ordenadas por fecha de solicitud.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza la página de solicitudes de inventario
+\end{DoxyVerb}
+ 
+
+\label{doc-var-members}
+\Hypertarget{namespacealmacenista_1_1views_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{namespacealmacenista_1_1views_a57b51d8109c6ac3811ea0c63eb4a023a}\index{almacenista.views@{almacenista.views}!TABLAS@{TABLAS}}
+\index{TABLAS@{TABLAS}!almacenista.views@{almacenista.views}}
+\doxysubsubsection{\texorpdfstring{TABLAS}{TABLAS}}
+{\footnotesize\ttfamily \label{namespacealmacenista_1_1views_a57b51d8109c6ac3811ea0c63eb4a023a} 
+dict almacenista.\+views.\+TABLAS}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ =\ \ \{}
+\DoxyCodeLine{00002\ \ \ \ \ \textcolor{stringliteral}{"{}centros"{}}:\ \ \ CentroFormacion,}
+\DoxyCodeLine{00003\ \ \ \ \ \textcolor{stringliteral}{"{}programas"{}}:\ Programa,}
+\DoxyCodeLine{00004\ \ \ \ \ \textcolor{stringliteral}{"{}tipos"{}}:\ \ \ \ \ TipoProducto,}
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{stringliteral}{"{}tallas"{}}:\ \ \ \ Talla,}
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{stringliteral}{"{}colores"{}}:\ \ \ Color,}
+\DoxyCodeLine{00007\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,178 @@
+\doxysection{Referencia de la clase core.\+models.\+Usuario}
+\hypertarget{classcore_1_1models_1_1_usuario}{}\label{classcore_1_1models_1_1_usuario}\index{core.models.Usuario@{core.models.Usuario}}
+Diagrama de herencia de core.\+models.\+Usuario\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcore_1_1models_1_1_usuario}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a23aa541d48cadd1128c3906301d1f638}{save}} (self, \texorpdfstring{$\ast$}{*}args, \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}kwargs)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a4a710572afd6eb6b5956ced1bb093a67}{\+\_\+\+\_\+str\+\_\+\+\_\+}} (self)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_ab34405d3659e32b711039e22cc653433}{get\+\_\+full\+\_\+name}} (self)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_ae775c86afedd5c681e55f47b21a1c787}{get\+\_\+short\+\_\+name}} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos públicos estáticos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a449304a89749ada0360a40ecff7a4d0d}{id\+\_\+usuario}} = models.\+Auto\+Field(primary\+\_\+key=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a6a11c620297acccbd21b6f487d509c22}{nombre}} = models.\+Char\+Field(max\+\_\+length=255)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a065e68b185343f3e22048553064ac485}{apellido}} = models.\+Char\+Field(max\+\_\+length=255)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a4d223e5c1da9aace206545d29c01b197}{correo}} = models.\+Email\+Field(unique=True, max\+\_\+length=255)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a49b3ece3d684a803c8f3d680ab80d728}{rol}} = models.\+Foreign\+Key(\mbox{\hyperlink{classcore_1_1models_1_1_rol}{Rol}}, on\+\_\+delete=models.\+PROTECT, null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_ac1213a55deb3b540364a39f1400ca252}{is\+\_\+active}} = models.\+Boolean\+Field(default=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a95460ad7991acd811fa03cfca9079020}{is\+\_\+staff}} = models.\+Boolean\+Field(default=False)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a3fed555e4580107156b67275be89c6f7}{objects}} = \mbox{\hyperlink{classcore_1_1models_1_1_usuario_manager}{Usuario\+Manager}}()
+\item 
+str \mbox{\hyperlink{classcore_1_1models_1_1_usuario_a0e0124a5baea686f60bb40e395266d7c}{USERNAME\+\_\+\+FIELD}} = \textquotesingle{}\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a4d223e5c1da9aace206545d29c01b197}{correo}}\textquotesingle{}
+\item 
+list \mbox{\hyperlink{classcore_1_1models_1_1_usuario_afd176f847acf781e2432b2c663665784}{REQUIRED\+\_\+\+FIELDS}} = \mbox{[}\textquotesingle{}\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a6a11c620297acccbd21b6f487d509c22}{nombre}}\textquotesingle{}, \textquotesingle{}\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a065e68b185343f3e22048553064ac485}{apellido}}\textquotesingle{}\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Modelo de usuario personalizado que extiende AbstractBaseUser.
+
+Este modelo reemplaza el modelo User por defecto de Django y utiliza
+el correo electrónico como campo de autenticación en lugar del username.
+
+Attributes:
+    id_usuario: Identificador único del usuario (clave primaria)
+    nombre: Nombre del usuario
+    apellido: Apellido del usuario
+    correo: Correo electrónico del usuario (único, usado para autenticación)
+    rol: Rol asignado al usuario (ForeignKey a Rol)
+    is_active: Indica si el usuario está activo
+    is_staff: Indica si el usuario tiene acceso al panel de administración
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1models_1_1_usuario_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1models_1_1_usuario_a4a710572afd6eb6b5956ced1bb093a67}\index{core.models.Usuario@{core.models.Usuario}!\_\_str\_\_@{\_\_str\_\_}}
+\index{\_\_str\_\_@{\_\_str\_\_}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{\_\_str\_\_()}{\_\_str\_\_()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a4a710572afd6eb6b5956ced1bb093a67} 
+core.\+models.\+Usuario.\+\_\+\+\_\+str\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Retorna la representación en string del usuario.
+
+Returns:
+    str: Nombre completo y rol del usuario
+\end{DoxyVerb}
+ \Hypertarget{classcore_1_1models_1_1_usuario_ab34405d3659e32b711039e22cc653433}\index{core.models.Usuario@{core.models.Usuario}!get\_full\_name@{get\_full\_name}}
+\index{get\_full\_name@{get\_full\_name}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{get\_full\_name()}{get\_full\_name()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_ab34405d3659e32b711039e22cc653433} 
+core.\+models.\+Usuario.\+get\+\_\+full\+\_\+name (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Retorna el nombre completo del usuario.
+
+Returns:
+    str: Nombre y apellido concatenados
+\end{DoxyVerb}
+ \Hypertarget{classcore_1_1models_1_1_usuario_ae775c86afedd5c681e55f47b21a1c787}\index{core.models.Usuario@{core.models.Usuario}!get\_short\_name@{get\_short\_name}}
+\index{get\_short\_name@{get\_short\_name}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{get\_short\_name()}{get\_short\_name()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_ae775c86afedd5c681e55f47b21a1c787} 
+core.\+models.\+Usuario.\+get\+\_\+short\+\_\+name (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Retorna el nombre corto del usuario (solo el nombre).
+
+Returns:
+    str: Nombre del usuario
+\end{DoxyVerb}
+ \Hypertarget{classcore_1_1models_1_1_usuario_a23aa541d48cadd1128c3906301d1f638}\index{core.models.Usuario@{core.models.Usuario}!save@{save}}
+\index{save@{save}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a23aa541d48cadd1128c3906301d1f638} 
+core.\+models.\+Usuario.\+save (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{\texorpdfstring{$\ast$}{*}}]{args}{, }\item[{\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{kwargs}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Guarda el usuario en la base de datos.
+
+Si el usuario no tiene un rol asignado, se le asigna automáticamente
+el rol de aprendiz por defecto.
+\end{DoxyVerb}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcore_1_1models_1_1_usuario_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{classcore_1_1models_1_1_usuario_a065e68b185343f3e22048553064ac485}\index{core.models.Usuario@{core.models.Usuario}!apellido@{apellido}}
+\index{apellido@{apellido}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{apellido}{apellido}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a065e68b185343f3e22048553064ac485} 
+core.\+models.\+Usuario.\+apellido = models.\+Char\+Field(max\+\_\+length=255)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_a4d223e5c1da9aace206545d29c01b197}\index{core.models.Usuario@{core.models.Usuario}!correo@{correo}}
+\index{correo@{correo}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{correo}{correo}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a4d223e5c1da9aace206545d29c01b197} 
+core.\+models.\+Usuario.\+correo = models.\+Email\+Field(unique=True, max\+\_\+length=255)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_a449304a89749ada0360a40ecff7a4d0d}\index{core.models.Usuario@{core.models.Usuario}!id\_usuario@{id\_usuario}}
+\index{id\_usuario@{id\_usuario}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{id\_usuario}{id\_usuario}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a449304a89749ada0360a40ecff7a4d0d} 
+core.\+models.\+Usuario.\+id\+\_\+usuario = models.\+Auto\+Field(primary\+\_\+key=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_ac1213a55deb3b540364a39f1400ca252}\index{core.models.Usuario@{core.models.Usuario}!is\_active@{is\_active}}
+\index{is\_active@{is\_active}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{is\_active}{is\_active}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_ac1213a55deb3b540364a39f1400ca252} 
+core.\+models.\+Usuario.\+is\+\_\+active = models.\+Boolean\+Field(default=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_a95460ad7991acd811fa03cfca9079020}\index{core.models.Usuario@{core.models.Usuario}!is\_staff@{is\_staff}}
+\index{is\_staff@{is\_staff}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{is\_staff}{is\_staff}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a95460ad7991acd811fa03cfca9079020} 
+core.\+models.\+Usuario.\+is\+\_\+staff = models.\+Boolean\+Field(default=False)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_a6a11c620297acccbd21b6f487d509c22}\index{core.models.Usuario@{core.models.Usuario}!nombre@{nombre}}
+\index{nombre@{nombre}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{nombre}{nombre}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a6a11c620297acccbd21b6f487d509c22} 
+core.\+models.\+Usuario.\+nombre = models.\+Char\+Field(max\+\_\+length=255)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_a3fed555e4580107156b67275be89c6f7}\index{core.models.Usuario@{core.models.Usuario}!objects@{objects}}
+\index{objects@{objects}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{objects}{objects}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a3fed555e4580107156b67275be89c6f7} 
+core.\+models.\+Usuario.\+objects = \mbox{\hyperlink{classcore_1_1models_1_1_usuario_manager}{Usuario\+Manager}}()\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_afd176f847acf781e2432b2c663665784}\index{core.models.Usuario@{core.models.Usuario}!REQUIRED\_FIELDS@{REQUIRED\_FIELDS}}
+\index{REQUIRED\_FIELDS@{REQUIRED\_FIELDS}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{REQUIRED\_FIELDS}{REQUIRED\_FIELDS}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_afd176f847acf781e2432b2c663665784} 
+list core.\+models.\+Usuario.\+REQUIRED\+\_\+\+FIELDS = \mbox{[}\textquotesingle{}\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a6a11c620297acccbd21b6f487d509c22}{nombre}}\textquotesingle{}, \textquotesingle{}\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a065e68b185343f3e22048553064ac485}{apellido}}\textquotesingle{}\mbox{]}\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_a49b3ece3d684a803c8f3d680ab80d728}\index{core.models.Usuario@{core.models.Usuario}!rol@{rol}}
+\index{rol@{rol}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{rol}{rol}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a49b3ece3d684a803c8f3d680ab80d728} 
+core.\+models.\+Usuario.\+rol = models.\+Foreign\+Key(\mbox{\hyperlink{classcore_1_1models_1_1_rol}{Rol}}, on\+\_\+delete=models.\+PROTECT, null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_usuario_a0e0124a5baea686f60bb40e395266d7c}\index{core.models.Usuario@{core.models.Usuario}!USERNAME\_FIELD@{USERNAME\_FIELD}}
+\index{USERNAME\_FIELD@{USERNAME\_FIELD}!core.models.Usuario@{core.models.Usuario}}
+\doxysubsubsection{\texorpdfstring{USERNAME\_FIELD}{USERNAME\_FIELD}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_a0e0124a5baea686f60bb40e395266d7c} 
+str core.\+models.\+Usuario.\+USERNAME\+\_\+\+FIELD = \textquotesingle{}\mbox{\hyperlink{classcore_1_1models_1_1_usuario_a4d223e5c1da9aace206545d29c01b197}{correo}}\textquotesingle{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{core_2models_8py}{models.\+py}}\end{DoxyCompactItemize}

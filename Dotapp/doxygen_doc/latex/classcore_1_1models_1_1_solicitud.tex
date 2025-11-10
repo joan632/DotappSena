@@ -1,0 +1,256 @@
+\doxysection{Referencia de la clase core.\+models.\+Solicitud}
+\hypertarget{classcore_1_1models_1_1_solicitud}{}\label{classcore_1_1models_1_1_solicitud}\index{core.models.Solicitud@{core.models.Solicitud}}
+Diagrama de herencia de core.\+models.\+Solicitud\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcore_1_1models_1_1_solicitud}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_ae3a3332aebfd46b92465b818347eca52}{save}} (self, \texorpdfstring{$\ast$}{*}args, \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}kwargs)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos públicos estáticos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a2ebf68436b5761f2d50c666050fdaed4}{id\+\_\+solicitud}} = models.\+Auto\+Field(primary\+\_\+key=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a29bc70aa8ff4d5712ef94d3b887e71b4}{fecha\+\_\+solicitud}} = models.\+Date\+Time\+Field(auto\+\_\+now\+\_\+add=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a73afae7ad4e089c3d68dd9871e79718c}{fecha\+\_\+finalizacion}} = models.\+Date\+Time\+Field(null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a41ad08a6865e5ae505234b2cce844885}{cantidad}} = models.\+Positive\+Integer\+Field(validators=\mbox{[}Min\+Value\+Validator(1)\mbox{]})
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_ac212a0d62517608ca4c0e3b02b6305b2}{detalles\+\_\+adicionales}} = models.\+Text\+Field(blank=True, null=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_ac9bfb5f0533c79b46b020cdcdda18c62}{tipo}} = models.\+Foreign\+Key("{}Tipo\+Producto"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a39e39374f20d6fda99acc199d6a3d30d}{tipo\+\_\+nombre}} = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_abbf5982970532d53627a31e7243c46be}{talla}} = models.\+Foreign\+Key("{}Talla"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a46bafca8660d21b5eb8e9dfa16854699}{talla\+\_\+nombre}} = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a4bf03528aa12021568545f17c08fb559}{color}} = models.\+Foreign\+Key("{}Color"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a02e802a41dbd4433331ed59020691e24}{color\+\_\+nombre}} = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a1d033e46a31bd177ab4a5509fe3d2c3b}{centro\+\_\+formacion}} = models.\+Foreign\+Key("{}Centro\+Formacion"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a071e125a4a7b2dfde7bb6a6f6bce403e}{centro\+\_\+nombre}} = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_ac10cc293dbbc2a201f72dbc0fdf2462b}{programa}} = models.\+Foreign\+Key("{}Programa"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_ad57908ea3bf5b7784264d093ca907035}{programa\+\_\+nombre}} = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a6f06cab7383791671b3c840d4237afc2}{ficha}} = models.\+Positive\+Integer\+Field(default=0)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_ab89319896781985d1ff304d7d8d6c883}{id\+\_\+aprendiz}} = models.\+Foreign\+Key("{}Usuario"{}, on\+\_\+delete=models.\+CASCADE, related\+\_\+name="{}solicitudes"{})
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_af4cdd82a01c6c798da60ed5a955dd4c5}{id\+\_\+producto}} = models.\+Foreign\+Key("{}Producto"{}, on\+\_\+delete=models.\+PROTECT, related\+\_\+name="{}solicitudes"{})
+\item 
+list \mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a68f552930e4a53a256db5e5e85c3b6eb}{ESTADOS}}
+\item 
+str \mbox{\hyperlink{classcore_1_1models_1_1_solicitud_aff5a5861f4fc04089ac6f4325fe66ba5}{estado\+\_\+solicitud}} = models.\+Char\+Field(max\+\_\+length=255, choices=\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a68f552930e4a53a256db5e5e85c3b6eb}{ESTADOS}}, default=\textquotesingle{}pendiente\textquotesingle{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Modelo que representa una solicitud de uniforme realizada por un aprendiz.
+
+Una solicitud pasa por diferentes estados durante su ciclo de vida:
+- pendiente: Recién creada, esperando aprobación
+- aprobada: Aprobada por el almacenista
+- rechazada: Rechazada por el almacenista
+- despachada: Despachada y lista para entrega
+- entregada: Entregada al aprendiz
+- cancelada: Cancelada por el aprendiz
+
+El modelo utiliza campos híbridos (ForeignKey + CharField) para mantener
+la integridad referencial mientras permite conservar los nombres incluso
+si se eliminan los objetos relacionados.
+
+Attributes:
+    id_solicitud: Identificador único de la solicitud (clave primaria)
+    fecha_solicitud: Fecha y hora en que se creó la solicitud
+    fecha_finalizacion: Fecha y hora en que se finalizó la solicitud
+    cantidad: Cantidad de productos solicitados (mínimo 1)
+    detalles_adicionales: Información adicional sobre la solicitud (opcional)
+    tipo: Tipo de producto (ForeignKey, puede ser NULL)
+    tipo_nombre: Nombre del tipo (almacenado como texto)
+    talla: Talla del producto (ForeignKey, puede ser NULL)
+    talla_nombre: Nombre de la talla (almacenado como texto)
+    color: Color del producto (ForeignKey, puede ser NULL)
+    color_nombre: Nombre del color (almacenado como texto)
+    centro_formacion: Centro de formación (ForeignKey, puede ser NULL)
+    centro_nombre: Nombre del centro (almacenado como texto)
+    programa: Programa de formación (ForeignKey, puede ser NULL)
+    programa_nombre: Nombre del programa (almacenado como texto)
+    ficha: Número de ficha del aprendiz
+    id_aprendiz: Aprendiz que realizó la solicitud (ForeignKey)
+    id_producto: Producto solicitado (ForeignKey, protegido)
+    estado_solicitud: Estado actual de la solicitud (CharField con choices)
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1models_1_1_solicitud_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1models_1_1_solicitud_ae3a3332aebfd46b92465b818347eca52}\index{core.models.Solicitud@{core.models.Solicitud}!save@{save}}
+\index{save@{save}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_ae3a3332aebfd46b92465b818347eca52} 
+core.\+models.\+Solicitud.\+save (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{\texorpdfstring{$\ast$}{*}}]{args}{, }\item[{\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{kwargs}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Guarda la solicitud en la base de datos con lógica personalizada.
+
+Este método:
+1. Copia los nombres de los objetos relacionados a los campos de texto
+2. Asigna la fecha de finalización según el estado
+3. Actualiza el stock del producto según el estado de la solicitud:
+   - pendiente: Resta stock del producto
+   - rechazada/cancelada: Suma stock al producto
+\end{DoxyVerb}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcore_1_1models_1_1_solicitud_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{classcore_1_1models_1_1_solicitud_a41ad08a6865e5ae505234b2cce844885}\index{core.models.Solicitud@{core.models.Solicitud}!cantidad@{cantidad}}
+\index{cantidad@{cantidad}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{cantidad}{cantidad}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a41ad08a6865e5ae505234b2cce844885} 
+core.\+models.\+Solicitud.\+cantidad = models.\+Positive\+Integer\+Field(validators=\mbox{[}Min\+Value\+Validator(1)\mbox{]})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a1d033e46a31bd177ab4a5509fe3d2c3b}\index{core.models.Solicitud@{core.models.Solicitud}!centro\_formacion@{centro\_formacion}}
+\index{centro\_formacion@{centro\_formacion}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{centro\_formacion}{centro\_formacion}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a1d033e46a31bd177ab4a5509fe3d2c3b} 
+core.\+models.\+Solicitud.\+centro\+\_\+formacion = models.\+Foreign\+Key("{}Centro\+Formacion"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a071e125a4a7b2dfde7bb6a6f6bce403e}\index{core.models.Solicitud@{core.models.Solicitud}!centro\_nombre@{centro\_nombre}}
+\index{centro\_nombre@{centro\_nombre}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{centro\_nombre}{centro\_nombre}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a071e125a4a7b2dfde7bb6a6f6bce403e} 
+core.\+models.\+Solicitud.\+centro\+\_\+nombre = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a4bf03528aa12021568545f17c08fb559}\index{core.models.Solicitud@{core.models.Solicitud}!color@{color}}
+\index{color@{color}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{color}{color}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a4bf03528aa12021568545f17c08fb559} 
+core.\+models.\+Solicitud.\+color = models.\+Foreign\+Key("{}Color"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a02e802a41dbd4433331ed59020691e24}\index{core.models.Solicitud@{core.models.Solicitud}!color\_nombre@{color\_nombre}}
+\index{color\_nombre@{color\_nombre}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{color\_nombre}{color\_nombre}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a02e802a41dbd4433331ed59020691e24} 
+core.\+models.\+Solicitud.\+color\+\_\+nombre = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_ac212a0d62517608ca4c0e3b02b6305b2}\index{core.models.Solicitud@{core.models.Solicitud}!detalles\_adicionales@{detalles\_adicionales}}
+\index{detalles\_adicionales@{detalles\_adicionales}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{detalles\_adicionales}{detalles\_adicionales}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_ac212a0d62517608ca4c0e3b02b6305b2} 
+core.\+models.\+Solicitud.\+detalles\+\_\+adicionales = models.\+Text\+Field(blank=True, null=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_aff5a5861f4fc04089ac6f4325fe66ba5}\index{core.models.Solicitud@{core.models.Solicitud}!estado\_solicitud@{estado\_solicitud}}
+\index{estado\_solicitud@{estado\_solicitud}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{estado\_solicitud}{estado\_solicitud}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_aff5a5861f4fc04089ac6f4325fe66ba5} 
+str core.\+models.\+Solicitud.\+estado\+\_\+solicitud = models.\+Char\+Field(max\+\_\+length=255, choices=\mbox{\hyperlink{classcore_1_1models_1_1_solicitud_a68f552930e4a53a256db5e5e85c3b6eb}{ESTADOS}}, default=\textquotesingle{}pendiente\textquotesingle{})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a68f552930e4a53a256db5e5e85c3b6eb}\index{core.models.Solicitud@{core.models.Solicitud}!ESTADOS@{ESTADOS}}
+\index{ESTADOS@{ESTADOS}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{ESTADOS}{ESTADOS}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a68f552930e4a53a256db5e5e85c3b6eb} 
+list core.\+models.\+Solicitud.\+ESTADOS\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \ [}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\textcolor{stringliteral}{'pendiente'},\ \textcolor{stringliteral}{'Pendiente'}),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\textcolor{stringliteral}{'aprobada'},\ \textcolor{stringliteral}{'Aprobada'}),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\textcolor{stringliteral}{'rechazada'},\ \textcolor{stringliteral}{'Rechazada'}),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\textcolor{stringliteral}{'entregada'},\ \textcolor{stringliteral}{'Entregada'}),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\textcolor{stringliteral}{'cancelada'},\ \textcolor{stringliteral}{'Cancelada'}),}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ (\textcolor{stringliteral}{'despachada'},\ \textcolor{stringliteral}{'Despachada'}),}
+\DoxyCodeLine{\ \ \ \ ]}
+
+\end{DoxyCode}
+\Hypertarget{classcore_1_1models_1_1_solicitud_a73afae7ad4e089c3d68dd9871e79718c}\index{core.models.Solicitud@{core.models.Solicitud}!fecha\_finalizacion@{fecha\_finalizacion}}
+\index{fecha\_finalizacion@{fecha\_finalizacion}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{fecha\_finalizacion}{fecha\_finalizacion}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a73afae7ad4e089c3d68dd9871e79718c} 
+core.\+models.\+Solicitud.\+fecha\+\_\+finalizacion = models.\+Date\+Time\+Field(null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a29bc70aa8ff4d5712ef94d3b887e71b4}\index{core.models.Solicitud@{core.models.Solicitud}!fecha\_solicitud@{fecha\_solicitud}}
+\index{fecha\_solicitud@{fecha\_solicitud}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{fecha\_solicitud}{fecha\_solicitud}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a29bc70aa8ff4d5712ef94d3b887e71b4} 
+core.\+models.\+Solicitud.\+fecha\+\_\+solicitud = models.\+Date\+Time\+Field(auto\+\_\+now\+\_\+add=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a6f06cab7383791671b3c840d4237afc2}\index{core.models.Solicitud@{core.models.Solicitud}!ficha@{ficha}}
+\index{ficha@{ficha}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{ficha}{ficha}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a6f06cab7383791671b3c840d4237afc2} 
+core.\+models.\+Solicitud.\+ficha = models.\+Positive\+Integer\+Field(default=0)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_ab89319896781985d1ff304d7d8d6c883}\index{core.models.Solicitud@{core.models.Solicitud}!id\_aprendiz@{id\_aprendiz}}
+\index{id\_aprendiz@{id\_aprendiz}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{id\_aprendiz}{id\_aprendiz}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_ab89319896781985d1ff304d7d8d6c883} 
+core.\+models.\+Solicitud.\+id\+\_\+aprendiz = models.\+Foreign\+Key("{}Usuario"{}, on\+\_\+delete=models.\+CASCADE, related\+\_\+name="{}solicitudes"{})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_af4cdd82a01c6c798da60ed5a955dd4c5}\index{core.models.Solicitud@{core.models.Solicitud}!id\_producto@{id\_producto}}
+\index{id\_producto@{id\_producto}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{id\_producto}{id\_producto}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_af4cdd82a01c6c798da60ed5a955dd4c5} 
+core.\+models.\+Solicitud.\+id\+\_\+producto = models.\+Foreign\+Key("{}Producto"{}, on\+\_\+delete=models.\+PROTECT, related\+\_\+name="{}solicitudes"{})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a2ebf68436b5761f2d50c666050fdaed4}\index{core.models.Solicitud@{core.models.Solicitud}!id\_solicitud@{id\_solicitud}}
+\index{id\_solicitud@{id\_solicitud}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{id\_solicitud}{id\_solicitud}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a2ebf68436b5761f2d50c666050fdaed4} 
+core.\+models.\+Solicitud.\+id\+\_\+solicitud = models.\+Auto\+Field(primary\+\_\+key=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_ac10cc293dbbc2a201f72dbc0fdf2462b}\index{core.models.Solicitud@{core.models.Solicitud}!programa@{programa}}
+\index{programa@{programa}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{programa}{programa}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_ac10cc293dbbc2a201f72dbc0fdf2462b} 
+core.\+models.\+Solicitud.\+programa = models.\+Foreign\+Key("{}Programa"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_ad57908ea3bf5b7784264d093ca907035}\index{core.models.Solicitud@{core.models.Solicitud}!programa\_nombre@{programa\_nombre}}
+\index{programa\_nombre@{programa\_nombre}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{programa\_nombre}{programa\_nombre}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_ad57908ea3bf5b7784264d093ca907035} 
+core.\+models.\+Solicitud.\+programa\+\_\+nombre = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_abbf5982970532d53627a31e7243c46be}\index{core.models.Solicitud@{core.models.Solicitud}!talla@{talla}}
+\index{talla@{talla}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{talla}{talla}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_abbf5982970532d53627a31e7243c46be} 
+core.\+models.\+Solicitud.\+talla = models.\+Foreign\+Key("{}Talla"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a46bafca8660d21b5eb8e9dfa16854699}\index{core.models.Solicitud@{core.models.Solicitud}!talla\_nombre@{talla\_nombre}}
+\index{talla\_nombre@{talla\_nombre}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{talla\_nombre}{talla\_nombre}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a46bafca8660d21b5eb8e9dfa16854699} 
+core.\+models.\+Solicitud.\+talla\+\_\+nombre = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_ac9bfb5f0533c79b46b020cdcdda18c62}\index{core.models.Solicitud@{core.models.Solicitud}!tipo@{tipo}}
+\index{tipo@{tipo}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{tipo}{tipo}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_ac9bfb5f0533c79b46b020cdcdda18c62} 
+core.\+models.\+Solicitud.\+tipo = models.\+Foreign\+Key("{}Tipo\+Producto"{}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_solicitud_a39e39374f20d6fda99acc199d6a3d30d}\index{core.models.Solicitud@{core.models.Solicitud}!tipo\_nombre@{tipo\_nombre}}
+\index{tipo\_nombre@{tipo\_nombre}!core.models.Solicitud@{core.models.Solicitud}}
+\doxysubsubsection{\texorpdfstring{tipo\_nombre}{tipo\_nombre}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_solicitud_a39e39374f20d6fda99acc199d6a3d30d} 
+core.\+models.\+Solicitud.\+tipo\+\_\+nombre = models.\+Char\+Field(max\+\_\+length=255, null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{core_2models_8py}{models.\+py}}\end{DoxyCompactItemize}

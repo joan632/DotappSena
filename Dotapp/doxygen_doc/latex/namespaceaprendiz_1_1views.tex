@@ -1,0 +1,230 @@
+\doxysection{Referencia del espacio de nombres aprendiz.\+views}
+\hypertarget{namespaceaprendiz_1_1views}{}\label{namespaceaprendiz_1_1views}\index{aprendiz.views@{aprendiz.views}}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_ad5c886aaacf25cb424e59e71dc62cb5e}{bienvenido}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_ac5b51b9185b7e07d62fc7ebd1a837f6c}{principal}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_a7ecb97c4b8016031efb918b5a38fd16e}{logout\+\_\+view}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_a03f3a0c133aae37f4b62c9fc1d9649d2}{perfil}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_ab05237dc24aac6b2f29b950548a795e8}{actualizar\+\_\+perfil}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_ac1fdaec1ddc3db3ba0d5bdcf9bfbbc0b}{solicitud\+\_\+uniforme}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_a18841f920dccf34d30a5ca06b867b7f1}{ajax\+\_\+programas\+\_\+por\+\_\+centro}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_ac60b54265d754a990752e17bf4bc7789}{crear\+\_\+solicitud}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_aebf52fde2e3c287294c4a071553848cf}{guardar\+\_\+borrador}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_a8e4f7445b6d9ce225c7775d4b6b35eee}{historial\+\_\+solicitudes}} (request)
+\item 
+\mbox{\hyperlink{namespaceaprendiz_1_1views_a8d5e3680a6fda5c5163f4d4fb53e1013}{cancelar\+\_\+solicitud}} (request, solicitud\+\_\+id)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Vistas para la aplicación de Aprendiz.
+
+Este módulo contiene todas las vistas relacionadas con las funcionalidades
+disponibles para los usuarios con rol de aprendiz, incluyendo:
+- Gestión de perfil
+- Creación y gestión de solicitudes
+- Historial de solicitudes
+- Borradores de solicitudes
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{namespaceaprendiz_1_1views_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{namespaceaprendiz_1_1views_ab05237dc24aac6b2f29b950548a795e8}\index{aprendiz.views@{aprendiz.views}!actualizar\_perfil@{actualizar\_perfil}}
+\index{actualizar\_perfil@{actualizar\_perfil}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{actualizar\_perfil()}{actualizar\_perfil()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_ab05237dc24aac6b2f29b950548a795e8} 
+aprendiz.\+views.\+actualizar\+\_\+perfil (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para actualizar el perfil del aprendiz.
+
+Permite al usuario actualizar su nombre, apellido y correo electrónico.
+
+Args:
+    request: Objeto HttpRequest con los datos del formulario
+    
+Returns:
+    HttpResponse: Renderiza la página de perfil o redirige después de actualizar
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_a18841f920dccf34d30a5ca06b867b7f1}\index{aprendiz.views@{aprendiz.views}!ajax\_programas\_por\_centro@{ajax\_programas\_por\_centro}}
+\index{ajax\_programas\_por\_centro@{ajax\_programas\_por\_centro}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{ajax\_programas\_por\_centro()}{ajax\_programas\_por\_centro()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_a18841f920dccf34d30a5ca06b867b7f1} 
+aprendiz.\+views.\+ajax\+\_\+programas\+\_\+por\+\_\+centro (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista AJAX para obtener programas filtrados por centro de formación.
+
+Retorna una lista JSON de programas que pertenecen al centro especificado.
+Utilizada para cargar dinámicamente los programas en el formulario.
+
+Args:
+    request: Objeto HttpRequest con el parámetro centro_id
+    
+Returns:
+    JsonResponse: Lista de programas en formato JSON
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_ad5c886aaacf25cb424e59e71dc62cb5e}\index{aprendiz.views@{aprendiz.views}!bienvenido@{bienvenido}}
+\index{bienvenido@{bienvenido}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{bienvenido()}{bienvenido()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_ad5c886aaacf25cb424e59e71dc62cb5e} 
+aprendiz.\+views.\+bienvenido (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista de bienvenida para el aprendiz.
+
+Muestra una página de bienvenida después del login.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza la página de bienvenida
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_a8d5e3680a6fda5c5163f4d4fb53e1013}\index{aprendiz.views@{aprendiz.views}!cancelar\_solicitud@{cancelar\_solicitud}}
+\index{cancelar\_solicitud@{cancelar\_solicitud}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{cancelar\_solicitud()}{cancelar\_solicitud()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_a8d5e3680a6fda5c5163f4d4fb53e1013} 
+aprendiz.\+views.\+cancelar\+\_\+solicitud (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{solicitud\+\_\+id}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para cancelar una solicitud pendiente.
+
+Permite al aprendiz cancelar una solicitud que está en estado "pendiente".
+Al cancelar, se envía un correo de notificación al aprendiz y se devuelve
+el stock al inventario.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    solicitud_id: ID de la solicitud a cancelar
+    
+Returns:
+    HttpResponseRedirect: Redirige al historial de solicitudes
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_ac60b54265d754a990752e17bf4bc7789}\index{aprendiz.views@{aprendiz.views}!crear\_solicitud@{crear\_solicitud}}
+\index{crear\_solicitud@{crear\_solicitud}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{crear\_solicitud()}{crear\_solicitud()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_ac60b54265d754a990752e17bf4bc7789} 
+aprendiz.\+views.\+crear\+\_\+solicitud (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para crear una nueva solicitud de uniforme.
+
+Procesa el formulario de solicitud, valida los datos, verifica el stock
+disponible y crea la solicitud. Si la solicitud se crea exitosamente,
+elimina cualquier borrador guardado del usuario.
+
+Args:
+    request: Objeto HttpRequest con los datos del formulario
+    
+Returns:
+    HttpResponseRedirect: Redirige al historial de solicitudes o al formulario
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_aebf52fde2e3c287294c4a071553848cf}\index{aprendiz.views@{aprendiz.views}!guardar\_borrador@{guardar\_borrador}}
+\index{guardar\_borrador@{guardar\_borrador}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{guardar\_borrador()}{guardar\_borrador()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_aebf52fde2e3c287294c4a071553848cf} 
+aprendiz.\+views.\+guardar\+\_\+borrador (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para guardar un borrador de solicitud.
+
+Permite al usuario guardar una solicitud incompleta para completarla
+más tarde. Solo se puede tener un borrador por usuario a la vez.
+
+Args:
+    request: Objeto HttpRequest con los datos del formulario
+    
+Returns:
+    HttpResponseRedirect: Redirige al formulario de solicitud
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_a8e4f7445b6d9ce225c7775d4b6b35eee}\index{aprendiz.views@{aprendiz.views}!historial\_solicitudes@{historial\_solicitudes}}
+\index{historial\_solicitudes@{historial\_solicitudes}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{historial\_solicitudes()}{historial\_solicitudes()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_a8e4f7445b6d9ce225c7775d4b6b35eee} 
+aprendiz.\+views.\+historial\+\_\+solicitudes (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para mostrar el historial de solicitudes del aprendiz.
+
+Muestra todas las solicitudes realizadas por el usuario autenticado.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza el historial de solicitudes
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_a7ecb97c4b8016031efb918b5a38fd16e}\index{aprendiz.views@{aprendiz.views}!logout\_view@{logout\_view}}
+\index{logout\_view@{logout\_view}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{logout\_view()}{logout\_view()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_a7ecb97c4b8016031efb918b5a38fd16e} 
+aprendiz.\+views.\+logout\+\_\+view (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para cerrar sesión del usuario.
+
+Cierra la sesión del usuario actual y redirige al login.
+
+Args:
+    request: Objeto HttpRequest
+    
+Returns:
+    HttpResponseRedirect: Redirige a la página de login
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_a03f3a0c133aae37f4b62c9fc1d9649d2}\index{aprendiz.views@{aprendiz.views}!perfil@{perfil}}
+\index{perfil@{perfil}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{perfil()}{perfil()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_a03f3a0c133aae37f4b62c9fc1d9649d2} 
+aprendiz.\+views.\+perfil (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para mostrar el perfil del aprendiz.
+
+Muestra la información del perfil del usuario autenticado.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza la página de perfil
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_ac5b51b9185b7e07d62fc7ebd1a837f6c}\index{aprendiz.views@{aprendiz.views}!principal@{principal}}
+\index{principal@{principal}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{principal()}{principal()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_ac5b51b9185b7e07d62fc7ebd1a837f6c} 
+aprendiz.\+views.\+principal (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista principal del panel del aprendiz.
+
+Muestra el dashboard principal con información del usuario.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza el panel principal del aprendiz
+\end{DoxyVerb}
+ \Hypertarget{namespaceaprendiz_1_1views_ac1fdaec1ddc3db3ba0d5bdcf9bfbbc0b}\index{aprendiz.views@{aprendiz.views}!solicitud\_uniforme@{solicitud\_uniforme}}
+\index{solicitud\_uniforme@{solicitud\_uniforme}!aprendiz.views@{aprendiz.views}}
+\doxysubsubsection{\texorpdfstring{solicitud\_uniforme()}{solicitud\_uniforme()}}
+{\footnotesize\ttfamily \label{namespaceaprendiz_1_1views_ac1fdaec1ddc3db3ba0d5bdcf9bfbbc0b} 
+aprendiz.\+views.\+solicitud\+\_\+uniforme (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para crear una nueva solicitud de uniforme.
+
+Muestra el formulario de creación de solicitud con todos los productos
+disponibles, tipos, tallas, colores, centros y programas. Si el usuario
+tiene un borrador guardado, lo carga automáticamente.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza el formulario de creación de solicitud
+\end{DoxyVerb}
+ 

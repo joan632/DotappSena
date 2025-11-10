@@ -6,7 +6,7 @@
     <div class="admin-card">
       <div class="sticky-sync-wrapper">
         <!-- Flecha atrás -->
-        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'dashboard-almacenista' %}'" aria-label="Volver">
           ←
         </button>
         
@@ -174,225 +174,236 @@
   <script id="tallas-data" type="application/json">{{ tallas_json|safe }}</script>
   <script id="colores-data" type="application/json">{{ colores_json|safe }}</script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // ✅ Cargar datos desde Django
-      const tipos = JSON.parse(document.getElementById('tipos-data').textContent);
-      const tallas = JSON.parse(document.getElementById('tallas-data').textContent);
-      const colores = JSON.parse(document.getElementById('colores-data').textContent);
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // ✅ Cargar datos desde Django
+    const tipos = JSON.parse(document.getElementById('tipos-data').textContent);
+    const tallas = JSON.parse(document.getElementById('tallas-data').textContent);
+    const colores = JSON.parse(document.getElementById('colores-data').textContent);
 
-      // ✅ Modal Agregar
-      const modalAgregar = document.getElementById("modalAgregar");
-      const btnAbrirAgregar = document.getElementById("btnAbrirAgregar");
-      const btnCerrarAgregar = modalAgregar.querySelector(".close");
-      const btnCancelarAgregar = modalAgregar.querySelector(".btn-cancelar");
-      const formAgregar = document.getElementById("formAgregar");
+    // ✅ --- MODAL AGREGAR ---
+    const modalAgregar = document.getElementById("modalAgregar");
+    const btnAbrirAgregar = document.getElementById("btnAbrirAgregar");
+    const btnCerrarAgregar = modalAgregar.querySelector(".close");
+    const btnCancelarAgregar = modalAgregar.querySelector(".btn-cancelar");
+    const formAgregar = document.getElementById("formAgregar");
 
-      btnAbrirAgregar.onclick = () => modalAgregar.style.display = "block";
-      btnCerrarAgregar.onclick = () => modalAgregar.style.display = "none";
-      btnCancelarAgregar.onclick = () => modalAgregar.style.display = "none";
+    btnAbrirAgregar.onclick = () => modalAgregar.style.display = "block";
+    btnCerrarAgregar.onclick = () => modalAgregar.style.display = "none";
+    btnCancelarAgregar.onclick = () => modalAgregar.style.display = "none";
 
-      formAgregar.onsubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(formAgregar);
+    formAgregar.onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(formAgregar);
+
+      try {
         const res = await fetch("/almacenista/agregar-producto/", {
           method: "POST",
-          headers: {
-            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-          },
+          headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value },
           body: formData
         });
+
         const data = await res.json();
         if (data.status === 'ok') {
-          alert("Producto agregado");
-          location.reload();
-        } else {
-          alert("Error al agregar");
-        }
-      };
-
-      // ✅ Modal Editar
-      const modalEditar = document.getElementById("modalAccion");
-      const modalTitulo = document.getElementById("modalTitulo");
-      const modalBody = document.getElementById("modalBody");
-      const btnConfirmar = document.getElementById("btnConfirmar");
-      const btnCancelar = document.getElementById("btnCancelar");
-      const btnCerrar = modalEditar.querySelector(".close");
-
-      let productoId = null;
-
-      document.querySelectorAll(".js-editar").forEach(btn => {
-        btn.addEventListener("click", () => {
-          productoId = btn.dataset.id;
-          modalTitulo.textContent = "Editar producto";
-
-          const fila = btn.closest("tr");
-          const tipoActual = fila.children[2].textContent.trim();
-          const tallaActual = fila.children[3].textContent.trim();
-          const colorActual = fila.children[4].textContent.trim();
-          const stockActual = fila.children[5].textContent.trim();
-          const precioActual = fila.children[6].textContent.trim(); // "50.000,00"
-          const precioLimpio = parseFloat(
-            precioActual.replace(/\./g, '').replace(',', '.')
-          ) || 0;
-
-
-          modalBody.innerHTML = `
-            <form id="formEditar" enctype="multipart/form-data">
-              <label>Tipo:</label>
-              <select name="tipo" id="editarTipo" required></select>
-
-              <label>Talla:</label>
-              <select name="talla" id="editarTalla" required></select>
-
-              <label>Color:</label>
-              <select name="color" id="editarColor" required></select>
-
-              <label>Cantidad:</label>
-              <input type="number" name="cantidad" value="${stockActual}" min="0" required>
-
-              <label>Precio:</label>
-              <input type="number" name="precio" value="${precioLimpio}" min="0" step="0.01" required>
-
-              <label>Imagen (opcional):</label>
-              <input type="file" name="imagen" accept="image/png, image/jpeg">
-            </form>
-          `;
-
-          // Llenar selects
-          const fillSelect = (id, items, selected) => {
-            const sel = document.getElementById(id);
-            items.forEach(i => {
-              const opt = new Option(i.nombre, i.nombre);
-              if (i.nombre === selected) opt.selected = true;
-              sel.add(opt);
-            });
-          };
-
-          fillSelect("editarTipo", tipos, tipoActual);
-          fillSelect("editarTalla", tallas, tallaActual);
-          fillSelect("editarColor", colores, colorActual);
-
-          modalEditar.style.display = "block";
-        });
-      });
-
-      btnCancelar.onclick = () => modalEditar.style.display = "none";
-      btnCerrar.onclick = () => modalEditar.style.display = "none";
-
-      btnConfirmar.onclick = async () => {
-        const formData = new FormData(document.getElementById("formEditar"));
-        const res = await fetch(`/almacenista/productos/editar/${productoId}/`, {
-          method: "POST",
-          headers: {
-            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-          },
-          body: formData
-        });
-        if (res.ok) {
-          alert("Producto editado");
-          location.reload();
-        } else {
-          alert("Error al editar");
-        }
-        modalEditar.style.display = "none";
-      };
-
-      // ✅ Modal Eliminar
-      const modalEliminar = document.getElementById("modalEliminar");
-      const btnEliminarConfirmar = document.getElementById("btnEliminarConfirmar");
-      const btnEliminarCancelar = document.getElementById("btnEliminarCancelar");
-      const btnCerrarEliminar = document.getElementById("cerrarEliminar");
-
-      let idEliminar = null;
-
-      document.querySelectorAll(".js-eliminar").forEach(btn => {
-        btn.addEventListener("click", () => {
-          idEliminar = btn.dataset.id;
-          document.getElementById("modalEliminarBody").innerHTML = `
-            <p>¿Estás seguro de eliminar el producto con ID <b>${idEliminar}</b>?</p>
-          `;
-          modalEliminar.style.display = "block";
-        });
-      });
-
-      btnEliminarCancelar.onclick = () => modalEliminar.style.display = "none";
-      btnCerrarEliminar.onclick = () => modalEliminar.style.display = "none";
-
-      btnEliminarConfirmar.onclick = async () => {
-        try {
-          const res = await fetch(`/almacenista/productos/eliminar/${idEliminar}/`, {
-            method: "POST",
-            headers: {
-              "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-            }
-          });
-
-          const data = await res.json();
-
-          if (data.status === "ok") {
-            alert(data.message);
+          showNotification("✅ Producto agregado correctamente", "success");
+          setTimeout(() => {
             location.reload();
-          } else {
-            alert(`❌ ${data.message}`);
-          }
-        } catch (error) {
-          alert("❌ Error al intentar eliminar el producto. Intenta nuevamente.");
-          console.error(error);
+          }, 1000);
+        } else {
+          showNotification(data.message || "❌ Error al agregar el producto", "error");
         }
+      } catch (err) {
+        console.error("Error al agregar producto:", err);
+        showNotification("❌ Error al conectar con el servidor", "error");
+      }
+    };
 
-        modalEliminar.style.display = "none";
-      };
+    // --- MODAL EDITAR ---
+    const modalEditar = document.getElementById("modalAccion");
+    const modalTitulo = document.getElementById("modalTitulo");
+    const modalBody = document.getElementById("modalBody");
+    const btnConfirmar = document.getElementById("btnConfirmar");
+    const btnCancelar = document.getElementById("btnCancelar");
+    const btnCerrar = modalEditar.querySelector(".close");
 
+    let productoId = null;
 
-      // ✅ Validación de imagen
-      const validarImagen = (input) => {
-        const archivo = input.files[0];
-        if (!archivo) return;
-        if (!["image/png", "image/jpeg"].includes(archivo.type)) {
-          alert("❌ Solo PNG o JPEG");
-          input.value = "";
-          return;
-        }
-        const img = new Image();
-        img.src = URL.createObjectURL(archivo);
-        img.onload = () => {
-          if (img.width > 1000 || img.height > 1000) {
-            alert(`❌ Máximo 1000pxx1000px. Tu imagen: ${img.width}x${img.height}`);
-            input.value = "";
-          }
+    document.querySelectorAll(".js-editar").forEach(btn => {
+      btn.addEventListener("click", () => {
+        productoId = btn.dataset.id;
+        modalTitulo.textContent = "Editar producto";
+
+        const fila = btn.closest("tr");
+        const tipoActual = fila.children[2].textContent.trim();
+        const tallaActual = fila.children[3].textContent.trim();
+        const colorActual = fila.children[4].textContent.trim();
+        const stockActual = fila.children[5].textContent.trim();
+        const precioActual = fila.children[6].textContent.trim();
+        const precioLimpio = parseFloat(precioActual.replace(/\./g, '').replace(',', '.')) || 0;
+
+        modalBody.innerHTML = `
+          <form id="formEditar" enctype="multipart/form-data">
+            <label>Tipo:</label>
+            <select name="tipo" id="editarTipo" required></select>
+
+            <label>Talla:</label>
+            <select name="talla" id="editarTalla" required></select>
+
+            <label>Color:</label>
+            <select name="color" id="editarColor" required></select>
+
+            <label>Cantidad:</label>
+            <input type="number" name="cantidad" value="${stockActual}" min="0" required>
+
+            <label>Precio:</label>
+            <input type="number" name="precio" value="${precioLimpio}" min="0" step="0.01" required>
+
+            <label>Imagen (opcional):</label>
+            <input type="file" name="imagen" accept="image/png, image/jpeg">
+          </form>
+        `;
+
+        // Llenar selects
+        const fillSelect = (id, items, selected) => {
+          const sel = document.getElementById(id);
+          items.forEach(i => {
+            const opt = new Option(i.nombre, i.nombre);
+            if (i.nombre === selected) opt.selected = true;
+            sel.add(opt);
+          });
         };
-      };
+        fillSelect("editarTipo", tipos, tipoActual);
+        fillSelect("editarTalla", tallas, tallaActual);
+        fillSelect("editarColor", colores, colorActual);
 
-      document.getElementById("inputImagen")?.addEventListener("change", function () {
-        validarImagen(this);
-      });
-
-      // ✅ Buscador
-      const buscador = document.getElementById("buscador");
-      const tabla = document.querySelector(".data-table tbody");
-      const filas = Array.from(tabla.querySelectorAll("tr"));
-
-      buscador.addEventListener("keyup", () => {
-        const filtro = buscador.value.toLowerCase();
-        let coincidencias = 0;
-        filas.forEach(fila => {
-          const texto = fila.textContent.toLowerCase();
-          const coincide = texto.includes(filtro);
-          fila.style.display = coincide ? "" : "none";
-          if (coincide) coincidencias++;
-        });
-        const noEncontrado = tabla.querySelector("#no-encontrado");
-        if (!noEncontrado) {
-          const tr = document.createElement("tr");
-          tr.id = "no-encontrado";
-          tr.innerHTML = `<td colspan="8" style="text-align:center;font-weight:bold;color:#555">Producto no encontrado</td>`;
-          tabla.appendChild(tr);
-        }
-        document.getElementById("no-encontrado").style.display = coincidencias === 0 ? "" : "none";
+        modalEditar.style.display = "block";
       });
     });
-  </script>
+
+    btnCancelar.onclick = () => modalEditar.style.display = "none";
+    btnCerrar.onclick = () => modalEditar.style.display = "none";
+
+    btnConfirmar.onclick = async () => {
+      const formData = new FormData(document.getElementById("formEditar"));
+      try {
+        const res = await fetch(`/almacenista/productos/editar/${productoId}/`, {
+          method: "POST",
+          headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value },
+          body: formData
+        });
+
+        const data = await res.json();
+        if (data.status === "ok") {
+          showNotification(data.message || "Producto editado correctamente", "success");
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        } else {
+          showNotification(data.message || "Error al editar producto", "error");
+        }
+      } catch (error) {
+        console.error("Error al editar producto:", error);
+        showNotification("Error al conectar con el servidor", "error");
+      }
+      modalEditar.style.display = "none";
+    };
+
+    // ✅ --- MODAL ELIMINAR ---
+    const modalEliminar = document.getElementById("modalEliminar");
+    const btnEliminarConfirmar = document.getElementById("btnEliminarConfirmar");
+    const btnEliminarCancelar = document.getElementById("btnEliminarCancelar");
+    const btnCerrarEliminar = document.getElementById("cerrarEliminar");
+
+    let idEliminar = null;
+
+    document.querySelectorAll(".js-eliminar").forEach(btn => {
+      btn.addEventListener("click", () => {
+        idEliminar = btn.dataset.id;
+        document.getElementById("modalEliminarBody").innerHTML = `
+          <p>¿Estás seguro de eliminar el producto con ID <b>${idEliminar}</b>?</p>
+        `;
+        modalEliminar.style.display = "block";
+      });
+    });
+
+    btnEliminarCancelar.onclick = () => modalEliminar.style.display = "none";
+    btnCerrarEliminar.onclick = () => modalEliminar.style.display = "none";
+
+    btnEliminarConfirmar.onclick = async () => {
+      try {
+        const res = await fetch(`/almacenista/productos/eliminar/${idEliminar}/`, {
+          method: "POST",
+          headers: { "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value }
+        });
+
+        const data = await res.json();
+        if (data.status === "ok") {
+          showNotification(data.message || "✅ Producto eliminado correctamente", "success");
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        } else {
+          showNotification(data.message || "❌ Error al eliminar producto", "error");
+        }
+      } catch (error) {
+        console.error("Error al eliminar producto:", error);
+        showNotification("❌ Error al conectar con el servidor", "error");
+      }
+      modalEliminar.style.display = "none";
+    };
+
+    // ✅ --- VALIDACIÓN DE IMAGEN ---
+    const validarImagen = (input) => {
+      const archivo = input.files[0];
+      if (!archivo) return;
+
+      if (!["image/png", "image/jpeg"].includes(archivo.type)) {
+        showNotification("Solo se permiten imágenes PNG o JPEG", "error");
+        input.value = "";
+        return;
+      }
+
+      const img = new Image();
+      img.src = URL.createObjectURL(archivo);
+      img.onload = () => {
+        if (img.width > 1000 || img.height > 1000) {
+          showNotification(`Máximo tamaño permitido: 1000x1000px. Tu imagen: ${img.width}x${img.height}`, "error");
+          input.value = "";
+        }
+      };
+    };
+
+    document.getElementById("inputImagen")?.addEventListener("change", function () {
+      validarImagen(this);
+    });
+
+    // ✅ --- BUSCADOR ---
+    const buscador = document.getElementById("buscador");
+    const tabla = document.querySelector(".data-table tbody");
+    const filas = Array.from(tabla.querySelectorAll("tr"));
+
+    buscador.addEventListener("keyup", () => {
+      const filtro = buscador.value.toLowerCase();
+      let coincidencias = 0;
+      filas.forEach(fila => {
+        const texto = fila.textContent.toLowerCase();
+        const coincide = texto.includes(filtro);
+        fila.style.display = coincide ? "" : "none";
+        if (coincide) coincidencias++;
+      });
+
+      let noEncontrado = document.getElementById("no-encontrado");
+      if (!noEncontrado) {
+        const tr = document.createElement("tr");
+        tr.id = "no-encontrado";
+        tr.innerHTML = `<td colspan="8" style="text-align:center;font-weight:bold;color:#555">Producto no encontrado</td>`;
+        tabla.appendChild(tr);
+        noEncontrado = tr;
+      }
+      noEncontrado.style.display = coincidencias === 0 ? "" : "none";
+    });
+  });
+</script>
 
 
   <!-- Script para sincronizar el slider con la tabla -->

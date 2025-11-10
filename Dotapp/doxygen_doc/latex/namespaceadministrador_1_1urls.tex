@@ -1,0 +1,35 @@
+\doxysection{Referencia del espacio de nombres administrador.\+urls}
+\hypertarget{namespaceadministrador_1_1urls}{}\label{namespaceadministrador_1_1urls}\index{administrador.urls@{administrador.urls}}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+list \mbox{\hyperlink{namespaceadministrador_1_1urls_a89ad2222da5db519856f6bfc8a2525ac}{urlpatterns}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-var-members}
+\Hypertarget{namespaceadministrador_1_1urls_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{namespaceadministrador_1_1urls_a89ad2222da5db519856f6bfc8a2525ac}\index{administrador.urls@{administrador.urls}!urlpatterns@{urlpatterns}}
+\index{urlpatterns@{urlpatterns}!administrador.urls@{administrador.urls}}
+\doxysubsubsection{\texorpdfstring{urlpatterns}{urlpatterns}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1urls_a89ad2222da5db519856f6bfc8a2525ac} 
+list administrador.\+urls.\+urlpatterns}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ =\ \ [}
+\DoxyCodeLine{00002\ \ \ \ \ path(\textcolor{stringliteral}{'panel-\/admin/'},\ views.panel\_admin,\ name=\textcolor{stringliteral}{'panel-\/admin'}),}
+\DoxyCodeLine{00003\ \ \ \ \ path(\textcolor{stringliteral}{'administracion-\/usuarios/'},\ views.administracion\_usuarios,\ name=\textcolor{stringliteral}{'administracion-\/usuarios'}),}
+\DoxyCodeLine{00004\ \ \ \ \ path(\textcolor{stringliteral}{'historial-\/usuarios/<int:id\_usuario>/'},\ views.historial\_usuarios,\ name=\textcolor{stringliteral}{'historial-\/usuarios'}),}
+\DoxyCodeLine{00005\ \ \ \ \ path(\textcolor{stringliteral}{"{}usuarios/editar/<int:id\_usuario>/"{}},\ views.editar\_usuario,\ name=\textcolor{stringliteral}{"{}editar-\/usuario"{}}),}
+\DoxyCodeLine{00006\ \ \ \ \ path(\textcolor{stringliteral}{"{}usuarios/eliminar/<int:id\_usuario>/"{}},\ views.eliminar\_usuario,\ name=\textcolor{stringliteral}{"{}eliminar-\/usuario"{}}),}
+\DoxyCodeLine{00007\ \ \ \ \ path(\textcolor{stringliteral}{"{}usuarios/estado/<int:id\_usuario>/"{}},\ views.cambiar\_estado\_usuario,\ name=\textcolor{stringliteral}{"{}cambiar-\/estado-\/usuario"{}}),}
+\DoxyCodeLine{00008\ \ \ \ \ path(\textcolor{stringliteral}{'seguimiento-\/pedidos/'},\ views.seguimiento\_pedidos,\ name=\textcolor{stringliteral}{'seguimiento-\/pedidos'}),}
+\DoxyCodeLine{00009\ \ \ \ \ path(\textcolor{stringliteral}{"{}export/pdf/"{}},\ views.exportar\_pdf,\ name=\textcolor{stringliteral}{"{}exportar\_pdf"{}}),}
+\DoxyCodeLine{00010\ \ \ \ \ path(\textcolor{stringliteral}{"{}export/excel/"{}},\ views.exportar\_excel,\ name=\textcolor{stringliteral}{"{}exportar\_excel"{}}),}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ ]}
+
+\end{DoxyCode}

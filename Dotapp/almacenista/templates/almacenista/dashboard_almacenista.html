@@ -1,3 +1,16 @@
+{% comment %}
+Template del dashboard del almacenista
+
+Este template muestra el menú principal para usuarios con rol de almacenista.
+Proporciona acceso a las funcionalidades de gestión de inventario y productos.
+
+Opciones disponibles:
+- Administrar productos: Crear, editar y eliminar productos del inventario
+- Solicitudes de inventario: Ver y gestionar solicitudes de uniformes pendientes de aprobación/rechazo
+
+El almacenista es responsable de mantener el inventario actualizado y aprobar/rechazar solicitudes
+basándose en la disponibilidad de stock.
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -6,8 +19,7 @@
   <div class="admin-container">
     <div class="login-card">
       <div class="sticky-sync-wrapper">
-        <!-- Flecha atrás -->
-        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-small" onclick="window.location.href='{% url 'dashboard_admin' %}'" aria-label="Volver">
           ←
         </button>
         
@@ -18,11 +30,13 @@
         </div>
       </div>
 
+      {% comment %}
+      Menú de opciones del almacenista
+      Botones de navegación a las secciones de gestión de productos e inventario
+      {% endcomment %}
       <div class="welcome-buttons">
-
         <button onclick="window.location.href='{% url 'administrar-productos' %}'">Administrar productos</button>
         <button onclick="window.location.href='{% url 'solicitudes-inventario' %}'">Solicitudes de inventario</button>
-
       </div>
     </div>
   </div>

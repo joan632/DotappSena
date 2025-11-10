@@ -6,7 +6,7 @@
     <div class="admin-card">
       <div class="sticky-sync-wrapper">
         <!-- Flecha atrás -->
-        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'dashboard-almacenista' %}'" aria-label="Volver">
           ←
         </button>
         
@@ -16,7 +16,12 @@
 
             <!-- FILTROS -->
             <div class="filtros">
-              <input type="text" id="buscar" placeholder="Buscar por nombre o correo..." />
+              <input type="text" id="buscar" placeholder="Buscar por nombre..." />
+              <select id="filtroRol">
+                <option value="">Estado</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Aprobado">Aprobada</option>
+              </select>
             </div>
 
         </div>
@@ -130,6 +135,79 @@
     window.addEventListener('resize', syncCenter);
     syncCenter(); // inicial
   </script>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputBuscar = document.getElementById("buscar");
+      const selectRol = document.getElementById("filtroRol");
+      const tablaBody = document.querySelector("#tablaUsuarios tbody");
+
+      function normalizarTexto(texto) {
+        return String(texto || '')
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
+      }
+
+      const statusMap = {
+        'aprobado': ['aprobada','aprobado'],
+        'rechazado': ['rechazada','rechazado'],
+        'pendiente': ['pendiente'],
+        'cancelado': ['cancelada','cancelado'],
+        'entregado': ['entregado','entregada']
+      };
+
+      function filtrarTabla() {
+        const texto = normalizarTexto(inputBuscar.value);
+        const rol = normalizarTexto(selectRol.value);
+        let visibleCount = 0;
+
+        // Eliminar mensaje previo si existe
+        const mensajePrevio = document.querySelector("#sinResultados");
+        if (mensajePrevio) mensajePrevio.remove();
+
+        for (let fila of tablaBody.rows) {
+          const cellsText = Array.from(fila.cells)
+            .map(c => normalizarTexto(c.textContent))
+            .join(' ');
+
+          const estado = normalizarTexto(fila.cells[fila.cells.length - 2]?.textContent || '');
+          const coincideTexto = texto === '' || cellsText.includes(texto);
+
+          let coincideRol = false;
+          if (rol === '') {
+            coincideRol = true;
+          } else {
+            const posibles = statusMap[rol] || [rol];
+            coincideRol = posibles.some(p => estado.includes(p));
+          }
+
+          const visible = (coincideTexto && coincideRol);
+          fila.style.display = visible ? '' : 'none';
+          if (visible) visibleCount++;
+        }
+
+        // Si no hay filas visibles, mostramos un mensaje
+        if (visibleCount === 0) {
+          const tr = document.createElement("tr");
+          tr.id = "sinResultados";
+          const td = document.createElement("td");
+          td.colSpan = document.querySelectorAll("#tablaUsuarios thead th").length;
+          td.textContent = "No se encontraron resultados";
+          td.style.textAlign = "center";
+          tr.appendChild(td);
+          tablaBody.appendChild(tr);
+        }
+      }
+
+      inputBuscar.addEventListener('input', filtrarTabla);
+      selectRol.addEventListener('change', filtrarTabla);
+    });
+  </script>
+
+
 
 
 {% endblock %}

@@ -1,0 +1,40 @@
+\doxysection{Referencia del espacio de nombres core.\+signals}
+\hypertarget{namespacecore_1_1signals}{}\label{namespacecore_1_1signals}\index{core.signals@{core.signals}}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacecore_1_1signals_afdafc1de7e43428011ad3b18ea6ac75d}{crear\+\_\+roles\+\_\+iniciales}} (sender, \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}kwargs)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Señales (signals) de Django para el sistema DotApp SENA.
+
+Este módulo contiene señales que se ejecutan automáticamente
+en ciertos eventos del sistema, como después de las migraciones.
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{namespacecore_1_1signals_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{namespacecore_1_1signals_afdafc1de7e43428011ad3b18ea6ac75d}\index{core.signals@{core.signals}!crear\_roles\_iniciales@{crear\_roles\_iniciales}}
+\index{crear\_roles\_iniciales@{crear\_roles\_iniciales}!core.signals@{core.signals}}
+\doxysubsubsection{\texorpdfstring{crear\_roles\_iniciales()}{crear\_roles\_iniciales()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1signals_afdafc1de7e43428011ad3b18ea6ac75d} 
+core.\+signals.\+crear\+\_\+roles\+\_\+iniciales (\begin{DoxyParamCaption}\item[{}]{sender}{, }\item[{\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{kwargs}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Crea los roles iniciales del sistema después de ejecutar migraciones.
+
+Esta función se ejecuta automáticamente después de cada migración
+y asegura que los roles básicos del sistema existan en la base de datos:
+- aprendiz
+- administrador
+- despachador
+- almacenista
+
+Args:
+    sender: Modelo o aplicación que disparó la señal
+    **kwargs: Argumentos adicionales de la señal
+\end{DoxyVerb}
+ 

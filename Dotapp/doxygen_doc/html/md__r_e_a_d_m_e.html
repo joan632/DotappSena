@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.15.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>DotApp-Sena: DotApp SENA</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">DotApp-Sena<span id="projectnumber">&#160;1.0</span>
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('md__r_e_a_d_m_e.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">DotApp SENA </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p><a class="anchor" id="autotoc_md0"></a></p>
+<p>Sistema de gestión de solicitudes de uniformes para el Servicio Nacional de Aprendizaje (SENA) de Colombia. Esta aplicación web permite a los aprendices solicitar uniformes, mientras que administradores, almacenistas y despachadores gestionan el proceso completo de solicitudes, inventario y entregas.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md1"></a>
+Descripción</h1>
+<p>DotApp SENA es una plataforma web desarrollada con Django que facilita la gestión integral del proceso de solicitud y entrega de uniformes en los centros de formación del SENA. El sistema está diseñado con un modelo de roles que permite diferentes niveles de acceso y funcionalidades según el tipo de usuario.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+Características Principales</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
+Para Aprendices</h2>
+<ul>
+<li>Registro y autenticación de usuarios</li>
+<li>Solicitud de uniformes con especificaciones (tipo, talla, color)</li>
+<li>Historial de solicitudes realizadas</li>
+<li>Sistema de borradores para guardar solicitudes incompletas</li>
+<li>Cancelación de solicitudes pendientes</li>
+<li>Perfil de usuario editable</li>
+</ul>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
+Para Administradores</h2>
+<ul>
+<li>Panel de administración completo</li>
+<li>Gestión de usuarios (editar, eliminar o desactivar)</li>
+<li>Aprobación o rechazo de solicitudes</li>
+<li>Visualización de solicitudes y reportes</li>
+<li>Gestión de centros de formación y programas</li>
+</ul>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
+Para Almacenistas</h2>
+<ul>
+<li>Gestión de inventario de productos</li>
+<li>Creación,edición y eliminación de productos (tipo, talla, color, precio, stock)</li>
+<li>Control de stock automático</li>
+<li>Visualización de solicitudes pendientes</li>
+</ul>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+Para Despachadores</h2>
+<ul>
+<li>Gestión de despachos y entregas</li>
+<li>Actualización de estado de solicitudes</li>
+<li>Seguimiento de entregas</li>
+</ul>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
+Funcionalidades Generales</h2>
+<ul>
+<li>Sistema de autenticación personalizado con roles</li>
+<li>Recuperación de contraseña por correo electrónico</li>
+<li>Generación de reportes en PDF</li>
+<li>Interfaz responsive con soporte para tema claro/oscuro</li>
+<li>Manejo de archivos multimedia (imágenes de productos)</li>
+<li>API REST con Django REST Framework</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+Tecnologías Utilizadas</h1>
+<ul>
+<li><b>Backend</b>: Django 5.2.6</li>
+<li><b>Base de Datos</b>: SQLite3 (desarrollo) / MySQL (producción)</li>
+<li><b>Frontend</b>: HTML5, CSS3, JavaScript</li>
+<li><b>Autenticación</b>: Sistema personalizado con Argon2</li>
+<li><b>API</b>: Django REST Framework</li>
+<li><b>Generación de PDFs</b>: WeasyPrint, ReportLab</li>
+<li><b>Envío de Emails</b>: SendGrid</li>
+<li><b>Manejo de Excel</b>: openpyxl</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+Requisitos Previos</h1>
+<ul>
+<li>Python 3.8 o superior</li>
+<li>pip (gestor de paquetes de Python)</li>
+<li>Virtual environment (recomendado)</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+Instalación</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+1. Clonar el repositorio</h2>
+<div class="fragment"><div class="line">git clone &lt;url-del-repositorio&gt;</div>
+<div class="line">cd DotappSENA</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+2. Crear y activar un entorno virtual</h2>
+<p><b>Windows:</b> </p><div class="fragment"><div class="line">python -m venv venv</div>
+<div class="line">venv\Scripts\activate</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+3. Instalar dependencias</h2>
+<div class="fragment"><div class="line">pip install -r requirements.txt</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+4. Configurar la base de datos</h2>
+<p>El proyecto está configurado para usar SQLite3 por defecto. Para usar MySQL en producción, descomentar y configurar la sección de base de datos en <span class="tt"><a class="el" href="settings_8py.html">Dotapp/Dotapp/settings.py</a></span>.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+5. Ejecutar migraciones</h2>
+<div class="fragment"><div class="line">cd Dotapp</div>
+<div class="line">python manage.py makemigrations</div>
+<div class="line">python manage.py migrate</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+6. Crear superusuario</h2>
+<div class="fragment"><div class="line">python manage.py createsuperuser</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
+7. Recopilar archivos estáticos</h2>
+<div class="fragment"><div class="line">python manage.py collectstatic --noinput</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
+8. Ejecutar el servidor de desarrollo</h2>
+<div class="fragment"><div class="line">python manage.py runserver</div>
+</div><!-- fragment --><p>La aplicación estará disponible en <span class="tt"><a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a></span></p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md19"></a>
+Configuración</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md20"></a>
+Configuración de Email (SendGrid)</h2>
+<p>Para habilitar el envío de correos electrónicos (recuperación de contraseña, notificaciones), es necesario configurar la API key de SendGrid en <span class="tt"><a class="el" href="settings_8py.html">Dotapp/Dotapp/settings.py</a></span>:</p>
+<div class="fragment"><div class="line">SENDGRID_API_KEY = <span class="stringliteral">&quot;tu_api_key_aqui&quot;</span></div>
+<div class="line">DEFAULT_FROM_EMAIL = <span class="stringliteral">&quot;tu_email@ejemplo.com&quot;</span></div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
+Configuración de Base de Datos (Producción)</h2>
+<p>Para usar MySQL en producción, editar <span class="tt"><a class="el" href="settings_8py.html">Dotapp/Dotapp/settings.py</a></span>:</p>
+<div class="fragment"><div class="line">DATABASES = {</div>
+<div class="line">    <span class="stringliteral">&#39;default&#39;</span>: {</div>
+<div class="line">        <span class="stringliteral">&#39;ENGINE&#39;</span>: <span class="stringliteral">&#39;django.db.backends.mysql&#39;</span>,</div>
+<div class="line">        <span class="stringliteral">&#39;NAME&#39;</span>: <span class="stringliteral">&#39;nombre_base_datos&#39;</span>,</div>
+<div class="line">        <span class="stringliteral">&#39;USER&#39;</span>: <span class="stringliteral">&#39;usuario&#39;</span>,</div>
+<div class="line">        <span class="stringliteral">&#39;PASSWORD&#39;</span>: <span class="stringliteral">&#39;contraseña&#39;</span>,</div>
+<div class="line">        <span class="stringliteral">&#39;HOST&#39;</span>: <span class="stringliteral">&#39;host&#39;</span>,</div>
+<div class="line">        <span class="stringliteral">&#39;PORT&#39;</span>: <span class="stringliteral">&#39;3306&#39;</span>,</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
+Configuración de Seguridad</h2>
+<p><b>IMPORTANTE</b>: Antes de desplegar en producción:</p>
+<ol type="1">
+<li>Cambiar <span class="tt">SECRET_KEY</span> en <span class="tt"><a class="el" href="settings_8py.html">settings.py</a></span></li>
+<li>Establecer <span class="tt">DEBUG = False</span></li>
+<li>Configurar <span class="tt">ALLOWED_HOSTS</span> con los dominios permitidos</li>
+<li>Configurar HTTPS</li>
+<li>Revisar todas las configuraciones de seguridad</li>
+</ol>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
+Estructura del Proyecto</h1>
+<div class="fragment"><div class="line">DotappSENA/</div>
+<div class="line">├── Dotapp/</div>
+<div class="line">│   ├── administrador/          # App para administradores</div>
+<div class="line">│   ├── almacenista/            # App para almacenistas</div>
+<div class="line">│   ├── aprendiz/               # App para aprendices</div>
+<div class="line">│   ├── core/                   # App central (usuarios, modelos base)</div>
+<div class="line">│   ├── despachador/            # App para despachadores</div>
+<div class="line">│   ├── Dotapp/                 # Configuración del proyecto</div>
+<div class="line">│   │   ├── settings.py         # Configuración principal</div>
+<div class="line">│   │   ├── urls.py             # URLs principales</div>
+<div class="line">│   │   ├── wsgi.py             # WSGI config</div>
+<div class="line">│   │   └── asgi.py             # ASGI config</div>
+<div class="line">│   ├── media/                  # Archivos multimedia subidos</div>
+<div class="line">│   ├── static/                 # Archivos estáticos (CSS, JS, imágenes)</div>
+<div class="line">│   ├── templates/              # Plantillas base</div>
+<div class="line">│   ├── db.sqlite3              # Base de datos SQLite</div>
+<div class="line">│   └── manage.py               # Script de gestión de Django</div>
+<div class="line">├── requirements.txt            # Dependencias del proyecto</div>
+<div class="line">└── README.md                   # Este archivo</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
+Roles y Permisos</h1>
+<p>El sistema maneja cuatro roles principales:</p>
+<ol type="1">
+<li><b>Aprendiz</b>: Puede crear y gestionar sus propias solicitudes</li>
+<li><b>Administrador</b>: Acceso completo al sistema, gestión de usuarios y aprobación de solicitudes</li>
+<li><b>Almacenista</b>: Gestión de inventario y productos</li>
+<li><b>Despachador</b>: Gestión de despachos y entregas</li>
+</ol>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
+Autenticación</h1>
+<ul>
+<li>El sistema utiliza un modelo de usuario personalizado (<span class="tt">core.Usuario</span>)</li>
+<li>Autenticación basada en correo electrónico</li>
+<li>Contraseñas hasheadas con Argon2</li>
+<li>Recuperación de contraseña por email (válida por 15 minutos)</li>
+<li>Sesiones con expiración automática (30 minutos de inactividad)</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
+Modelos Principales</h1>
+<ul>
+<li><b>Usuario</b>: Usuarios del sistema con roles</li>
+<li><b>Producto</b>: Uniformes con tipo, talla, color, precio y stock</li>
+<li><b>Solicitud</b>: Solicitudes de uniformes con estados (pendiente, aprobada, rechazada, entregada, etc.)</li>
+<li><b>CentroFormacion</b>: Centros de formación del SENA</li>
+<li><b>Programa</b>: Programas de formación asociados a centros</li>
+<li><b>Borrador</b>: Borradores de solicitudes guardadas</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
+URLs Principales</h1>
+<ul>
+<li><span class="tt">/login/</span> - Inicio de sesión</li>
+<li><span class="tt">/registro/</span> - Registro de nuevos aprendices</li>
+<li><span class="tt">/aprendiz/</span> - Panel del aprendiz</li>
+<li><span class="tt">/administrador/</span> - Panel del administrador</li>
+<li><span class="tt">/almacenista/</span> - Panel del almacenista</li>
+<li><span class="tt">/despachador/</span> - Panel del despachador</li>
+</ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
+Comandos Útiles</h1>
+<div class="fragment"><div class="line"># Crear migraciones</div>
+<div class="line">python manage.py makemigrations</div>
+<div class="line"> </div>
+<div class="line"># Aplicar migraciones</div>
+<div class="line">python manage.py migrate</div>
+<div class="line"> </div>
+<div class="line"># Crear superusuario</div>
+<div class="line">python manage.py createsuperuser</div>
+<div class="line"> </div>
+<div class="line"># Ejecutar servidor de desarrollo</div>
+<div class="line">python manage.py runserver</div>
+<div class="line"> </div>
+<div class="line"># Acceder al shell de Django</div>
+<div class="line">python manage.py shell</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
+Solución de Problemas</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md30"></a>
+Error al instalar dependencias</h2>
+<p>Asegúrate de tener Python 3.8 o superior y pip actualizado: </p><div class="fragment"><div class="line">python --version</div>
+<div class="line">pip install --upgrade pip</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
+Error de migraciones</h2>
+<p>Si hay problemas con las migraciones: </p><div class="fragment"><div class="line">python manage.py makemigrations --merge</div>
+<div class="line">python manage.py migrate</div>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md32"></a>
+Licencia</h1>
+<p>Este proyecto fue desarrollado para el SENA (Servicio Nacional de Aprendizaje de Colombia).</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md33"></a>
+Desarrollo</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md34"></a>
+Versión Actual</h2>
+<ul>
+<li><b>Versión</b>: 1.0.0</li>
+<li><b>Django</b>: 5.2.6</li>
+<li><b>Python</b>: 3.8+</li>
+</ul>
+<p><b>Nota</b>: Este proyecto está en desarrollo activo. Algunas funcionalidades pueden estar en proceso de implementación o mejora. </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
+</div>
+</body>
+</html>

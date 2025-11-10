@@ -1,0 +1,160 @@
+\doxysection{Referencia de la clase core.\+models.\+Borrador}
+\hypertarget{classcore_1_1models_1_1_borrador}{}\label{classcore_1_1models_1_1_borrador}\index{core.models.Borrador@{core.models.Borrador}}
+Diagrama de herencia de core.\+models.\+Borrador\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcore_1_1models_1_1_borrador}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a2c9c4b5ffcbeb2a92d7fce978def8e19}{\+\_\+\+\_\+str\+\_\+\+\_\+}} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos públicos estáticos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a0768f35787e64a42b9a98a08f47ad9d9}{id\+\_\+borrador}} = models.\+Auto\+Field(primary\+\_\+key=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a1f75fdd49bbb3edb6ef71f78a3ac0efd}{aprendiz}} = models.\+Foreign\+Key(\mbox{\hyperlink{classcore_1_1models_1_1_usuario}{Usuario}}, on\+\_\+delete=models.\+CASCADE)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_ac321698071f2fa475ada40f67d741add}{tipo}} = models.\+Char\+Field(max\+\_\+length=255, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a3ab859134d11f3f3dc74d888049c016e}{talla}} = models.\+Char\+Field(max\+\_\+length=255, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_af65c09ed3b251620cbf41580cbdb689a}{color}} = models.\+Char\+Field(max\+\_\+length=255, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a45b191f4a5b379de1b330bb0074ffcbe}{cantidad}} = models.\+Positive\+Integer\+Field(default=0)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a53f548c7c026bd208ce2ce53a66e5aba}{centro}} = models.\+Foreign\+Key(\mbox{\hyperlink{classcore_1_1models_1_1_centro_formacion}{Centro\+Formacion}}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a43b428bd1a384f9f98247ca681533a5c}{programa}} = models.\+Foreign\+Key(\mbox{\hyperlink{classcore_1_1models_1_1_programa}{Programa}}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a1fcc9483dbdb0e6f7b7dedac31f1029d}{ficha}} = models.\+Positive\+Integer\+Field(null=True, blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a2cb846df2a7ed777ea5ab08368372f50}{detalles}} = models.\+Text\+Field(blank=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a3a2197655fd9e43982153424cf4c2fe4}{creado}} = models.\+Date\+Time\+Field(auto\+\_\+now\+\_\+add=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_borrador_a6fd7cdd9ab8dda28a843b07fe025f9ff}{actualizado}} = models.\+Date\+Time\+Field(auto\+\_\+now=True)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Modelo que representa un borrador de solicitud guardado por un aprendiz.
+
+Permite a los aprendices guardar solicitudes incompletas para completarlas
+más tarde sin perder la información ingresada.
+
+Attributes:
+    id_borrador: Identificador único del borrador (clave primaria)
+    aprendiz: Aprendiz propietario del borrador (ForeignKey)
+    tipo: Tipo de producto (almacenado como texto)
+    talla: Talla del producto (almacenado como texto)
+    color: Color del producto (almacenado como texto)
+    cantidad: Cantidad de productos
+    centro: Centro de formación (ForeignKey, opcional)
+    programa: Programa de formación (ForeignKey, opcional)
+    ficha: Número de ficha del aprendiz (opcional)
+    detalles: Detalles adicionales de la solicitud
+    creado: Fecha y hora de creación del borrador
+    actualizado: Fecha y hora de última actualización
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1models_1_1_borrador_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1models_1_1_borrador_a2c9c4b5ffcbeb2a92d7fce978def8e19}\index{core.models.Borrador@{core.models.Borrador}!\_\_str\_\_@{\_\_str\_\_}}
+\index{\_\_str\_\_@{\_\_str\_\_}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{\_\_str\_\_()}{\_\_str\_\_()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a2c9c4b5ffcbeb2a92d7fce978def8e19} 
+core.\+models.\+Borrador.\+\_\+\+\_\+str\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Retorna la representación en string del borrador.
+
+Returns:
+    str: Identificador del borrador
+\end{DoxyVerb}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcore_1_1models_1_1_borrador_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{classcore_1_1models_1_1_borrador_a6fd7cdd9ab8dda28a843b07fe025f9ff}\index{core.models.Borrador@{core.models.Borrador}!actualizado@{actualizado}}
+\index{actualizado@{actualizado}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{actualizado}{actualizado}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a6fd7cdd9ab8dda28a843b07fe025f9ff} 
+core.\+models.\+Borrador.\+actualizado = models.\+Date\+Time\+Field(auto\+\_\+now=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a1f75fdd49bbb3edb6ef71f78a3ac0efd}\index{core.models.Borrador@{core.models.Borrador}!aprendiz@{aprendiz}}
+\index{aprendiz@{aprendiz}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{aprendiz}{aprendiz}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a1f75fdd49bbb3edb6ef71f78a3ac0efd} 
+core.\+models.\+Borrador.\+aprendiz = models.\+Foreign\+Key(\mbox{\hyperlink{classcore_1_1models_1_1_usuario}{Usuario}}, on\+\_\+delete=models.\+CASCADE)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a45b191f4a5b379de1b330bb0074ffcbe}\index{core.models.Borrador@{core.models.Borrador}!cantidad@{cantidad}}
+\index{cantidad@{cantidad}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{cantidad}{cantidad}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a45b191f4a5b379de1b330bb0074ffcbe} 
+core.\+models.\+Borrador.\+cantidad = models.\+Positive\+Integer\+Field(default=0)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a53f548c7c026bd208ce2ce53a66e5aba}\index{core.models.Borrador@{core.models.Borrador}!centro@{centro}}
+\index{centro@{centro}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{centro}{centro}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a53f548c7c026bd208ce2ce53a66e5aba} 
+core.\+models.\+Borrador.\+centro = models.\+Foreign\+Key(\mbox{\hyperlink{classcore_1_1models_1_1_centro_formacion}{Centro\+Formacion}}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_af65c09ed3b251620cbf41580cbdb689a}\index{core.models.Borrador@{core.models.Borrador}!color@{color}}
+\index{color@{color}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{color}{color}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_af65c09ed3b251620cbf41580cbdb689a} 
+core.\+models.\+Borrador.\+color = models.\+Char\+Field(max\+\_\+length=255, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a3a2197655fd9e43982153424cf4c2fe4}\index{core.models.Borrador@{core.models.Borrador}!creado@{creado}}
+\index{creado@{creado}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{creado}{creado}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a3a2197655fd9e43982153424cf4c2fe4} 
+core.\+models.\+Borrador.\+creado = models.\+Date\+Time\+Field(auto\+\_\+now\+\_\+add=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a2cb846df2a7ed777ea5ab08368372f50}\index{core.models.Borrador@{core.models.Borrador}!detalles@{detalles}}
+\index{detalles@{detalles}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{detalles}{detalles}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a2cb846df2a7ed777ea5ab08368372f50} 
+core.\+models.\+Borrador.\+detalles = models.\+Text\+Field(blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a1fcc9483dbdb0e6f7b7dedac31f1029d}\index{core.models.Borrador@{core.models.Borrador}!ficha@{ficha}}
+\index{ficha@{ficha}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{ficha}{ficha}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a1fcc9483dbdb0e6f7b7dedac31f1029d} 
+core.\+models.\+Borrador.\+ficha = models.\+Positive\+Integer\+Field(null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a0768f35787e64a42b9a98a08f47ad9d9}\index{core.models.Borrador@{core.models.Borrador}!id\_borrador@{id\_borrador}}
+\index{id\_borrador@{id\_borrador}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{id\_borrador}{id\_borrador}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a0768f35787e64a42b9a98a08f47ad9d9} 
+core.\+models.\+Borrador.\+id\+\_\+borrador = models.\+Auto\+Field(primary\+\_\+key=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a43b428bd1a384f9f98247ca681533a5c}\index{core.models.Borrador@{core.models.Borrador}!programa@{programa}}
+\index{programa@{programa}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{programa}{programa}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a43b428bd1a384f9f98247ca681533a5c} 
+core.\+models.\+Borrador.\+programa = models.\+Foreign\+Key(\mbox{\hyperlink{classcore_1_1models_1_1_programa}{Programa}}, on\+\_\+delete=models.\+SET\+\_\+\+NULL, null=True, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_a3ab859134d11f3f3dc74d888049c016e}\index{core.models.Borrador@{core.models.Borrador}!talla@{talla}}
+\index{talla@{talla}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{talla}{talla}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_a3ab859134d11f3f3dc74d888049c016e} 
+core.\+models.\+Borrador.\+talla = models.\+Char\+Field(max\+\_\+length=255, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_borrador_ac321698071f2fa475ada40f67d741add}\index{core.models.Borrador@{core.models.Borrador}!tipo@{tipo}}
+\index{tipo@{tipo}!core.models.Borrador@{core.models.Borrador}}
+\doxysubsubsection{\texorpdfstring{tipo}{tipo}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_borrador_ac321698071f2fa475ada40f67d741add} 
+core.\+models.\+Borrador.\+tipo = models.\+Char\+Field(max\+\_\+length=255, blank=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{core_2models_8py}{models.\+py}}\end{DoxyCompactItemize}

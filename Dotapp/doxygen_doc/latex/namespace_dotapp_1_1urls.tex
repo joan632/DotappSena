@@ -1,0 +1,129 @@
+\doxysection{Referencia del espacio de nombres Dotapp.\+urls}
+\hypertarget{namespace_dotapp_1_1urls}{}\label{namespace_dotapp_1_1urls}\index{Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+list \mbox{\hyperlink{namespace_dotapp_1_1urls_ab0152333cbd8d6662c47885aba3b8e38}{urlpatterns}}
+\item 
+\mbox{\hyperlink{namespace_dotapp_1_1urls_a48117a68a7cc659a4abcf6cb2712c491}{MEDIA\+\_\+\+URL}}
+\item 
+\mbox{\hyperlink{namespace_dotapp_1_1urls_a85170349d002b27558642288eafc3244}{document\+\_\+root}}
+\item 
+\mbox{\hyperlink{namespace_dotapp_1_1urls_a37df27f2a90df506f8b0a9cbade4316c}{STATIC\+\_\+\+URL}}
+\item 
+str \mbox{\hyperlink{namespace_dotapp_1_1urls_a711ba26843b17a6e7cfd6b0f26fffc9b}{handler404}} = \textquotesingle{}\mbox{\hyperlink{namespacecore_1_1views_a615043550d2a896606ea23fd7f06cde4}{core.\+views.\+error\+\_\+404\+\_\+view}}\textquotesingle{}
+\item 
+str \mbox{\hyperlink{namespace_dotapp_1_1urls_ae15ff6ee92bed233c172d27c7ea56dd1}{handler500}} = \textquotesingle{}\mbox{\hyperlink{namespacecore_1_1views_af1bf477d4c4acd395f890b601d9bcb04}{core.\+views.\+error\+\_\+500\+\_\+view}}\textquotesingle{}
+\item 
+str \mbox{\hyperlink{namespace_dotapp_1_1urls_ad47e8142568ba0afa389688bc54a3f5f}{handler403}} = \textquotesingle{}\mbox{\hyperlink{namespacecore_1_1views_af0daa19bd5a494cc67bd8df0702ec24a}{core.\+views.\+error\+\_\+403\+\_\+view}}\textquotesingle{}
+\item 
+str \mbox{\hyperlink{namespace_dotapp_1_1urls_a704f6b67c452a97f8db48527c67a240f}{handler400}} = \textquotesingle{}\mbox{\hyperlink{namespacecore_1_1views_a3af5a90cf9656ba784aa48f7f7db1745}{core.\+views.\+error\+\_\+400\+\_\+view}}\textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}URL configuration for Dotapp project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/5.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+
+    
+
+
+from django.contrib import admin
+from django.urls import path, include
+from django.shortcuts import redirect
+from django.conf import settings
+from django.conf.urls.static import static
+
+def redirect_to_login(request):
+    return redirect('login')
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('error/', include('core.urls')),
+    path('', redirect_to_login),
+    path('', include('core.urls')),
+    path('aprendiz/', include('aprendiz.urls')),
+    path('administrador/', include('administrador.urls')),
+    path('almacenista/', include('almacenista.urls')),
+    path('despachador/', include('despachador.urls')),
+]
+\end{DoxyVerb}
+ 
+
+\label{doc-var-members}
+\Hypertarget{namespace_dotapp_1_1urls_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{namespace_dotapp_1_1urls_a85170349d002b27558642288eafc3244}\index{Dotapp.urls@{Dotapp.urls}!document\_root@{document\_root}}
+\index{document\_root@{document\_root}!Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection{\texorpdfstring{document\_root}{document\_root}}
+{\footnotesize\ttfamily \label{namespace_dotapp_1_1urls_a85170349d002b27558642288eafc3244} 
+Dotapp.\+urls.\+document\+\_\+root}
+
+\Hypertarget{namespace_dotapp_1_1urls_a704f6b67c452a97f8db48527c67a240f}\index{Dotapp.urls@{Dotapp.urls}!handler400@{handler400}}
+\index{handler400@{handler400}!Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection{\texorpdfstring{handler400}{handler400}}
+{\footnotesize\ttfamily \label{namespace_dotapp_1_1urls_a704f6b67c452a97f8db48527c67a240f} 
+str Dotapp.\+urls.\+handler400 = \textquotesingle{}\mbox{\hyperlink{namespacecore_1_1views_a3af5a90cf9656ba784aa48f7f7db1745}{core.\+views.\+error\+\_\+400\+\_\+view}}\textquotesingle{}}
+
+\Hypertarget{namespace_dotapp_1_1urls_ad47e8142568ba0afa389688bc54a3f5f}\index{Dotapp.urls@{Dotapp.urls}!handler403@{handler403}}
+\index{handler403@{handler403}!Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection{\texorpdfstring{handler403}{handler403}}
+{\footnotesize\ttfamily \label{namespace_dotapp_1_1urls_ad47e8142568ba0afa389688bc54a3f5f} 
+str Dotapp.\+urls.\+handler403 = \textquotesingle{}\mbox{\hyperlink{namespacecore_1_1views_af0daa19bd5a494cc67bd8df0702ec24a}{core.\+views.\+error\+\_\+403\+\_\+view}}\textquotesingle{}}
+
+\Hypertarget{namespace_dotapp_1_1urls_a711ba26843b17a6e7cfd6b0f26fffc9b}\index{Dotapp.urls@{Dotapp.urls}!handler404@{handler404}}
+\index{handler404@{handler404}!Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection{\texorpdfstring{handler404}{handler404}}
+{\footnotesize\ttfamily \label{namespace_dotapp_1_1urls_a711ba26843b17a6e7cfd6b0f26fffc9b} 
+str Dotapp.\+urls.\+handler404 = \textquotesingle{}\mbox{\hyperlink{namespacecore_1_1views_a615043550d2a896606ea23fd7f06cde4}{core.\+views.\+error\+\_\+404\+\_\+view}}\textquotesingle{}}
+
+\Hypertarget{namespace_dotapp_1_1urls_ae15ff6ee92bed233c172d27c7ea56dd1}\index{Dotapp.urls@{Dotapp.urls}!handler500@{handler500}}
+\index{handler500@{handler500}!Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection{\texorpdfstring{handler500}{handler500}}
+{\footnotesize\ttfamily \label{namespace_dotapp_1_1urls_ae15ff6ee92bed233c172d27c7ea56dd1} 
+str Dotapp.\+urls.\+handler500 = \textquotesingle{}\mbox{\hyperlink{namespacecore_1_1views_af1bf477d4c4acd395f890b601d9bcb04}{core.\+views.\+error\+\_\+500\+\_\+view}}\textquotesingle{}}
+
+\Hypertarget{namespace_dotapp_1_1urls_a48117a68a7cc659a4abcf6cb2712c491}\index{Dotapp.urls@{Dotapp.urls}!MEDIA\_URL@{MEDIA\_URL}}
+\index{MEDIA\_URL@{MEDIA\_URL}!Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection{\texorpdfstring{MEDIA\_URL}{MEDIA\_URL}}
+{\footnotesize\ttfamily \label{namespace_dotapp_1_1urls_a48117a68a7cc659a4abcf6cb2712c491} 
+Dotapp.\+urls.\+MEDIA\+\_\+\+URL}
+
+\Hypertarget{namespace_dotapp_1_1urls_a37df27f2a90df506f8b0a9cbade4316c}\index{Dotapp.urls@{Dotapp.urls}!STATIC\_URL@{STATIC\_URL}}
+\index{STATIC\_URL@{STATIC\_URL}!Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection{\texorpdfstring{STATIC\_URL}{STATIC\_URL}}
+{\footnotesize\ttfamily \label{namespace_dotapp_1_1urls_a37df27f2a90df506f8b0a9cbade4316c} 
+Dotapp.\+urls.\+STATIC\+\_\+\+URL}
+
+\Hypertarget{namespace_dotapp_1_1urls_ab0152333cbd8d6662c47885aba3b8e38}\index{Dotapp.urls@{Dotapp.urls}!urlpatterns@{urlpatterns}}
+\index{urlpatterns@{urlpatterns}!Dotapp.urls@{Dotapp.urls}}
+\doxysubsubsection{\texorpdfstring{urlpatterns}{urlpatterns}}
+{\footnotesize\ttfamily \label{namespace_dotapp_1_1urls_ab0152333cbd8d6662c47885aba3b8e38} 
+list Dotapp.\+urls.\+urlpatterns}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ =\ \ [}
+\DoxyCodeLine{00002\ \ \ \ \ path(\textcolor{stringliteral}{'admin/'},\ admin.site.urls),}
+\DoxyCodeLine{00003\ \ \ \ \ path(\textcolor{stringliteral}{''},\ include(\textcolor{stringliteral}{'core.urls'})),}
+\DoxyCodeLine{00004\ \ \ \ \ path(\textcolor{stringliteral}{'aprendiz/'},\ include(\textcolor{stringliteral}{'aprendiz.urls'})),}
+\DoxyCodeLine{00005\ \ \ \ \ path(\textcolor{stringliteral}{'administrador/'},\ include(\textcolor{stringliteral}{'administrador.urls'})),}
+\DoxyCodeLine{00006\ \ \ \ \ path(\textcolor{stringliteral}{'almacenista/'},\ include(\textcolor{stringliteral}{'almacenista.urls'})),}
+\DoxyCodeLine{00007\ \ \ \ \ path(\textcolor{stringliteral}{'despachador/'},\ include(\textcolor{stringliteral}{'despachador.urls'})),}
+\DoxyCodeLine{00008\ \ \ \ \ path(\textcolor{stringliteral}{''},\ RedirectView.as\_view(pattern\_name=\textcolor{stringliteral}{'login'},\ permanent=\textcolor{keyword}{False})),}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ ]}
+
+\end{DoxyCode}

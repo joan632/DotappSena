@@ -1,0 +1,78 @@
+\doxysection{Referencia del espacio de nombres despachador.\+views}
+\hypertarget{namespacedespachador_1_1views}{}\label{namespacedespachador_1_1views}\index{despachador.views@{despachador.views}}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacedespachador_1_1views_a0df9d0f18ca8086f87f4e09ac4eb604b}{dashboard\+\_\+despachador}} (request)
+\item 
+\mbox{\hyperlink{namespacedespachador_1_1views_a90209944809d7c70cb439ff66c93b20f}{solicitudes\+\_\+pendientes}} (request)
+\item 
+\mbox{\hyperlink{namespacedespachador_1_1views_a090e9fede08beee180ef38d4f6745013}{entregar\+\_\+solicitud}} (request, solicitud\+\_\+id)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Vistas para la aplicación de Despachador.
+
+Este módulo contiene todas las vistas relacionadas con las funcionalidades
+disponibles para los usuarios con rol de despachador, incluyendo:
+- Visualización de solicitudes despachadas
+- Marcado de solicitudes como entregadas
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{namespacedespachador_1_1views_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{namespacedespachador_1_1views_a0df9d0f18ca8086f87f4e09ac4eb604b}\index{despachador.views@{despachador.views}!dashboard\_despachador@{dashboard\_despachador}}
+\index{dashboard\_despachador@{dashboard\_despachador}!despachador.views@{despachador.views}}
+\doxysubsubsection{\texorpdfstring{dashboard\_despachador()}{dashboard\_despachador()}}
+{\footnotesize\ttfamily \label{namespacedespachador_1_1views_a0df9d0f18ca8086f87f4e09ac4eb604b} 
+despachador.\+views.\+dashboard\+\_\+despachador (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista del panel principal del despachador.
+
+Verifica que el usuario tenga rol de administrador o despachador.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza el dashboard o redirige si no tiene permisos
+\end{DoxyVerb}
+ \Hypertarget{namespacedespachador_1_1views_a090e9fede08beee180ef38d4f6745013}\index{despachador.views@{despachador.views}!entregar\_solicitud@{entregar\_solicitud}}
+\index{entregar\_solicitud@{entregar\_solicitud}!despachador.views@{despachador.views}}
+\doxysubsubsection{\texorpdfstring{entregar\_solicitud()}{entregar\_solicitud()}}
+{\footnotesize\ttfamily \label{namespacedespachador_1_1views_a090e9fede08beee180ef38d4f6745013} 
+despachador.\+views.\+entregar\+\_\+solicitud (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{solicitud\+\_\+id}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para marcar una solicitud como entregada.
+
+Cambia el estado de la solicitud de "despachada" a "entregada"
+y envía un correo de notificación al aprendiz confirmando la entrega.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    solicitud_id: ID de la solicitud a marcar como entregada
+    
+Returns:
+    HttpResponseRedirect: Redirige a la página de solicitudes pendientes
+\end{DoxyVerb}
+ \Hypertarget{namespacedespachador_1_1views_a90209944809d7c70cb439ff66c93b20f}\index{despachador.views@{despachador.views}!solicitudes\_pendientes@{solicitudes\_pendientes}}
+\index{solicitudes\_pendientes@{solicitudes\_pendientes}!despachador.views@{despachador.views}}
+\doxysubsubsection{\texorpdfstring{solicitudes\_pendientes()}{solicitudes\_pendientes()}}
+{\footnotesize\ttfamily \label{namespacedespachador_1_1views_a90209944809d7c70cb439ff66c93b20f} 
+despachador.\+views.\+solicitudes\+\_\+pendientes (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para mostrar las solicitudes despachadas pendientes de entrega.
+
+Muestra todas las solicitudes que están en estado "despachada",
+ordenadas por fecha de solicitud (más recientes primero).
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza la página de solicitudes pendientes
+\end{DoxyVerb}
+ 

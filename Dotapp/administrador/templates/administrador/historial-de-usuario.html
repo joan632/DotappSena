@@ -6,7 +6,7 @@
     <div class="admin-card">
       <div class="sticky-sync-wrapper">
         <!-- Flecha atrás -->
-        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'administracion-usuarios' %}'" aria-label="Volver">
           ←
         </button>
         
@@ -22,10 +22,11 @@
             <input type="text" id="buscar" placeholder="Buscar por tipo, talla o color..." />
             <select id="filtroRol">
               <option value="">Estado</option>
+              <option value="Pendiente">Pendiente</option>
               <option value="Aprobado">Aprobada</option>
               <option value="Rechazado">Rechazada</option>
-              <option value="Pendiente">Pendiente</option>
               <option value="Cancelado">Cancelada</option>
+              <option value="Despachada">Despachada</option>
               <option value="Entregado">Entregada</option>
             </select>
           </div>
@@ -94,60 +95,60 @@
 {% endblock %}
 
 {% block scripts %}
-  <!-- Script corregido -->
+  <!-- Script de Filtros de Busqueda -->
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const inputBuscar = document.getElementById("buscar");
-    const selectRol = document.getElementById("filtroRol");
-    const tablaBody = document.querySelector("#tablaUsuarios tbody");
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputBuscar = document.getElementById("buscar");
+      const selectRol = document.getElementById("filtroRol");
+      const tablaBody = document.querySelector("#tablaPedidos tbody");
 
-    function normalizarTexto(texto) {
-      return String(texto || '')
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .trim();
-    }
-
-    // Mapeo flexible para estados (para que "Aprobado" funcione con "Aprobada", etc.)
-    const statusMap = {
-      'aprobado': ['aprobada','aprobado'],
-      'rechazado': ['rechazada','rechazado'],
-      'pendiente': ['pendiente'],
-      'cancelado': ['cancelada','cancelado'],
-      'entregado': ['entregado','entregada']
-    };
-
-    function filtrarTabla() {
-      const texto = normalizarTexto(inputBuscar.value);
-      const rol = normalizarTexto(selectRol.value);
-
-      for (let fila of tablaBody.rows) {
-        // texto combinado de todas las celdas (id, tipo, talla, color, etc.)
-        const cellsText = Array.from(fila.cells)
-          .map(c => normalizarTexto(c.textContent))
-          .join(' ');
-
-        // estado normalmente está en la última celda
-        const estado = normalizarTexto(fila.cells[fila.cells.length - 1]?.textContent || '');
-
-        const coincideTexto = texto === '' || cellsText.includes(texto);
-
-        let coincideRol = false;
-        if (rol === '') {
-          coincideRol = true;
-        } else {
-          const posibles = statusMap[rol] || [rol];
-          coincideRol = posibles.some(p => estado.includes(p));
-        }
-
-        fila.style.display = (coincideTexto && coincideRol) ? '' : 'none';
+      function normalizarTexto(texto) {
+        return String(texto || '')
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
       }
-    }
 
-    inputBuscar.addEventListener('input', filtrarTabla);
-    selectRol.addEventListener('change', filtrarTabla);
-  });
+      // Mapeo flexible para estados (para que "Aprobado" funcione con "Aprobada", etc.)
+      const statusMap = {
+        'aprobado': ['aprobada','aprobado'],
+        'rechazado': ['rechazada','rechazado'],
+        'pendiente': ['pendiente'],
+        'cancelado': ['cancelada','cancelado'],
+        'entregado': ['entregado','entregada']
+      };
+
+      function filtrarTabla() {
+        const texto = normalizarTexto(inputBuscar.value);
+        const rol = normalizarTexto(selectRol.value);
+
+        for (let fila of tablaBody.rows) {
+          // texto combinado de todas las celdas (id, tipo, talla, color, etc.)
+          const cellsText = Array.from(fila.cells)
+            .map(c => normalizarTexto(c.textContent))
+            .join(' ');
+
+          // estado normalmente está en la última celda
+          const estado = normalizarTexto(fila.cells[fila.cells.length - 2]?.textContent || '');
+
+          const coincideTexto = texto === '' || cellsText.includes(texto);
+
+          let coincideRol = false;
+          if (rol === '') {
+            coincideRol = true;
+          } else {
+            const posibles = statusMap[rol] || [rol];
+            coincideRol = posibles.some(p => estado.includes(p));
+          }
+
+          fila.style.display = (coincideTexto && coincideRol) ? '' : 'none';
+        }
+      }
+
+      inputBuscar.addEventListener('input', filtrarTabla);
+      selectRol.addEventListener('change', filtrarTabla);
+    });
   </script>
 
 {% endblock %}

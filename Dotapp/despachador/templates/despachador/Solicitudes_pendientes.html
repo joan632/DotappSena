@@ -6,7 +6,7 @@
     <div class="admin-card">
       <div class="sticky-sync-wrapper">
         <!-- Flecha atrás -->
-        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'dashboard-despachador' %}'" aria-label="Volver">
           ←
         </button>
 
@@ -16,7 +16,7 @@
 
             <!-- FILTROS -->
             <div class="filtros">
-              <input type="text" id="buscar" placeholder="Buscar por nombre o correo..." />
+              <input type="text" id="buscar" placeholder="Buscar por nombre, centro..." />
             </div>
         </div>
       </div>

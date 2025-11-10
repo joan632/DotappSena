@@ -1,3 +1,26 @@
+{% comment %}
+Template de creación de solicitud de uniforme
+
+Este template permite al aprendiz crear una nueva solicitud de uniforme.
+Incluye:
+- Carrusel de productos disponibles con imágenes
+- Formulario completo de solicitud con validación
+- Funcionalidad de guardar borrador
+- Carga dinámica de programas según el centro seleccionado
+- Modal de confirmación después del envío
+
+Campos del formulario:
+- Tipo de uniforme (select)
+- Talla (select)
+- Color (select)
+- Cantidad (number)
+- Centro de formación (select)
+- Programa (select dinámico basado en centro)
+- Ficha (number)
+- Detalles adicionales (textarea)
+
+El formulario puede guardarse como borrador o enviarse como solicitud completa.
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -5,20 +28,22 @@
   <div class="perfil-container">
     <div class="perfil-card">
       <div class="sticky-sync-wrapper">
-        <!-- Flecha atrás -->
-        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-small" onclick="window.location.href='{% url 'principal-aprendiz' %}'" aria-label="Volver">
           ←
         </button>
         
         <div class="slide" id="slideSync">
           <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
-          <!-- Título -->
           <h1>Solicitud de Uniforme</h1>
           <br>
         </div>
       </div>
 
-      <!-- Carrusel de productos -->
+      {% comment %}
+      Carrusel de productos disponibles
+      Muestra imágenes y detalles de los productos en formato de diapositivas
+      Incluye controles de navegación y auto-avance
+      {% endcomment %}
       <div class="carousel" aria-roledescription="carousel">
 
         <!-- Diapositivas dinámicas -->

@@ -1,3 +1,13 @@
+"""
+Vistas para la aplicación de Administrador.
+
+Este módulo contiene todas las vistas relacionadas con las funcionalidades
+disponibles para los usuarios con rol de administrador, incluyendo:
+- Gestión de usuarios
+- Seguimiento de pedidos
+- Exportación de reportes (PDF y Excel)
+"""
+
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -6,29 +16,63 @@ from django.http import JsonResponse, HttpResponse
 from core.models import Usuario, Rol, Solicitud, Borrador, CentroFormacion, Programa
 from django.contrib import messages
 
-#vista de panel de administrador
+
 @login_required
 def panel_admin(request):
+    """
+    Vista del panel principal del administrador.
+    
+    Verifica que el usuario tenga rol de administrador antes de mostrar el panel.
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        
+    Returns:
+        HttpResponse: Renderiza el panel de administración o redirige si no tiene permisos
+    """
     if request.user.rol is None or request.user.rol.nombre_rol != "administrador":
         return redirect(reverse("acceso_denegado"))
     return render(request, "administrador/panel_admin.html")
 
-#vista de administracion de usuarios
+
 @login_required
 def administracion_usuarios(request):
+    """
+    Vista para la administración de usuarios del sistema.
+    
+    Muestra la lista de todos los usuarios (excepto superusuario) y sus roles
+    para que el administrador pueda gestionarlos.
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        
+    Returns:
+        HttpResponse: Renderiza la página de administración de usuarios
+    """
     usuarios = Usuario.objects.filter(is_superuser=False)
     roles = Rol.objects.all()
     return render(request, "administrador/administracion_usuarios.html", {"usuarios": usuarios, "roles": roles})
 
 
-#vista de historial de usuarios
 @login_required
 def historial_usuarios(request, id_usuario):
+    """
+    Vista para mostrar el historial de solicitudes de un usuario específico.
+    
+    Muestra todas las solicitudes realizadas por el usuario seleccionado,
+    ordenadas por fecha de solicitud (más recientes primero).
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        id_usuario: ID del usuario cuyo historial se desea ver
+        
+    Returns:
+        HttpResponse: Renderiza el historial de solicitudes del usuario
+    """
     usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
     solicitudes = usuario.solicitudes.all()
     
-    
-    # ordenar por fecha de solicitud
+    # Ordenar por fecha de solicitud (más recientes primero)
     solicitudes = solicitudes.order_by("-fecha_solicitud")
     return render(
         request,
@@ -39,14 +83,30 @@ def historial_usuarios(request, id_usuario):
         }
     )
 
-# vista de editar usuario
+
+
+
 @login_required
 def editar_usuario(request, id_usuario):
+    """
+    Vista para editar la información de un usuario.
+    
+    Permite al administrador modificar el nombre, apellido, correo y rol
+    de un usuario. No permite editar usuarios inactivos.
+    
+    Args:
+        request: Objeto HttpRequest con los datos del formulario
+        id_usuario: ID del usuario a editar
+        
+    Returns:
+        HttpResponseRedirect: Redirige a la administración de usuarios
+    """
     usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
 
-    # 🚫 Bloquear edición si está inactivo
+    # Bloquear edición si está inactivo
     if not usuario.is_active:
-        return JsonResponse({"success": False, "error": "El usuario está inactivo y no puede ser editado."}, status=403)
+        messages.error(request, "El usuario está inactivo y no puede ser editado.")
+        return redirect("administracion-usuarios")
 
     if request.method == "POST":
         nombre = request.POST.get("nombre")
@@ -64,74 +124,112 @@ def editar_usuario(request, id_usuario):
             usuario.rol_id = int(rol_id)
 
         usuario.save()
-        return JsonResponse({"success": True})
+        messages.success(request, f"Usuario {usuario.nombre} {usuario.apellido} editado correctamente.")
+        return redirect("administracion-usuarios")
 
-    return JsonResponse({
-        "id": usuario.id_usuario,
-        "nombre": usuario.nombre,
-        "apellido": usuario.apellido,
-        "correo": usuario.correo,
-        "rol": usuario.rol.nombre if usuario.rol else None
-    })
+    messages.warning(request, "Método no permitido.")
+    return redirect("administracion-usuarios")
 
-#vista de eliminar usuario
+
 @login_required
-def eliminar_usuario(request, id):
+def eliminar_usuario(request, id_usuario):
+    """
+    Vista para eliminar un usuario del sistema.
+    
+    Solo permite eliminar usuarios activos. Los usuarios inactivos
+    no pueden ser eliminados.
+    
+    Args:
+        request: Objeto HttpRequest (debe ser POST)
+        id_usuario: ID del usuario a eliminar
+        
+    Returns:
+        HttpResponseRedirect: Redirige a la administración de usuarios
+    """
     if request.method == "POST":
         try:
-            usuario = Usuario.objects.get(pk=id)
+            usuario = Usuario.objects.get(id_usuario=id_usuario)
 
-            # 🚫 Bloquear eliminación si está inactivo
+            # Bloquear eliminación si está inactivo
             if not usuario.is_active:
-                return JsonResponse({"success": False, "error": "No se puede eliminar un usuario inactivo."}, status=403)
+                messages.warning(request, "No se puede eliminar un usuario inactivo.")
+                return redirect("administracion-usuarios")
 
             usuario.delete()
-            return JsonResponse({"success": True})
+            messages.success(request, "Usuario eliminado correctamente.")
         except Usuario.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Usuario no encontrado"})
-    return JsonResponse({"success": False, "error": "Método no permitido"})
+            messages.error(request, "Usuario no encontrado.")
+    else:
+        messages.error(request, "Método no permitido.")
+    
+    return redirect("administracion-usuarios")
 
 
-#vista de desactivar usuarios
-@csrf_exempt
-def cambiar_estado_usuario(request, id):
+@login_required
+def cambiar_estado_usuario(request, id_usuario):
+    """
+    Vista para activar o desactivar un usuario.
+    
+    Alterna el estado activo/inactivo del usuario. Los usuarios inactivos
+    no pueden iniciar sesión en el sistema.
+    
+    Args:
+        request: Objeto HttpRequest (debe ser POST)
+        id_usuario: ID del usuario cuyo estado se desea cambiar
+        
+    Returns:
+        HttpResponseRedirect: Redirige a la administración de usuarios
+    """
     if request.method == "POST":
         try:
-            usuario = Usuario.objects.get(pk=id)
-            data = json.loads(request.body)
-            activar = data.get("activar", True)
-            usuario.is_active = activar  # o tu campo equivalente
+            usuario = Usuario.objects.get(id_usuario=id_usuario)
+
+            # Cambiar estado activo/inactivo
+            usuario.is_active = not usuario.is_active
             usuario.save()
-            return JsonResponse({"success": True})
+
+            if usuario.is_active:
+                messages.success(request, f"Usuario {usuario.nombre} {usuario.apellido} activado correctamente.")
+            else:
+                messages.info(request, f"Usuario {usuario.nombre} {usuario.apellido} desactivado correctamente.")
+
         except Usuario.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Usuario no encontrado"})
-    return JsonResponse({"success": False, "error": "Método no permitido"})
+            messages.error(request, "Usuario no encontrado.")
+    else:
+        messages.error(request, "Método no permitido.")
+
+    return redirect("administracion-usuarios")
 
 
-#vista de seguimiento de pedidos
+from django.db.models import Q
+
+
 @login_required
 def seguimiento_pedidos(request):
-    # obtener parámetros GET
+    """
+    Vista para el seguimiento de pedidos y solicitudes.
+    
+    Muestra todas las solicitudes del sistema con opciones de filtrado
+    por búsqueda de texto y estado. También muestra los borradores guardados.
+    
+    Args:
+        request: Objeto HttpRequest con parámetros de búsqueda opcionales
+        
+    Returns:
+        HttpResponse: Renderiza la página de seguimiento de pedidos
+    """
     buscar = request.GET.get("buscar", "").strip()
     estado = request.GET.get("estado", "").strip()
 
-    CentroFormacion.objects.all()  # Asegura que la tabla exista
+    solicitudes = Solicitud.objects.select_related("id_aprendiz", "id_producto").order_by("-fecha_solicitud")
+    borradores = Borrador.objects.all().order_by("-creado")
 
-    # queryset base
-    solicitudes = Solicitud.objects.select_related("id_aprendiz", "id_producto").all()
-    # Agrega esto:
-    borradores = Borrador.objects.all().order_by('-creado')
-
-    # ordenar por fecha de solicitud
-    solicitudes = solicitudes.order_by("-fecha_solicitud")
-
-    # aplicar filtros en backend
     if buscar:
         solicitudes = solicitudes.filter(
-            id_aprendiz__nombre__icontains=buscar
-        ) | solicitudes.filter(
-            id_producto__nombre__icontains=buscar
-        )  # ejemplo, puedes ajustar
+            Q(id_aprendiz__nombre__icontains=buscar) |
+            Q(id_producto__tipo__nombre__icontains=buscar)
+        )
+
     if estado:
         solicitudes = solicitudes.filter(estado_solicitud__iexact=estado)
 
@@ -142,65 +240,6 @@ def seguimiento_pedidos(request):
         "estado": estado,
         "centros": CentroFormacion.objects.all()
     })
-
-
-# 🟢 Agregar Centro de Formación
-@csrf_exempt
-def agregar_centro(request):
-    if request.method == "POST":
-        nombre = request.POST.get("nombre", "").strip()
-        if not nombre:
-            return JsonResponse({"success": False, "error": "No se envió nombre"}, status=400)
-        
-        # Normalización: cada palabra con inicial mayúscula
-        nombre = nombre.title()
-
-        centro, created = CentroFormacion.objects.get_or_create(nombre=nombre)
-        return JsonResponse({
-            "success": True,
-            "created": created,
-            "id_centro": centro.id_centro,
-            "nombre": centro.nombre
-        })
-    return JsonResponse({"success": False, "error": "Método no permitido"}, status=405)
-
-
-# 🟡 Agregar Programa
-@csrf_exempt
-def agregar_programa(request):
-    if request.method == "POST":
-        nombre = request.POST.get("nombre", "").strip()
-        centro_id = request.POST.get("centro_id")
-        if not nombre:
-            return JsonResponse({"success": False, "error": "No se envió nombre"}, status=400)
-        if not centro_id:
-            return JsonResponse({"success": False, "error": "No se envió centro_id"}, status=400)
-
-        try:
-            centro = CentroFormacion.objects.get(id_centro=centro_id)
-        except CentroFormacion.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Centro no existe"}, status=400)
-        
-        # Normalización: cada palabra con inicial mayúscula
-        nombre = nombre.title()
-
-        programa, created = Programa.objects.get_or_create(nombre=nombre, centro=centro)
-        return JsonResponse({
-            "success": True,
-            "created": created,
-            "id_programa": programa.id_programa,
-            "nombre": programa.nombre,
-            "centro": centro.nombre
-        })
-
-    return JsonResponse({"success": False, "error": "Método no permitido"}, status=405)
-
-
-
-
-
-
-
 
 
 
@@ -218,6 +257,18 @@ from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 
 def exportar_pdf(request):
+    """
+    Vista para exportar solicitudes a formato PDF.
+    
+    Genera un reporte en PDF con las solicitudes filtradas según los parámetros
+    de búsqueda, estado y usuario. El PDF se genera en formato landscape.
+    
+    Args:
+        request: Objeto HttpRequest con parámetros de filtrado opcionales
+        
+    Returns:
+        HttpResponse: Archivo PDF con el reporte de solicitudes
+    """
     buscar = request.GET.get("buscar", "").strip().lower()
     estado = request.GET.get("estado", "").strip().lower()
     usuario = request.GET.get("usuario", "").strip()
@@ -344,6 +395,18 @@ from django.db.models import Q
 from django.utils.timezone import is_aware
 
 def exportar_excel(request):
+    """
+    Vista para exportar solicitudes a formato Excel.
+    
+    Genera un archivo Excel (.xlsx) con las solicitudes filtradas según
+    los parámetros de búsqueda, estado y usuario. Incluye formato de tabla.
+    
+    Args:
+        request: Objeto HttpRequest con parámetros de filtrado opcionales
+        
+    Returns:
+        HttpResponse: Archivo Excel con el reporte de solicitudes
+    """
     buscar = request.GET.get("buscar", "").strip().lower()
     estado = request.GET.get("estado", "").strip().lower()
     usuario = request.GET.get("usuario", "").strip()

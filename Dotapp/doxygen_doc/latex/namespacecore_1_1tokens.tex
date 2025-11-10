@@ -1,0 +1,64 @@
+\doxysection{Referencia del espacio de nombres core.\+tokens}
+\hypertarget{namespacecore_1_1tokens}{}\label{namespacecore_1_1tokens}\index{core.tokens@{core.tokens}}
+\doxysubsubsection*{Clases}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcore_1_1tokens_1_1_expiring_token_generator}{Expiring\+Token\+Generator}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacecore_1_1tokens_a4c5b4422390abb3753f493ae74db25d3}{check\+\_\+token}} (self, user, token)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacecore_1_1tokens_a05ea598b5d8768e71e8ff51a6e85463a}{EPOCH}} = datetime(2001, 1, 1)
+\item 
+\mbox{\hyperlink{namespacecore_1_1tokens_a7c7dc58d1e1ff9148ffb1266d8cffb4c}{expiring\+\_\+token\+\_\+generator}} = \mbox{\hyperlink{classcore_1_1tokens_1_1_expiring_token_generator}{Expiring\+Token\+Generator}}()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Generador de tokens con expiración para recuperación de contraseña.
+
+Este módulo proporciona un generador de tokens personalizado que expira
+después de un tiempo determinado (15 minutos por defecto).
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{namespacecore_1_1tokens_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{namespacecore_1_1tokens_a4c5b4422390abb3753f493ae74db25d3}\index{core.tokens@{core.tokens}!check\_token@{check\_token}}
+\index{check\_token@{check\_token}!core.tokens@{core.tokens}}
+\doxysubsubsection{\texorpdfstring{check\_token()}{check\_token()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1tokens_a4c5b4422390abb3753f493ae74db25d3} 
+core.\+tokens.\+check\+\_\+token (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{user}{, }\item[{}]{token}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Verifica si un token es válido y no ha expirado.
+
+Args:
+    user: Instancia del usuario
+    token: Token a verificar
+    
+Returns:
+    bool: True si el token es válido y no ha expirado, False en caso contrario
+\end{DoxyVerb}
+ 
+
+\label{doc-var-members}
+\Hypertarget{namespacecore_1_1tokens_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{namespacecore_1_1tokens_a05ea598b5d8768e71e8ff51a6e85463a}\index{core.tokens@{core.tokens}!EPOCH@{EPOCH}}
+\index{EPOCH@{EPOCH}!core.tokens@{core.tokens}}
+\doxysubsubsection{\texorpdfstring{EPOCH}{EPOCH}}
+{\footnotesize\ttfamily \label{namespacecore_1_1tokens_a05ea598b5d8768e71e8ff51a6e85463a} 
+core.\+tokens.\+EPOCH = datetime(2001, 1, 1)}
+
+\Hypertarget{namespacecore_1_1tokens_a7c7dc58d1e1ff9148ffb1266d8cffb4c}\index{core.tokens@{core.tokens}!expiring\_token\_generator@{expiring\_token\_generator}}
+\index{expiring\_token\_generator@{expiring\_token\_generator}!core.tokens@{core.tokens}}
+\doxysubsubsection{\texorpdfstring{expiring\_token\_generator}{expiring\_token\_generator}}
+{\footnotesize\ttfamily \label{namespacecore_1_1tokens_a7c7dc58d1e1ff9148ffb1266d8cffb4c} 
+core.\+tokens.\+expiring\+\_\+token\+\_\+generator = \mbox{\hyperlink{classcore_1_1tokens_1_1_expiring_token_generator}{Expiring\+Token\+Generator}}()}
+

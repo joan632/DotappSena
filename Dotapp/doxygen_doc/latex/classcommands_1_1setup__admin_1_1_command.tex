@@ -1,0 +1,62 @@
+\doxysection{Referencia de la clase commands.\+setup\+\_\+admin.\+Command}
+\hypertarget{classcommands_1_1setup__admin_1_1_command}{}\label{classcommands_1_1setup__admin_1_1_command}\index{commands.setup\_admin.Command@{commands.setup\_admin.Command}}
+Diagrama de herencia de commands.\+setup\+\_\+admin.\+Command\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcommands_1_1setup__admin_1_1_command}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcommands_1_1setup__admin_1_1_command_a0f809bca1a29ee9d6c8cd8788a2b0451}{handle}} (self, \texorpdfstring{$\ast$}{*}args, \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}options)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos públicos estáticos}
+\begin{DoxyCompactItemize}
+\item 
+str \mbox{\hyperlink{classcommands_1_1setup__admin_1_1_command_acbd12c5c395e70514ac08e6b84ee2427}{help}} = \textquotesingle{}Crea un usuario \mbox{\hyperlink{namespaceadministrador}{administrador}} inicial si no existe\textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Comando para crear un usuario administrador inicial.
+
+Lee las credenciales desde variables de entorno (ADMIN_EMAIL y ADMIN_PASSWORD)
+y crea un superusuario si no existe uno en el sistema.
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcommands_1_1setup__admin_1_1_command_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcommands_1_1setup__admin_1_1_command_a0f809bca1a29ee9d6c8cd8788a2b0451}\index{commands.setup\_admin.Command@{commands.setup\_admin.Command}!handle@{handle}}
+\index{handle@{handle}!commands.setup\_admin.Command@{commands.setup\_admin.Command}}
+\doxysubsubsection{\texorpdfstring{handle()}{handle()}}
+{\footnotesize\ttfamily \label{classcommands_1_1setup__admin_1_1_command_a0f809bca1a29ee9d6c8cd8788a2b0451} 
+commands.\+setup\+\_\+admin.\+Command.\+handle (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{\texorpdfstring{$\ast$}{*}}]{args}{, }\item[{\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{options}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Ejecuta el comando para crear el superusuario.
+
+Verifica si ya existe un superusuario. Si no existe, crea uno nuevo
+usando las credenciales de las variables de entorno.
+
+Args:
+    *args: Argumentos posicionales
+    **options: Opciones del comando
+\end{DoxyVerb}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcommands_1_1setup__admin_1_1_command_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{classcommands_1_1setup__admin_1_1_command_acbd12c5c395e70514ac08e6b84ee2427}\index{commands.setup\_admin.Command@{commands.setup\_admin.Command}!help@{help}}
+\index{help@{help}!commands.setup\_admin.Command@{commands.setup\_admin.Command}}
+\doxysubsubsection{\texorpdfstring{help}{help}}
+{\footnotesize\ttfamily \label{classcommands_1_1setup__admin_1_1_command_acbd12c5c395e70514ac08e6b84ee2427} 
+str commands.\+setup\+\_\+admin.\+Command.\+help = \textquotesingle{}Crea un usuario \mbox{\hyperlink{namespaceadministrador}{administrador}} inicial si no existe\textquotesingle{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/management/commands/\mbox{\hyperlink{setup__admin_8py}{setup\+\_\+admin.\+py}}\end{DoxyCompactItemize}

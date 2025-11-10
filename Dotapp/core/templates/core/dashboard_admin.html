@@ -1,3 +1,16 @@
+{% comment %}
+Template del dashboard principal de administración
+
+Este template es el punto de entrada para usuarios con rol de administrador.
+Proporciona acceso a los diferentes paneles del sistema según el rol.
+
+Opciones disponibles:
+- Panel de Administrador: Gestión completa de usuarios y solicitudes
+- Panel de Almacenista: Gestión de inventario y productos
+- Panel de Despachador: Gestión de entregas y despachos
+
+Permite a los administradores acceder a todas las funcionalidades del sistema.
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -7,22 +20,27 @@
 <div class="admin-container">
     <div class="login-card">
         <div class="welcome-buttons">
-
             <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
             <h1>Panel de Administración</h1>
             <hr>
 
+            {% comment %}
+            Botones de navegación a los diferentes paneles
+            Cada botón redirige al dashboard correspondiente
+            {% endcomment %}
             <button onclick="window.location.href='{% url 'panel-admin' %}'" >Administrador</button>
             <button onclick="window.location.href='{% url 'dashboard-almacenista' %}'" >Almacenista</button>
             <button onclick="window.location.href='{% url 'dashboard-despachador' %}'" >Despachador</button>
             <br>
 
-            <!-- Botón de cerrar sesión -->
+            {% comment %}
+            Formulario de cierre de sesión
+            Utiliza POST para mayor seguridad
+            {% endcomment %}
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="btn-logout">Cerrar Sesión</button>
             </form>
-
         </div>
     </div>
 </div>

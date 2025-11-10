@@ -6,7 +6,7 @@
     <div class="admin-card">
       <div class="sticky-sync-wrapper">
         <!-- Flecha atrás -->
-        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'panel-admin' %}'" aria-label="Volver">
           ←
         </button>
         
@@ -21,7 +21,7 @@
             <form method="get" id="filtrosForm">
               <input type="text" name="buscar" id="buscar" placeholder="Buscar..." value="{{ buscar }}">
               <select name="estado" id="filtroEstado">
-                <option value="">--Todos--</option>
+                <option value="">Todos los estados</option>
                 <option value="Pendiente" {% if estado == "Pendiente" %}selected{% endif %}>Pendiente</option>
                 <option value="Aprobada" {% if estado == "Aprobada" %}selected{% endif %}>Aprobada</option>
                 <option value="Entregada" {% if estado == "Entregada" %}selected{% endif %}>Entregada</option>

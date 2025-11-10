@@ -1,3 +1,26 @@
+{% comment %}
+Template de historial de solicitudes del aprendiz
+
+Este template muestra todas las solicitudes realizadas por el aprendiz.
+Incluye funcionalidades de búsqueda y filtrado por estado.
+
+Funcionalidades:
+- Tabla con todas las solicitudes del usuario
+- Búsqueda por texto (tipo, talla, color)
+- Filtro por estado (Pendiente, Aprobada, Rechazada, Cancelada, Despachada, Entregada)
+- Botón de cancelación para solicitudes pendientes
+- Scroll sincronizado con el encabezado
+
+Columnas de la tabla:
+- ID de solicitud
+- Fecha de solicitud
+- Tipo, Talla, Color
+- Cantidad
+- Detalles adicionales
+- Fecha de finalización
+- Estado
+- Acciones (cancelar si está pendiente)
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -5,8 +28,7 @@
   <div class="admin-container">
     <div class="admin-card">
       <div class="sticky-sync-wrapper">
-        <!-- Flecha atrás -->
-        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'principal-aprendiz' %}'" aria-label="Volver">
           ←
         </button>
         
@@ -15,14 +37,17 @@
           <h1>Historial de Solicitudes</h1>
           <br>
 
-          <!-- FILTROS -->
+          {% comment %}
+          Filtros de búsqueda y estado
+          Permite buscar por texto y filtrar por estado de la solicitud
+          {% endcomment %}
           <div class="filtros">
             <input type="text" id="buscar" placeholder="Buscar por tipo, talla o color..." />
             <select id="filtroRol">
               <option value="">Estado</option>
+              <option value="Pendiente">Pendiente</option>
               <option value="Aprobado">Aprobada</option>
               <option value="Rechazado">Rechazada</option>
-              <option value="Pendiente">Pendiente</option>
               <option value="Cancelado">Cancelada</option>
               <option value="Despachada">Despachada</option>
               <option value="Entregado">Entregada</option>
@@ -31,6 +56,10 @@
         </div>
       </div>
       
+      {% comment %}
+      Tabla de solicitudes con scroll horizontal
+      Muestra todas las solicitudes del aprendiz en formato tabular
+      {% endcomment %}
       <div class="table-scroll" id="tableScroll">
         <table id="tablaPedidos" class="usuarios-table">
           <thead>

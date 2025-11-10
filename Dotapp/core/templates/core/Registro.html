@@ -1,3 +1,25 @@
+{% comment %}
+Template de registro de nuevos aprendices
+
+Este template permite a los usuarios crear una nueva cuenta en el sistema.
+Incluye:
+- Formulario de registro con validación de contraseñas
+- Botones para mostrar/ocultar contraseñas
+- Validación en tiempo real de coincidencia de contraseñas
+- Botón para volver al login
+
+Campos del formulario:
+- Nombre
+- Apellido
+- Correo electrónico
+- Contraseña
+- Confirmar contraseña
+
+Funcionalidades JavaScript:
+- Toggle de visibilidad de contraseñas
+- Validación en tiempo real de coincidencia de contraseñas
+- Prevención de envío si las contraseñas no coinciden
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -6,9 +28,12 @@
 {% block content %}
 <section class="admin-container">
   <div class="login-card">
+      {% comment %}
+      Encabezado con botón de retroceso y logo
+      Permite volver a la página de login
+      {% endcomment %}
       <div class="sticky-sync-wrapper">
-        <!-- Flecha atrás -->
-        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-small" onclick="window.location.href='{% url 'login' %}'" aria-label="Volver">
           ←
         </button>
         
@@ -18,6 +43,11 @@
         </div>
       </div>
 
+    {% comment %}
+    Formulario de registro
+    Envía los datos a la vista 'registro-aprendiz' mediante POST
+    Incluye validación JavaScript antes del envío
+    {% endcomment %}
     <form id="registroForm" action="{% url 'registro-aprendiz' %}" method="POST">
       {% csrf_token %}
       <div class="form-group">
@@ -62,6 +92,10 @@
         </button>       
       </div>
 
+      {% comment %}
+      Mensajes de validación de contraseñas
+      Se muestran dinámicamente según la coincidencia de las contraseñas
+      {% endcomment %}
       <p id="errorMsg" style="color:red; display:none;">Las contraseñas no coinciden</p>
       <p id="successMsg" style="color:green; display:none;">Las contraseñas coinciden</p>
 
@@ -72,8 +106,15 @@
 {% endblock %}
 
 {% block scripts %}
+{% comment %}
+Scripts de validación y funcionalidad del formulario de registro
+{% endcomment %}
 <script>
-  // Mostrar / ocultar contraseña
+  /**
+   * Alterna la visibilidad de la contraseña en un campo específico
+   * @param {string} inputId - ID del campo de contraseña
+   * @param {HTMLElement} button - Botón que activó la función
+   */
   function togglePassword(inputId, button) {
     const passwordInput = document.getElementById(inputId);
     const eyeIcon = button.querySelector('.eye-icon');
@@ -89,12 +130,17 @@
     eyeSlashIcon?.classList.toggle('hidden');
   }
 
-  // Validación de contraseñas
+  // Referencias a elementos del formulario
   const pass1 = document.getElementById('contrasena');
   const pass2 = document.getElementById('confirmar-contrasena');
   const errorMsg = document.getElementById('errorMsg');
   const successMsg = document.getElementById('successMsg');
 
+  /**
+   * Valida que las contraseñas coincidan en tiempo real
+   * Muestra mensajes de error o éxito según corresponda
+   * Solo valida si el segundo campo tiene contenido
+   */
   function validarPasswords() {
     const pass1Value = pass1.value;
     const pass2Value = pass2.value;
@@ -119,9 +165,14 @@
     }
   }
 
+  // Validar contraseñas mientras el usuario escribe
   pass1.addEventListener('input', validarPasswords);
   pass2.addEventListener('input', validarPasswords);
 
+  /**
+   * Previene el envío del formulario si las contraseñas no coinciden
+   * Muestra mensaje de error si hay discrepancia
+   */
   document.getElementById('registroForm').addEventListener('submit', function(event) {
     if (pass1.value !== pass2.value) {
       event.preventDefault();

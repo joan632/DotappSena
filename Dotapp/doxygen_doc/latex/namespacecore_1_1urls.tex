@@ -1,0 +1,32 @@
+\doxysection{Referencia del espacio de nombres core.\+urls}
+\hypertarget{namespacecore_1_1urls}{}\label{namespacecore_1_1urls}\index{core.urls@{core.urls}}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+list \mbox{\hyperlink{namespacecore_1_1urls_ad9ce59a6033fdcedbc4e63d4e526d47a}{urlpatterns}}
+\end{DoxyCompactItemize}
+
+
+\label{doc-var-members}
+\Hypertarget{namespacecore_1_1urls_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{namespacecore_1_1urls_ad9ce59a6033fdcedbc4e63d4e526d47a}\index{core.urls@{core.urls}!urlpatterns@{urlpatterns}}
+\index{urlpatterns@{urlpatterns}!core.urls@{core.urls}}
+\doxysubsubsection{\texorpdfstring{urlpatterns}{urlpatterns}}
+{\footnotesize\ttfamily \label{namespacecore_1_1urls_ad9ce59a6033fdcedbc4e63d4e526d47a} 
+list core.\+urls.\+urlpatterns}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ =\ \ [}
+\DoxyCodeLine{00002\ \ \ \ \ path(\textcolor{stringliteral}{'registro/'},\ views.registro\_aprendiz,\ name=\textcolor{stringliteral}{'registro-\/aprendiz'}),}
+\DoxyCodeLine{00003\ \ \ \ \ path(\textcolor{stringliteral}{'login/'},\ views.login\_view,\ name=\textcolor{stringliteral}{'login'}),}
+\DoxyCodeLine{00004\ \ \ \ \ path(\textcolor{stringliteral}{'manual/'},\ views.manual,\ name=\textcolor{stringliteral}{'manual'}),}
+\DoxyCodeLine{00005\ \ \ \ \ path(\textcolor{stringliteral}{'dashboard/'},\ views.dashboard\_admin,\ name=\textcolor{stringliteral}{'dashboard\_admin'}),}
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{comment}{\#recuperacion\ de\ contraseña}}
+\DoxyCodeLine{00007\ \ \ \ \ path(\textcolor{stringliteral}{"{}reset/"{}},\ views.password\_reset\_request,\ name=\textcolor{stringliteral}{"{}password\_reset\_request"{}}),}
+\DoxyCodeLine{00008\ \ \ \ \ path(\textcolor{stringliteral}{"{}reset/<uidb64>/<token>/"{}},\ views.password\_reset\_confirm,\ name=\textcolor{stringliteral}{"{}password\_reset\_confirm"{}}),}
+\DoxyCodeLine{00009\ \ \ \ \ path(\textcolor{stringliteral}{"{}acceso\_denegado/"{}},\ views.acceso\_denegado,\ name=\textcolor{stringliteral}{"{}acceso\_denegado"{}}),}
+\DoxyCodeLine{00010\ ]}
+
+\end{DoxyCode}

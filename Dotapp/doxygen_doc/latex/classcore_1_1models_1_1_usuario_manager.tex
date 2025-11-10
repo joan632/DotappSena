@@ -1,0 +1,76 @@
+\doxysection{Referencia de la clase core.\+models.\+Usuario\+Manager}
+\hypertarget{classcore_1_1models_1_1_usuario_manager}{}\label{classcore_1_1models_1_1_usuario_manager}\index{core.models.UsuarioManager@{core.models.UsuarioManager}}
+Diagrama de herencia de core.\+models.\+Usuario\+Manager\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcore_1_1models_1_1_usuario_manager}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_manager_aab26a7933131f1af8032efb4b5005011}{create\+\_\+user}} (self, nombre, apellido, correo, password=None)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_usuario_manager_ab9b2a82bc4cb9de5d2d6b13609a3a618}{create\+\_\+superuser}} (self, nombre, apellido, correo, password)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Manager personalizado para el modelo Usuario.
+
+Extiende BaseUserManager para proporcionar métodos de creación
+de usuarios y superusuarios con el modelo personalizado.
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1models_1_1_usuario_manager_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1models_1_1_usuario_manager_ab9b2a82bc4cb9de5d2d6b13609a3a618}\index{core.models.UsuarioManager@{core.models.UsuarioManager}!create\_superuser@{create\_superuser}}
+\index{create\_superuser@{create\_superuser}!core.models.UsuarioManager@{core.models.UsuarioManager}}
+\doxysubsubsection{\texorpdfstring{create\_superuser()}{create\_superuser()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_manager_ab9b2a82bc4cb9de5d2d6b13609a3a618} 
+core.\+models.\+Usuario\+Manager.\+create\+\_\+superuser (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{nombre}{, }\item[{}]{apellido}{, }\item[{}]{correo}{, }\item[{}]{password}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Crea y retorna un superusuario con rol de administrador.
+
+Solo puede existir un superusuario en el sistema. Si ya existe uno,
+se lanza una excepción.
+
+Args:
+    nombre: Nombre del superusuario
+    apellido: Apellido del superusuario
+    correo: Correo electrónico del superusuario
+    password: Contraseña del superusuario
+    
+Returns:
+    Usuario: Instancia del superusuario creado
+    
+Raises:
+    ValueError: Si ya existe un superusuario en el sistema
+\end{DoxyVerb}
+ \Hypertarget{classcore_1_1models_1_1_usuario_manager_aab26a7933131f1af8032efb4b5005011}\index{core.models.UsuarioManager@{core.models.UsuarioManager}!create\_user@{create\_user}}
+\index{create\_user@{create\_user}!core.models.UsuarioManager@{core.models.UsuarioManager}}
+\doxysubsubsection{\texorpdfstring{create\_user()}{create\_user()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_usuario_manager_aab26a7933131f1af8032efb4b5005011} 
+core.\+models.\+Usuario\+Manager.\+create\+\_\+user (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{nombre}{, }\item[{}]{apellido}{, }\item[{}]{correo}{, }\item[{}]{password}{ = {\ttfamily None}}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Crea y retorna un usuario normal con rol de aprendiz por defecto.
+
+Args:
+    nombre: Nombre del usuario
+    apellido: Apellido del usuario
+    correo: Correo electrónico del usuario (debe ser único)
+    password: Contraseña del usuario (opcional)
+    
+Returns:
+    Usuario: Instancia del usuario creado
+    
+Raises:
+    ValueError: Si el correo no es proporcionado
+\end{DoxyVerb}
+ 
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{core_2models_8py}{models.\+py}}\end{DoxyCompactItemize}

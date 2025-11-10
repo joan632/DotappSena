@@ -1,20 +1,36 @@
+{% comment %}
+Template de bienvenida para aprendices
+
+Este template se muestra después del login exitoso de un aprendiz.
+Proporciona un mensaje de bienvenida y un botón para continuar al panel principal.
+
+Funcionalidad:
+- Muestra mensaje de bienvenida personalizado
+- Botón para acceder al panel principal del aprendiz
+- Diseño simple y centrado
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %} 
   <div class="admin-container">
     <div class="login-card">
+      {% comment %}
+      Encabezado con logo y mensaje de bienvenida
+      {% endcomment %}
       <div class="sticky-sync-wrapper">
         <div class="slide" id="slideSync">
-
           <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
           <h2>¡Bienvenido a DotApp SENA!</h2>
           <p>Aquí podrás adquirir tu uniforme oficial del SENA</p>
           <br>
-
         </div>
       </div>
 
+      {% comment %}
+      Botón para continuar al panel principal
+      Redirige a la página principal del aprendiz donde puede acceder a todas las funcionalidades
+      {% endcomment %}
       <a href="{% url 'principal-aprendiz' %}"> 
         <button type="button">Continuar</button>
       </a>

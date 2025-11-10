@@ -8,7 +8,7 @@
 <div class="manual-card">
     <div class="sticky-sync-wrapper">
         <!-- Flecha atrás -->
-        <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'login' %}'" aria-label="Volver">
           ←
         </button>
         
@@ -19,8 +19,8 @@
         </div>
     </div>
 
-    <video controls autoplay controlsList="nodownload" style="width: 700px; height: 400px;">
-        <source src="{% static 'img/manual.mp4' %}" type="video/mp4">
+    <video controls autoplay controlsList="nodownload" style="width: 800px; height: 500px;">
+        <source src="{% static 'img/manual/manual.mp4' %}" type="video/mp4">
     </video>
     <br>
 
@@ -35,42 +35,576 @@
     <div id="cont-manual" style="margin-top:30px;">
       <!-- Administrador -->
       <div class="manual-content" data-content="admin" style="display:none;">
+        <hr><br>
         <h2>Manual Administrador</h2>
-        <video controls controlsList="nodownload" style="width:700px; height:400px;">
-          <source src="{% static 'img/manual_admin.mp4' %}" type="video/mp4">
-        </video>
-        <p>Explicación específica para <strong>Administrador</strong>.</p>
+        <br><hr><br>
+        <div>
+          <h3>1. Gestión de Usuarios</h3>
+          <p>En esta sección, aprenderás a gestionar los usuarios del sistema. 
+            Podrás editar la información de los usuarios existentes, eliminar o desactivar usuarios que ya no sean necesarios.
+          </p>
+          <p>
+            Para gestionar los usuarios, dirígete a la sección de "Administrar Usuarios" en el menú principal.
+            Aquí podrás ver una lista de todos los usuarios registrados en el sistema.
+          </p>
+          <img src="{% static 'img/manual/administrador/1.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="1. Gestión de Usuarios" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>2. Editar, Eliminar o Desactivar Usuarios</h3>
+          <p>En esta sección, aprenderás a editar, eliminar o desactivar la información de los usuarios existentes.</p>
+          <p>
+            Para editar un usuario, selecciona el usuario correspondiente de la lista de usuarios.
+            Realiza los cambios necesarios en los campos disponibles y guarda los cambios.
+            Después de editar el usuario, los cambios se reflejarán en la sección de "Administrar Usuarios".
+          </p>
+          <p>
+            Para eliminar o desactivar un usuario, selecciona el usuario correspondiente de la lista de usuarios.
+            Confirma la eliminación o desactivación del usuario y los cambios se reflejarán en la sección de "Administración de Usuarios".
+          </p>
+          <p>
+            Nota: La eliminación de un usuario es permanente, mientras que la desactivación permite reactivar el usuario en el futuro si es necesario.
+          </p>
+          <img src="{% static 'img/manual/administrador/2.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="2. Agregar Usuario" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>3. Historial de Usuarios</h3>
+          <p>En esta sección, aprenderás a ver el historial de usuarios registrados en el sistema.</p>
+          <p>
+            Para visualizar el historial de usuarios, da click en el botón "Historial" dentro de la sección de "Administrar Usuarios".
+            Aqui podras ver un registro detallado de las solicitudes realizadas por cada usuario, incluyendo fechas y estados de las solicitudes.
+          </p>
+          <img src="{% static 'img/manual/administrador/3.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="3. historial de usuarios " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>4. Filtrar Usuarios</h3>
+          <p>En esta sección, aprenderás a filtrar los usuarios para encontrar información específica.</p>
+          <p>
+            Utiliza los filtros disponibles para buscar usuarios por rol u otros criterios.
+          </p>
+          <img src="{% static 'img/manual/administrador/4.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="4. Filtrar Usuarios " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>5. Seguimiento de pedidos</h3>
+          <p>En esta sección, aprenderás a realizar el seguimiento de los pedidos realizados por los aprendices.</p>
+          <p>
+            Podrás ver el estado de cada pedido, desde la solicitud hasta la entrega final y exportar los datos de los pedidos.
+          </p>
+          <img src="{% static 'img/manual/administrador/5.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="5. Seguimiento de pedidos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>6. Filtrar Pedidos </h3>
+          <p>En esta sección, aprenderás a filtrar los pedidos para encontrar información específica.</p>
+          <p>
+            Utiliza los filtros disponibles para buscar pedidos por estado u otros criterios.
+          </p>
+          <img src="{% static 'img/manual/administrador/6.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="6. Filtrar Pedidos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>7. Generar PDF </h3>
+          <p>En esta sección, aprenderás a generar un informe en formato PDF de los pedidos realizados.</p>
+          <p>
+            Haz clic en el botón "Exportar a PDF" para crear un documento que contenga los detalles de los pedidos.
+          </p>
+          <p>
+            Nota: Puedes seleccionar los pedidos que deseas incluir en el PDF utilizando los filtros disponibles.
+          </p>
+          <img src="{% static 'img/manual/administrador/7.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="7. Generar PDF " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>8. Generar Excel</h3>
+          <p>En esta sección, aprenderás a generar un informe en formato Excel de los pedidos realizados.</p>
+          <p>
+            Haz clic en el botón "Exportar a Excel" para crear un archivo que contenga los detalles de los pedidos.
+          </p>
+          <p>
+            Nota: Puedes seleccionar los pedidos que deseas incluir en el Excel utilizando los filtros disponibles.
+          </p>
+          <img src="{% static 'img/manual/administrador/8.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="8. Generar Excel " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>9. Gestión de productos </h3>
+          <p>En esta sección, aprenderás a gestionar los productos en el sistema. 
+            Podrás agregar nuevos productos, editar la información de los productos existentes y eliminar productos que ya no sean necesarios.
+          </p>
+          <img src="{% static 'img/manual/administrador/9.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="9. Gestion de productos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>10. Agregar productos </h3>
+          <p>En esta sección, aprenderás a agregar nuevos productos al sistema.</p>
+          <p>Para agregar un nuevo producto, haz clic en el botón "Agregar Producto"</p>
+          <p>Completa los campos necesarios, como el nombre del producto, la talla, etc.</p>
+          <p>Después de agregar el producto, podrás verlo en la sección de "Administrar Productos".</p>
+          <img src="{% static 'img/manual/administrador/10.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="10. Agregar productos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>11. Editar o Eliminar Productos </h3>
+          <p>En esta sección, aprenderás a editar o eliminar la información de los productos existentes.</p>
+          <p>
+            Para editar un producto, selecciona el producto correspondiente de la lista de productos.
+            Realiza los cambios necesarios en los campos disponibles y guarda los cambios.
+            Después de editar el producto, los cambios se reflejarán en la sección de "Administrar Productos".
+          </p>
+          <p>
+            Para eliminar un producto, selecciona el producto correspondiente de la lista de productos.
+            Confirma la eliminación del producto y los cambios se reflejarán en la sección de "Administrar Productos".
+          </p>
+          <p>
+            Nota: La eliminación de un producto es permanente.
+          </p>
+          <img src="{% static 'img/manual/administrador/11.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="11. Editar o Eliminar Productos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>12. Configuraciones adicionales </h3>
+          <p>En esta sección, aprenderás a gestionar configuraciones adicionales relacionadas con los productos.</p>
+          <p>
+            Podrás ajustar parámetros como Tipos de productos, tallas y otras configuraciones relevantes.
+          </p>
+          <img src="{% static 'img/manual/administrador/12.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="12. Configuraciones adicionales " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>13. Configuraciones de producto </h3>
+          <p>En esta sección, aprenderás a gestionar las configuraciones específicas de los productos.</p>
+          <p>
+            Podrás ajustar parámetros como Tipos de productos, tallas y colores.
+          </p>
+          <img src="{% static 'img/manual/administrador/13.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="13. Configuraciones de producto " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>14. Agregar Tipos de productos, tallas o colores </h3>
+          <p>En esta sección, aprenderás a agregar nuevos tipos de productos, tallas o colores al sistema.</p>
+          <p>Para agregar un nuevo tipo de producto, talla o color, haz clic en el botón correspondiente</p>
+          <p>Completa los campos necesarios, como el nombre del tipo de producto, la talla, etc.</p>
+          <p>Después de agregar el tipo de producto, talla o color, podrás verlo en la tabla correspondiente".</p>
+          <img src="{% static 'img/manual/administrador/14.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="14. Agregar Tipos de productos, tallas o colores " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>15. Configuraciones adicionales </h3>
+          <p>En esta sección, aprenderás a gestionar configuraciones adicionales relacionadas con las solicitudes.</p>
+          <p>
+            Podrás ajustar parámetros como centros de formación o programas de formación.
+          </p>
+          <img src="{% static 'img/manual/administrador/15.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="15. configuraciones adicionales " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>16. Agregar centros o progarmas de formación </h3>
+          <p>En esta sección, aprenderás a agregar nuevos centros de formación o programas de formación al sistema.</p>
+          <p>Para agregar un nuevo centro de formación o programa de formación, haz clic en el botón correspondiente</p>
+          <p>Completa los campos necesarios, como el nombre del centro de formación o programa de formación.</p>
+          <p>Después de agregar el centro de formación o programa de formación, podrás verlo en la tabla correspondiente".</p>
+          <img src="{% static 'img/manual/administrador/16.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="16. agregar centros o progarmas de formación " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>17. Filtrar Datos </h3>
+          <p>En esta sección, aprenderás a filtrar los datos para encontrar información específica.</p>
+          <p>
+            Utiliza los filtros disponibles para buscar las palabras incluidas en cada categoría.
+          </p>
+          <img src="{% static 'img/manual/administrador/17.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="17. Filtrar Datos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>18. Seleccionar tabla </h3>
+          <p>En esta sección, aprenderás a seleccionar la tabla que deseas visualizar.</p>
+          <p>
+            Haz clic en el menú desplegable para elegir entre las diferentes tablas disponibles.
+          </p>
+          <img src="{% static 'img/manual/administrador/18.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="18. Seleccionar tabla " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>19. Eliminar datos </h3>
+          <p>En esta sección, aprenderás a eliminar datos específicos de las tablas.</p>
+          <p>
+            Selecciona el dato que deseas eliminar y haz clic en el botón "Eliminar".
+            Confirma la eliminación y el dato será removido de la tabla.
+          </p>
+          <img src="{% static 'img/manual/administrador/19.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="19. Eliminar datos " />
+        </div>
+        <br>
+
+        <div class="manual-buttons">
+          <button type="button" onclick="window.location.href = '{% url 'login' %}';">Volver al inicio</button>
+        </div>
+
       </div>
 
       <!-- Almacenista -->
       <div class="manual-content" data-content="alma" style="display:none;">
+        <hr><br>
         <h2>Manual Almacenista</h2>
-        <video controls controlsList="nodownload" style="width:700px; height:400px;">
-          <source src="{% static 'img/manual_almacenista.mp4' %}" type="video/mp4">
-        </video>
-        <p>Explicación específica para <strong>Almacenista</strong>.</p>
+        <br><hr><br>
+        
+        <div>
+          <h3>1. Administración de productos</h3>
+          <p>En esta sección, aprenderás a gestionar los productos en el sistema. 
+            Podrás agregar nuevos productos, editar la información de los productos existentes y eliminar productos que ya no sean necesarios.
+          </p>
+          <p>
+            Para administrar los productos, dirígete a la sección de "Administrar Productos" en el menú principal.
+            Aquí podrás ver una lista de todos los productos disponibles en el sistema.
+          </p>
+          <img src="{% static 'img/manual/almacenista/1.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="1. Administración de productos" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>2. Agregar productos </h3>
+          <p>En esta sección, aprenderás a agregar nuevos productos al sistema.</p>
+          <p>Para agregar un nuevo producto, haz clic en el botón "Agregar Producto"</p>
+          <p>Completa los campos necesarios, como el nombre del producto, la talla, etc.</p>
+          <p>Después de agregar el producto, podrás verlo en la sección de "Administrar Productos".</p>
+          <img src="{% static 'img/manual/administrador/10.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="2. Agregar productos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>3. Editar o Eliminar Productos </h3>
+          <p>En esta sección, aprenderás a editar o eliminar la información de los productos existentes.</p>
+          <p>
+            Para editar un producto, selecciona el producto correspondiente de la lista de productos.
+            Realiza los cambios necesarios en los campos disponibles y guarda los cambios.
+            Después de editar el producto, los cambios se reflejarán en la sección de "Administrar Productos".
+          </p>
+          <p>
+            Para eliminar un producto, selecciona el producto correspondiente de la lista de productos.
+            Confirma la eliminación del producto y los cambios se reflejarán en la sección de "Administrar Productos".
+          </p>
+          <p>
+            Nota: La eliminación de un producto es permanente.
+          </p>
+          <img src="{% static 'img/manual/administrador/11.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="3. Editar o Eliminar Productos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>4. Configuraciones adicionales </h3>
+          <p>En esta sección, aprenderás a gestionar configuraciones adicionales relacionadas con los productos.</p>
+          <p>
+            Podrás ajustar parámetros como Tipos de productos, tallas y otras configuraciones relevantes.
+          </p>
+          <img src="{% static 'img/manual/administrador/12.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="4. Configuraciones adicionales " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>5. Configuraciones de producto </h3>
+          <p>En esta sección, aprenderás a gestionar las configuraciones específicas de los productos.</p>
+          <p>
+            Podrás ajustar parámetros como Tipos de productos, tallas y colores.
+          </p>
+          <img src="{% static 'img/manual/administrador/13.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="5. Configuraciones de producto " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>6. Agregar Tipos de productos, tallas o colores </h3>
+          <p>En esta sección, aprenderás a agregar nuevos tipos de productos, tallas o colores al sistema.</p>
+          <p>Para agregar un nuevo tipo de producto, talla o color, haz clic en el botón correspondiente</p>
+          <p>Completa los campos necesarios, como el nombre del tipo de producto, la talla, etc.</p>
+          <p>Después de agregar el tipo de producto, talla o color, podrás verlo en la tabla correspondiente".</p>
+          <img src="{% static 'img/manual/administrador/14.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="6. Agregar Tipos de productos, tallas o colores " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>7. Configuraciones adicionales </h3>
+          <p>En esta sección, aprenderás a gestionar configuraciones adicionales relacionadas con las solicitudes.</p>
+          <p>
+            Podrás ajustar parámetros como centros de formación o programas de formación.
+          </p>
+          <img src="{% static 'img/manual/administrador/15.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="7. configuraciones adicionales " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>8. Agregar centros o progarmas de formación </h3>
+          <p>En esta sección, aprenderás a agregar nuevos centros de formación o programas de formación al sistema.</p>
+          <p>Para agregar un nuevo centro de formación o programa de formación, haz clic en el botón correspondiente</p>
+          <p>Completa los campos necesarios, como el nombre del centro de formación o programa de formación.</p>
+          <p>Después de agregar el centro de formación o programa de formación, podrás verlo en la tabla correspondiente".</p>
+          <img src="{% static 'img/manual/administrador/16.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="8. agregar centros o progarmas de formación " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>9. Filtrar Datos </h3>
+          <p>En esta sección, aprenderás a filtrar los datos para encontrar información específica.</p>
+          <p>
+            Utiliza los filtros disponibles para buscar las palabras incluidas en cada categoría.
+          </p>
+          <img src="{% static 'img/manual/administrador/17.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="9. Filtrar Datos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>10. Seleccionar tabla </h3>
+          <p>En esta sección, aprenderás a seleccionar la tabla que deseas visualizar.</p>
+          <p>
+            Haz clic en el menú desplegable para elegir entre las diferentes tablas disponibles.
+          </p>
+          <img src="{% static 'img/manual/administrador/18.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="10. Seleccionar tabla " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>11. Eliminar datos </h3>
+          <p>En esta sección, aprenderás a eliminar datos específicos de las tablas.</p>
+          <p>
+            Selecciona el dato que deseas eliminar y haz clic en el botón "Eliminar".
+            Confirma la eliminación y el dato será removido de la tabla.
+          </p>
+          <img src="{% static 'img/manual/administrador/19.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="11. Eliminar datos " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>12. Solicitudes de Inventario </h3>
+          <p>En esta sección, aprenderás a gestionar las solicitudes de inventario realizadas por los aprendices.</p>
+          <p>
+            Podrás ver, aprobar, rechazar o despachar las solicitudes de inventario.
+          </p>
+          <img src="{% static 'img/manual/almacenista/2.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="12. Solicitudes de Inventario " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>13. Aprobar o Rechazar Solicitudes </h3>
+          <p>En esta sección, aprenderás a aprobar o rechazar las solicitudes.</p>
+          <p>
+            Haz clic en el botón correspondiente para aprobar o rechazar la solicitud.
+          </p>
+          <p>
+            Nota: Una vez aprobada, la solicitud estará lista para ser despachada por el almacenista.
+          </p>
+          <p>
+            Nota: Una vez rechazada, la solicitud no podrá ser aprobada.
+          </p>
+          <img src="{% static 'img/manual/almacenista/3.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="13. Aprobar o Rechazar Solicitudes " />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>14. Despachar Solicitudes </h3>
+          <p>En esta sección, aprenderás a despachar las solicitudes.</p>
+          <p>
+            Haz clic en el botón "Despachar" para marcar la solicitud como despachada.
+          </p>
+          <p>
+            Nota: Una vez despachada, la solicitud estará lista para ser entregada por el despachador.
+          </p>
+          <img src="{% static 'img/manual/almacenista/4.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="14. " />
+        </div>
+        <br>
+        
+        <div class="manual-buttons">
+          <button type="button" onclick="window.location.href = '{% url 'login' %}';">Volver al inicio</button>
+        </div>
+
       </div>
 
       <!-- Despachador -->
       <div class="manual-content" data-content="desp" style="display:none;">
+        <hr><br>
         <h2>Manual Despachador</h2>
-        <video controls controlsList="nodownload" style="width:700px; height:400px;">
-          <source src="{% static 'img/manual_despachador.mp4' %}" type="video/mp4">
-        </video>
-        <p>Explicación específica para <strong>Despachador</strong>.</p>
+        <br><hr><br>
+
+        <div>
+          <h3>1. Pedidos de Despacho para entregar </h3>
+          <p>En esta sección, aprenderás a gestionar los pedidos de despacho que están listos para ser entregados a los aprendices.</p>
+          <p>Para visualizar los pedidos de despacho, dirígete a la sección de "Pedidos Pendientes" en el menú principal.
+            Aquí podrás ver una lista de todos los pedidos que están listos para ser entregados.
+          </p>
+          <img src="{% static 'img/manual/despachador/1.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="1. Pedidos de Despacho" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>2. Entregar Pedido</h3>
+          <p>En esta sección, aprenderás a entregar los pedidos a los aprendices de manera eficiente.</p>
+          <p>Para entregar un pedido, selecciona el pedido correspondiente de la lista de "Pedidos Pendientes".
+            Revisa los detalles del pedido y confirma la entrega haciendo clic en el botón "Entregado".
+          </p>
+          <img src="{% static 'img/manual/despachador/2.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="2. Entregar Pedido" />
+        </div>
+        <br>
+
+        <div class="manual-buttons">
+          <button type="button" onclick="window.location.href = '{% url 'login' %}';">Volver al inicio</button>
+        </div>
+
       </div>
 
       <!-- Aprendiz -->
       <div class="manual-content" data-content="apren" style="display:none;">
+        <hr><br>
         <h2>Manual Aprendiz</h2>
-        <video controls controlsList="nodownload" style="width:700px; height:400px;">
-          <source src="{% static 'img/manual_aprendiz.mp4' %}" type="video/mp4">
-        </video>
-        <p>Explicación específica para <strong>Aprendiz</strong>.</p>
+        <br><hr><br>
+
+        <div>
+          <h3>1. Perfil</h3>
+          <p>En esta sección, aprenderás a gestionar tu perfil de usuario. 
+            Podrás ver y editar tu información personal y actualizar tus datos de contacto.
+          </p>
+          <p>
+            Para visualizar tu perfil, dirígete a la sección de perfil en el menú principal.
+            Aquí podrás ver toda tu información personal.
+          </p>
+          <img src="{% static 'img/manual/aprendiz/1.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="1. Perfil" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>1. Visualizar Perfil</h3>
+          <p>
+            En esta sección, podrás ver toda tu información personal.
+          </p>
+          <p>
+            Para editar tu perfil, haz clic en el botón "Editar Perfil".
+          </p>
+          <img src="{% static 'img/manual/aprendiz/2.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="2. Visualizar Perfil" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>2. Editar Perfil</h3>
+          <p>
+            En esta sección, podrás actualizar tu información personal.
+          </p>
+          <p>
+            Realiza los cambios necesarios y haz clic en "Guardar Cambios" para actualizar tu perfil.
+          </p>
+          <img src="{% static 'img/manual/aprendiz/3.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="3. Editar Perfil" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>4. Solicitud de Uniforme</h3>
+          <p>
+            En esta sección, aprenderás a solicitar uniformes a través de la plataforma.
+          </p>
+          <img src="{% static 'img/manual/aprendiz/4.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="4. Solicitud de Uniforme" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>5. Visualizar Productos</h3>
+          <p>
+            En esta sección, podrás explorar el catálogo de productos disponibles para tu solicitud.
+          </p>
+          <p>
+            Navega por el catálogo y revisa los detalles de cada producto.
+          </p>
+          <img src="{% static 'img/manual/aprendiz/5.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="5. Visualizar Productos" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>6. Guardar Borrador</h3>
+          <p>
+            En esta sección, aprenderás a guardar tu solicitud como borrador para revisarla más tarde.
+          </p>
+          <p>
+            completa los campos necesarios en el formulario de solicitud.
+            Haz clic en "Guardar Borrador" para almacenar tu solicitud sin enviarla.
+          </p>
+          <img src="{% static 'img/manual/aprendiz/6.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="6. Guardar Borrador" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>7. Enviar Solicitud</h3>
+          <p>
+            En esta sección, aprenderás a enviar tu solicitud de uniforme para su procesamiento.
+          </p>
+          <p>
+            Completa los campos necesarios en el formulario de solicitud.
+            Revisa toda la información de tu solicitud y haz clic en "Enviar Solicitud" para completar el proceso.
+          </p>
+          <img src="{% static 'img/manual/aprendiz/7.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="7. Enviar Solicitud" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>8. Historial de Solicitudes</h3>
+          <p>
+            En esta sección, podrás revisar el historial de todas tus solicitudes de uniformes.
+          </p>
+          <p>
+            Accede a la sección de historial para ver el estado y detalles de cada solicitud realizada.
+          </p>
+          <img src="{% static 'img/manual/aprendiz/8.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="8. Historial de Solicitudes" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>9. Filtrar Solicitudes</h3>
+          <p>
+            En esta sección, aprenderás a filtrar tus solicitudes para encontrar información específica.
+          </p>
+          <p>
+            Utiliza los filtros disponibles para buscar solicitudes por estado u otros criterios.
+          </p>
+          <img src="{% static 'img/manual/aprendiz/9.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="9. Filtrar Solicitudes" />
+        </div>
+        <br><hr><br>
+
+        <div>
+          <h3>10. Cancelar Solicitud</h3>
+          <p>
+            En esta sección, aprenderás a cancelar una solicitud de uniforme que ya no necesitas.
+          </p>
+          <p>
+            Selecciona la solicitud que deseas cancelar y haz clic en "Cancelar Solicitud".
+            Una vez cancelado, la solicitud no podrá ser recuperada.
+          </p>
+          <p>
+            Nota: Solo puedes cancelar solicitudes que estén en estado "Pendiente".
+          </p>
+          <img src="{% static 'img/manual/aprendiz/10.png' %}" style="border-radius: 8px; border: 3px solid #F4F2F7;" width="1000" alt="10. Cancelar Solicitud" />
+        </div>
+        <br>
+        
+        <div class="manual-buttons">
+          <button type="button" onclick="window.location.href = '{% url 'login' %}';">Volver al inicio</button>
+        </div>
+        
       </div>
+
     </div>
-
-
 
 </div>
 
@@ -97,3 +631,11 @@
   });
 </script>
 {% endblock %}
+
+
+
+
+
+
+
+

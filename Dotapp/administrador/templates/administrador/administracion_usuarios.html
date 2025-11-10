@@ -6,12 +6,9 @@
     <div class="admin-card">
         <div class="sticky-sync-wrapper">
           <!-- Flecha atrás -->
-          <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">
-            ←
-          </button>
-          
-          <div class="slide" id="slideSync">
+          <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'panel-admin' %}'" aria-label="Volver">←</button>
 
+          <div class="slide" id="slideSync">
             <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
             <h1>Gestión de Usuarios</h1>
             <p>Administra los usuarios registrados en el sistema.</p>
@@ -22,16 +19,15 @@
               <select id="filtroRol">
                 <option value="">Todos los roles</option>
                 <option value="aprendiz">Aprendiz</option>
+                <option value="administrador">Administrador</option>
                 <option value="almacenista">Almacenista</option>
                 <option value="despachador">Despachador</option>
               </select>
             </div>
-
           </div>
         </div>
 
         <div class="table-scroll" id="tableScroll">
-
           <table class="usuarios-table" id="tablaUsuarios">
             <thead>
               <tr>
@@ -54,374 +50,166 @@
                 <td>
                   {{ usuario.rol }}{% if not usuario.is_active %} <span class="badge-inactivo">(Inactivo)</span>{% endif %}
                 </td>
-                <td><button onclick="window.location.href='{% url 'historial-usuarios' usuario.id_usuario %}'" class="btn-tabla-historial">Ver Historial</button></td>
+                <td>
+                  <button onclick="window.location.href='{% url 'historial-usuarios' usuario.id_usuario %}'" class="btn-tabla-historial">Ver Historial</button>
+                </td>
                 <td class="acciones">
-                  <button class="btn-tabla editar">Editar</button>
-                  <button class="btn-tabla eliminar">Eliminar</button>
-                    {% if usuario.is_active %}
-                      <button class="btn-tabla-toggle-estado" data-estado="activo">Desactivar</button>
-                    {% else %}
-                      <button class="btn-tabla-toggle-estado" data-estado="inactivo">Activar</button>
-                    {% endif %}
+                  <!-- Botones que abren los modales -->
+                  <button class="btn-tabla editar" data-id="{{ usuario.id_usuario }}" data-nombre="{{ usuario.nombre }}" data-apellido="{{ usuario.apellido }}" data-correo="{{ usuario.correo }}" data-rol="{{ usuario.rol.id_rol }}">Editar</button>
+
+                  <button class="btn-tabla eliminar" data-id="{{ usuario.id_usuario }}" data-nombre="{{ usuario.nombre }}" data-apellido="{{ usuario.apellido }}">Eliminar</button>
+
+                  <button class="btn-tabla-toggle-estado" data-id="{{ usuario.id_usuario }}" data-activo="{{ usuario.is_active }}">
+                    {% if usuario.is_active %}Desactivar{% else %}Activar{% endif %}
+                  </button>
                 </td>
               </tr>
               {% empty %}
-              <tr>
-                <td colspan="7">No hay usuarios registrados.</td>
-              </tr>
+              <tr><td colspan="7">No hay usuarios registrados.</td></tr>
               {% endfor %}
-    
             </tbody>
           </table>
-
         </div>
 
-
-      <!-- Modal de Editar usuario -->
+      <!-- 🔹 Modal Editar Usuario -->
       <div id="modalEditar" class="modal">
         <div class="modal-content">
-          <span id="cerrarModal"> 
-            <span class="close">&times;</span>              
-          </span>
+          <span class="close" onclick="cerrarModal('modalEditar')">&times;</span>
           <h2>Editar usuario</h2>
-          <form id="formEditar">
+          <form id="formEditar" method="POST">
+            {% csrf_token %}
             <input type="hidden" id="editId" name="id">
 
-            <label for="editNombre">Nombre</label>
+            <label>Nombre</label>
             <input type="text" id="editNombre" name="nombre">
 
-            <label for="editApellido">Apellido</label>
+            <label>Apellido</label>
             <input type="text" id="editApellido" name="apellido">
 
-            <label for="editCorreo">Correo</label>
+            <label>Correo</label>
             <input type="email" id="editCorreo" name="correo">
 
-            <label for="editRol">Rol</label>
+            <label>Rol</label>
             <select id="editRol" name="rol">
               {% for rol in roles %}
                 <option value="{{ rol.id_rol }}">{{ rol.nombre_rol }}</option>
               {% endfor %}
             </select>
 
-            <button type="submit">Guardar</button>
+            <div class="modal-actions">
+              <button type="button" class="btn-cancelar" onclick="cerrarModal('modalEditar')">Cancelar</button>
+              <button type="submit">Guardar</button>
+            </div>
           </form>
         </div>
       </div>
 
-      <!-- Modal eliminar -->
+      <!-- 🔹 Modal Eliminar Usuario -->
       <div id="modalEliminar" class="modal">
         <div class="modal-content">
-          <span class="close" id="cerrarModalEliminar">&times;</span>
+          <span class="close" onclick="cerrarModal('modalEliminar')">&times;</span>
           <h2>Confirmar eliminación</h2>
           <p id="textoEliminar"></p>
-          <div class="modal-actions">
-            <button class="btn-cancelar" id="cancelarEliminar">Cancelar</button>
-            <button class="btn-confirmar" id="confirmarEliminar">Eliminar</button>
-          </div>
+          <form id="formEliminar" method="POST">
+            {% csrf_token %}
+            <div class="modal-actions">
+              <button type="button" class="btn-cancelar" onclick="cerrarModal('modalEliminar')">Cancelar</button>
+              <button type="submit" class="btn-confirmar">Eliminar</button>
+            </div>
+          </form>
         </div>
       </div>
 
-
-      <!-- Modal activar / desactivar usuario -->
-
+      <!-- 🔹 Modal Activar/Desactivar Usuario -->
       <div id="modalEstado" class="modal">
         <div class="modal-content">
-          <span class="close">&times;</span>
+          <span class="close" onclick="cerrarModal('modalEstado')">&times;</span>
           <h2 id="tituloEstado"></h2>
           <p id="textoEstado"></p>
-          <div class="modal-actions">
-            <button type="button" class="btn-cancelar">Cancelar</button>
-            <button type="button" class="btn-confirmar">Confirmar</button>
-          </div>
+          <form id="formEstado" method="POST">
+            {% csrf_token %}
+            <div class="modal-actions">
+              <button type="button" class="btn-cancelar" onclick="cerrarModal('modalEstado')">Cancelar</button>
+              <button type="submit" id="btnConfirmarEstado">Confirmar</button>
+            </div>
+          </form>
         </div>
       </div>
-
 
     </div>
   </div>
 {% endblock %}
 
 {% block scripts %}
-  <!-- FILTRO DE USUARIOS -->
-  <script>
-    const inputBuscar = document.getElementById("buscar");
-    const selectRol = document.getElementById("filtroRol");
-    const tabla = document.getElementById("tablaUsuarios").getElementsByTagName("tbody")[0];
-
-    // 🔹 Función para normalizar texto (quita tildes y pasa a minúsculas)
-    function normalizarTexto(texto) {
-      return texto
-        .toLowerCase()
-        .normalize("NFD") // separa letras y acentos
-        .replace(/[\u0300-\u036f]/g, ""); // elimina los acentos
+<script>
+  // --- FILTROS ---
+  const inputBuscar = document.getElementById("buscar");
+  const selectRol = document.getElementById("filtroRol");
+  const tabla = document.getElementById("tablaUsuarios").getElementsByTagName("tbody")[0];
+  function normalizarTexto(t) { return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+  function filtrarTabla() {
+    const texto = normalizarTexto(inputBuscar.value);
+    const rol = normalizarTexto(selectRol.value);
+    let coincidencias = 0;
+    for (let fila of tabla.rows) {
+      const nombre = normalizarTexto(fila.cells[1].textContent);
+      const correo = normalizarTexto(fila.cells[3].textContent);
+      const rolFila = normalizarTexto(fila.cells[4].textContent);
+      const visible = (nombre.includes(texto) || correo.includes(texto)) && (rol === "" || rolFila.includes(rol));
+      fila.style.display = visible ? "" : "none";
+      if (visible) coincidencias++;
     }
+  }
+  inputBuscar.addEventListener("input", filtrarTabla);
+  selectRol.addEventListener("change", filtrarTabla);
 
-    function filtrarTabla() {
-      const texto = normalizarTexto(inputBuscar.value);
-      const rol = selectRol.value;
-      let coincidencias = 0;
+  // --- MODALES ---
+  function abrirModal(id) { document.getElementById(id).style.display = "block"; }
+  function cerrarModal(id) { document.getElementById(id).style.display = "none"; }
 
-      // 🔹 Eliminar mensaje anterior si existe
-      const filaMensaje = document.getElementById("filaMensaje");
-      if (filaMensaje) filaMensaje.remove();
-
-      for (let fila of tabla.rows) {
-        const id = normalizarTexto(fila.cells[0].textContent);
-        const nombre = normalizarTexto(fila.cells[1].textContent);
-        const apellido = normalizarTexto(fila.cells[2].textContent);
-        const correo = normalizarTexto(fila.cells[3].textContent);
-        const rolFila = fila.cells[4].textContent;
-
-        const coincideTexto =
-          id.includes(texto) ||
-          nombre.includes(texto) ||
-          apellido.includes(texto) ||
-          correo.includes(texto);
-
-        const coincideRol = rol === "" || rolFila === rol;
-
-        const visible = coincideTexto && coincideRol;
-        fila.style.display = visible ? "" : "none";
-
-        if (visible) coincidencias++;
-      }
-
-      // 🔹 Si no hay coincidencias, agregar una fila de mensaje
-      if (coincidencias === 0) {
-        const fila = tabla.insertRow();
-        fila.id = "filaMensaje";
-
-        const celda = fila.insertCell();
-        celda.colSpan = 7; // ajusta al número de columnas
-        celda.textContent = "No se encontraron resultados.";
-        celda.style.textAlign = "center";
-        celda.style.fontWeight = "bold";
-        celda.style.color = "#666";
-      }
-    }
-
-    // Escuchar cambios
-    inputBuscar.addEventListener("input", filtrarTabla);
-    selectRol.addEventListener("change", filtrarTabla);
-
-  </script>
-
-  <!-- MODAL EDITAR USUARIO -->
-  <script>
-    // 🔹 Función para obtener el CSRF token (puede ir en utils.js si la usarás en varias páginas)
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + "=")) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    }
-
-    // 🔹 Variables del modal
-    const modal = document.getElementById("modalEditar");
-    const cerrarModal = document.getElementById("cerrarModal");
-    const formEditar = document.getElementById("formEditar");
-
-    let filaSeleccionada = null;
-
-    // 🔹 Abrir modal con datos de la fila
-    document.querySelectorAll(".editar").forEach(btn => {
-      btn.addEventListener("click", function() {
-        filaSeleccionada = this.closest("tr");
-
-        // 🚫 Evitar editar si está inactivo
-        if (filaSeleccionada.classList.contains("inactivo")) {
-          alert("El usuario se encuentra inactivo.");
-          return;
-        }
-        
-        document.getElementById("editId").value = filaSeleccionada.cells[0].textContent.trim();
-        document.getElementById("editNombre").value = filaSeleccionada.cells[1].textContent.trim();
-        document.getElementById("editApellido").value = filaSeleccionada.cells[2].textContent.trim();
-        document.getElementById("editCorreo").value = filaSeleccionada.cells[3].textContent.trim();
-
-        const rolTexto = filaSeleccionada.cells[4].textContent.trim();
-        const selectRol = document.getElementById("editRol");
-
-        // Selecciona el rol correspondiente en el <select>
-        [...selectRol.options].forEach(opt => {
-          if(opt.text === rolTexto){
-            selectRol.value = opt.value;
-          }
-        });
-
-        modal.style.display = "block";
-      });
-    });
-
-    // 🔹 Cerrar modal
-    cerrarModal.onclick = () => modal.style.display = "none";
-    window.onclick = e => { if(e.target == modal) modal.style.display = "none"; }
-
-    // 🔹 Guardar cambios en el backend
-    formEditar.addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const id = document.getElementById("editId").value;
-      const formData = new FormData(formEditar);
-
-      fetch(`/administrador/usuarios/editar/${id}/`, {
-        method: "POST",
-        body: formData,
-        headers: {
-          "X-CSRFToken": getCookie("csrftoken")
-        }
-      })
-      .then(resp => resp.json())
-      .then(data => {
-        if(data.success){
-          // Actualizamos la fila de la tabla sin refrescar la página
-          filaSeleccionada.cells[1].textContent = formData.get("nombre");
-          filaSeleccionada.cells[2].textContent = formData.get("apellido");
-          filaSeleccionada.cells[3].textContent = formData.get("correo");
-
-          const rolSeleccionado = document.querySelector(`#editRol option[value="${formData.get("rol")}"]`).text;
-          filaSeleccionada.cells[4].textContent = rolSeleccionado;
-          alert("Usuario editado correctamente.");
-        }
-        modal.style.display = "none";
-      })
-      .catch(err => {
-        console.error("Error al actualizar el usuario:", err);
-        alert("Ocurrió un error al guardar los cambios.");
-      });
-    });
-  </script>
-
-  <!-- MODAL ELIMINAR USUARIO -->
-  <script>
-    const modalEliminar = document.getElementById("modalEliminar");
-    const cerrarModalEliminar = document.getElementById("cerrarModalEliminar");
-    const cancelarEliminar = document.getElementById("cancelarEliminar");
-    const confirmarEliminar = document.getElementById("confirmarEliminar");
-    const textoEliminar = document.getElementById("textoEliminar");
-
-    let filaAEliminar = null;
-
-    document.querySelectorAll(".eliminar").forEach(btn => {
-      btn.addEventListener("click", function() {
-        filaAEliminar = this.closest("tr");
-        // 🚫 Evitar eliminar si está inactivo
-        if (filaAEliminar.classList.contains("inactivo")) {
-          alert("El usuario se encuentra inactivo.");
-          return;
-        }
-        const nombre = filaAEliminar.cells[1].textContent;
-        const apellido = filaAEliminar.cells[2].textContent;
-        textoEliminar.textContent = `¿Seguro que deseas eliminar al usuario "${nombre} ${apellido}"?`;
-        modalEliminar.style.display = "block";
-      });
-    });
-
-    cerrarModalEliminar.onclick = () => modalEliminar.style.display = "none";
-    cancelarEliminar.onclick = () => modalEliminar.style.display = "none";
-
-    confirmarEliminar.onclick = () => {
-      if(filaAEliminar){
-        const usuarioId = filaAEliminar.cells[0].textContent.trim(); // Obtenemos el ID de la fila
-
-        fetch(`/administrador/usuarios/eliminar/${usuarioId}/`, {
-          method: "POST",
-          headers: {
-            "X-CSRFToken": getCookie("csrftoken"), // Función que ya tienes en utils.js
-          },
-        })
-        .then(resp => resp.json())
-        .then(data => {
-          if(data.success){
-            // Eliminamos la fila del frontend
-            filaAEliminar.remove();
-            alert("Usuario eliminado correctamente.");
-          } else {
-            alert("No se pudo eliminar el usuario: " + data.error);
-          }
-          modalEliminar.style.display = "none";
-        })
-        .catch(err => {
-          console.error("Error al eliminar el usuario:", err);
-          alert("Ocurrió un error al eliminar el usuario.");
-          modalEliminar.style.display = "none";
-        });
-      }
+  // Editar
+  document.querySelectorAll(".editar").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.id;
+      const nombre = btn.dataset.nombre;
+      const apellido = btn.dataset.apellido;
+      const correo = btn.dataset.correo;
+      const rol = btn.dataset.rol;
+      document.getElementById("editId").value = id;
+      document.getElementById("editNombre").value = nombre;
+      document.getElementById("editApellido").value = apellido;
+      document.getElementById("editCorreo").value = correo;
+      document.getElementById("editRol").value = rol;
+      document.getElementById("formEditar").action = `/administrador/usuarios/editar/${id}/`;
+      abrirModal("modalEditar");
     };
-  </script>
+  });
 
-  <!-- MODAL ACTIVAR/DESACTIVAR USUARIO -->
-  <script>
-    const modalEstado = document.getElementById("modalEstado");
-    const btnCancelarEstado = modalEstado.querySelector(".btn-cancelar");
-    const btnConfirmarEstado = modalEstado.querySelector(".btn-confirmar");
+  // Eliminar
+  document.querySelectorAll(".eliminar").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.id;
+      const nombre = btn.dataset.nombre + " " + btn.dataset.apellido;
+      document.getElementById("textoEliminar").textContent = `¿Seguro que deseas eliminar al usuario "${nombre}"?`;
+      document.getElementById("formEliminar").action = `/administrador/usuarios/eliminar/${id}/`;
+      abrirModal("modalEliminar");
+    };
+  });
 
-    modalEstado.querySelector(".close").onclick = () => modalEstado.style.display = "none";
-    btnCancelarEstado.onclick = () => modalEstado.style.display = "none";
+  // Activar/Desactivar
+  document.querySelectorAll(".btn-tabla-toggle-estado").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.id;
+      const activo = btn.dataset.activo === "True";
+      const accion = activo ? "desactivar" : "activar";
+      document.getElementById("tituloEstado").textContent = `Confirmar ${accion.charAt(0).toUpperCase() + accion.slice(1)}`;
+      document.getElementById("textoEstado").textContent = `¿Seguro que deseas ${accion} este usuario?`;
+      document.getElementById("formEstado").action = `/administrador/usuarios/estado/${id}/`;
+      abrirModal("modalEstado");
+    };
+  });
 
-    document.querySelectorAll(".btn-tabla-toggle-estado").forEach(btn => {
-      btn.addEventListener("click", function() {
-        const fila = this.closest("tr");
-        const usuarioId = fila.cells[0].textContent.trim();
-        const nombre = fila.cells[1].textContent;
-        const esDesactivar = btn.textContent === "Desactivar";
-
-        modalEstado.querySelector("#tituloEstado").textContent = esDesactivar ? "Confirmar Desactivación" : "Confirmar Activación";
-        modalEstado.querySelector("#textoEstado").textContent = `¿Seguro que deseas ${esDesactivar ? "desactivar" : "activar"} al usuario "${nombre}"?`;
-        btnConfirmarEstado.textContent = esDesactivar ? "Desactivar" : "Activar";
-
-        modalEstado.style.display = "block";
-
-        btnConfirmarEstado.onclick = () => {
-          fetch(`/administrador/usuarios/estado/${usuarioId}/`, {
-            method: "POST",
-            headers: {
-              "X-CSRFToken": getCookie("csrftoken")
-            },
-            body: JSON.stringify({ activar: !esDesactivar })
-          })
-          .then(resp => resp.json())
-          .then(data => {
-            if(data.success){
-              if(esDesactivar){
-                fila.classList.add("inactivo");
-                fila.cells[4].textContent = `${fila.cells[4].textContent} (Inactivo)`;
-                btn.textContent = "Activar";
-                alert("Usuario desactivado correctamente.");
-              } else {
-                fila.classList.remove("inactivo");
-                fila.cells[4].textContent = fila.cells[4].textContent.replace(" (Inactivo)", "");
-                btn.textContent = "Desactivar";
-                alert("Usuario activado correctamente.");
-              }
-            } else {
-              alert("No se pudo cambiar el estado: " + data.error);
-            }
-            modalEstado.style.display = "none";
-          })
-          .catch(err => {
-            console.error("Error al cambiar estado del usuario:", err);
-            alert("Ocurrió un error al cambiar el estado del usuario.");
-            modalEstado.style.display = "none";
-          });
-        };
-      });
-    });
-
-    /* Cerrar modales al hacer click fuera */
-    window.addEventListener("click", function(e) {
-      [modalEditar, modalEliminar, modalEstado].forEach(m => { if (e.target === m) m.style.display = "none"; });
-    });
-
-  </script>
-
-
+  // Cerrar al hacer clic fuera
+  window.onclick = e => ["modalEditar","modalEliminar","modalEstado"].forEach(id => { if(e.target == document.getElementById(id)) cerrarModal(id); });
+</script>
 {% endblock %}

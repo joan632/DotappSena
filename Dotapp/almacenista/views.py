@@ -1,3 +1,13 @@
+"""
+Vistas para la aplicación de Almacenista.
+
+Este módulo contiene todas las vistas relacionadas con las funcionalidades
+disponibles para los usuarios con rol de almacenista, incluyendo:
+- Gestión de productos e inventario
+- Aprobación y rechazo de solicitudes
+- Gestión de tipos, tallas, colores, centros y programas
+"""
+
 import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -57,9 +67,19 @@ def generar_factura_pdf_bytes(solicitud):
 
 
         
-# Vista para el panel de almacenista
 @login_required
 def dashboard_almacenista(request):
+    """
+    Vista del panel principal del almacenista.
+    
+    Verifica que el usuario tenga rol de administrador o almacenista.
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        
+    Returns:
+        HttpResponse: Renderiza el dashboard o redirige si no tiene permisos
+    """
     if request.user.rol is None or request.user.rol.nombre_rol not in ["administrador", "almacenista"]:
         return redirect(reverse("acceso_denegado"))
     return render(request, "almacenista/dashboard_almacenista.html")
@@ -70,6 +90,18 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 @login_required
 def administrar_productos(request):
+    """
+    Vista para administrar productos del inventario.
+    
+    Muestra todos los productos con sus tipos, tallas, colores y stock disponible.
+    Proporciona datos en formato JSON para uso con JavaScript.
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        
+    Returns:
+        HttpResponse: Renderiza la página de administración de productos
+    """
     productos = Producto.objects.order_by('stock')
     tipos = list(TipoProducto.objects.all().values('id_tipo', 'nombre'))
     tallas = list(Talla.objects.all().values('id_talla', 'nombre'))
@@ -87,10 +119,72 @@ def administrar_productos(request):
     })
 
 
+# 🟢 Agregar Centro de Formación
+@login_required
+def agregar_centro(request):
+    if request.method == "POST":
+        nombre = request.POST.get("nombre", "").strip()
+        if not nombre:
+            messages.warning(request, "Ingresa un nombre de centro.")
+            return redirect("gestion_palabras")
 
-# Vista para agregar productos
+        nombre = nombre.title()
+        centro, created = CentroFormacion.objects.get_or_create(nombre=nombre)
+        if created:
+            messages.success(request, f"Centro '{centro.nombre}' agregado correctamente.")
+        else:
+            messages.warning(request, f"El centro '{centro.nombre}' ya existe.")
+        return redirect("gestion_palabras")
+    else:
+        messages.error(request, "Método no permitido.")
+        return redirect("gestion_palabras")
+
+
+# 🟢 Agregar Programa
+@login_required
+def agregar_programa(request):
+    if request.method == "POST":
+        nombre = request.POST.get("nombre", "").strip()
+        centro_id = request.POST.get("centro_id")
+
+        if not nombre or not centro_id:
+            messages.warning(request, "Ingresa todos los campos.")
+            return redirect("gestion_palabras")
+
+        try:
+            centro = CentroFormacion.objects.get(id_centro=centro_id)
+        except CentroFormacion.DoesNotExist:
+            messages.error(request, "El centro seleccionado no existe.")
+            return redirect("gestion_palabras")
+
+        nombre = nombre.title()
+        programa, created = Programa.objects.get_or_create(nombre=nombre, centro=centro)
+
+        if created:
+            messages.success(request, f"Programa '{programa.nombre}' agregado correctamente al centro '{centro.nombre}'.")
+        else:
+            messages.warning(request, f"El programa '{programa.nombre}' ya existe en '{centro.nombre}'.")
+
+        return redirect("gestion_palabras")
+    else:
+        messages.error(request, "Método no permitido.")
+        return redirect("gestion_palabras")
+
+
 @csrf_exempt
 def agregar_producto(request):
+    """
+    Vista para agregar un nuevo producto al inventario.
+    
+    Crea un nuevo producto con tipo, talla, color, precio, stock e imagen.
+    Retorna una respuesta JSON con el estado de la operación.
+    
+    Args:
+        request: Objeto HttpRequest con los datos del formulario (POST)
+        
+    Returns:
+        JsonResponse: Estado de la operación (ok o error)
+    """
     if request.method == 'POST':
         tipo_nombre = request.POST.get('tipo')
         talla_nombre = request.POST.get('talla')
@@ -196,57 +290,73 @@ def eliminar_palabra(request):
 
 @login_required
 def gestion_palabras(request):
-    return render(request, 'almacenista/gestion_palabras.html')
-
-
+    centros = CentroFormacion.objects.all().order_by('nombre')
+    return render(request, 'almacenista/gestion_palabras.html', {
+        'centros': centros
+    })
 
 
 # Vista para agregar tipos de productos
-@csrf_exempt
+@require_POST
+@login_required
 def agregar_tipo(request):
-    if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        if nombre:
-            nombre = nombre.strip().capitalize()
-            TipoProducto.objects.create(nombre=nombre)
-            return HttpResponse("OK")
-        else:
-            print("⚠️ No se recibió nombre")
-    return HttpResponse("Error", status=400)
+    nombre = request.POST.get('nombre', '').strip().capitalize()
+    if not nombre:
+        return JsonResponse({'success': False, 'message': 'Ingresa un nombre de tipo.'})
+
+    tipo, created = TipoProducto.objects.get_or_create(nombre=nombre)
+    if created:
+        return JsonResponse({'success': True, 'message': f"Tipo '{tipo.nombre}' agregado correctamente."})
+    else:
+        return JsonResponse({'success': False, 'message': f"El tipo '{tipo.nombre}' ya existe."})
 
 
-# Vista para agregar tallas de productos
-@csrf_exempt
+# Vista para agregar tallas
+@require_POST
+@login_required
 def agregar_talla(request):
-    if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        if nombre:
-            nombre = nombre.strip().upper()
-            Talla.objects.create(nombre=nombre)
-            return HttpResponse("OK")
-        else:
-            print("⚠️ No se recibió nombre")
-    return HttpResponse("Error", status=400)
+    nombre = request.POST.get('nombre', '').strip().upper()
+    if not nombre:
+        return JsonResponse({'success': False, 'message': 'Ingresa una talla.'})
+
+    talla, created = Talla.objects.get_or_create(nombre=nombre)
+    if created:
+        return JsonResponse({'success': True, 'message': f"Talla '{talla.nombre}' agregada correctamente."})
+    else:
+        return JsonResponse({'success': False, 'message': f"La talla '{talla.nombre}' ya existe."})
 
 
-# Vista para agregar colores de productos
-@csrf_exempt
+# Vista para agregar colores
+@require_POST
+@login_required
 def agregar_color(request):
-    if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        if nombre:
-            nombre = nombre.strip().capitalize()
-            Color.objects.create(nombre=nombre)
-            return HttpResponse("OK")
-        else:
-            print("⚠️ No se recibió nombre")
-    return HttpResponse("Error", status=400)
+    nombre = request.POST.get('nombre', '').strip().capitalize()
+    if not nombre:
+        return JsonResponse({'success': False, 'message': 'Ingresa un color.'})
+
+    color, created = Color.objects.get_or_create(nombre=nombre)
+    if created:
+        return JsonResponse({'success': True, 'message': f"Color '{color.nombre}' agregado correctamente."})
+    else:
+        return JsonResponse({'success': False, 'message': f"El color '{color.nombre}' ya existe."})
 
 
 
-# Vista para editar productos
 @csrf_exempt
 def editar_producto(request, producto_id):
+    """
+    Vista para editar un producto existente.
+    
+    Permite modificar tipo, talla, color, precio, stock e imagen de un producto.
+    Retorna una respuesta JSON con el estado de la operación.
+    
+    Args:
+        request: Objeto HttpRequest con los datos del formulario (POST)
+        producto_id: ID del producto a editar
+        
+    Returns:
+        JsonResponse: Estado de la operación (ok o error)
+    """
     try:
         producto = Producto.objects.get(id_producto=producto_id)
     except Producto.DoesNotExist:
@@ -303,22 +413,36 @@ def editar_producto(request, producto_id):
 from django.http import JsonResponse
 from django.db.models import ProtectedError
 
-def eliminar_producto(request, id):
-    if request.method == "POST":
-        try:
-            producto = Producto.objects.get(pk=id)
-            producto.delete()
-            return JsonResponse({"status": "ok", "message": "Producto eliminado correctamente."})
-        except ProtectedError:
-            return JsonResponse({"status": "error", "message": "No se puede eliminar este producto porque está asociado a una o más solicitudes."})
-        except Producto.DoesNotExist:
-            return JsonResponse({"status": "error", "message": "El producto no existe."})
-    return JsonResponse({"status": "error", "message": "Método no permitido."})
+@require_POST
+def eliminar_producto(request, producto_id):
+    try:
+        producto = get_object_or_404(Producto, id_producto=producto_id)
+        producto.delete()
+        return JsonResponse({
+            'status': 'ok',
+            'message': 'Producto eliminado correctamente'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
 
 
 
-#vista para solicitudes de inventario
 def solicitudes_inventario(request):
+    """
+    Vista para mostrar las solicitudes pendientes de revisión.
+    
+    Muestra todas las solicitudes que no están canceladas, despachadas,
+    rechazadas o entregadas, ordenadas por fecha de solicitud.
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        
+    Returns:
+        HttpResponse: Renderiza la página de solicitudes de inventario
+    """
     solicitudes = ( 
     Solicitud.objects
     .select_related("id_aprendiz", "id_producto")
@@ -330,9 +454,21 @@ def solicitudes_inventario(request):
     return render(request, 'almacenista/Solicitudes_inventario.html', {"solicitudes": solicitudes})
 
 
-#vista para rechazar solicitudes
 @login_required
 def rechazar_solicitud(request, solicitud_id):
+    """
+    Vista para rechazar una solicitud pendiente.
+    
+    Cambia el estado de la solicitud a "rechazada", devuelve el stock
+    al inventario y envía un correo de notificación al aprendiz.
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        solicitud_id: ID de la solicitud a rechazar
+        
+    Returns:
+        HttpResponseRedirect: Redirige a la página de solicitudes de inventario
+    """
     solicitud = get_object_or_404(Solicitud, id_solicitud=solicitud_id)
 
     if solicitud.estado_solicitud == "pendiente":
@@ -380,16 +516,25 @@ def rechazar_solicitud(request, solicitud_id):
     return redirect("solicitudes-inventario")
 
 
-#vista para aprobar solicitudes
 @login_required
 def aprobar_solicitud(request, solicitud_id):
+    """
+    Vista para aprobar una solicitud pendiente.
+    
+    Cambia el estado de la solicitud de "pendiente" a "aprobada".
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        solicitud_id: ID de la solicitud a aprobar
+        
+    Returns:
+        HttpResponseRedirect: Redirige a la página de solicitudes de inventario
+    """
     solicitud = get_object_or_404(Solicitud, id_solicitud=solicitud_id)
 
     if solicitud.estado_solicitud == "pendiente":
         solicitud.estado_solicitud = "aprobada"
         solicitud.save()
-        
-
 
         try:
             # 🧾 Generar el PDF de la factura
@@ -416,7 +561,7 @@ def aprobar_solicitud(request, solicitud_id):
         </html>
         """
 
-        # 🧾 Versión texto plano
+        # Versión texto plano
         text_content = (
             f"Hola {solicitud.id_aprendiz.get_full_name()},\n\n"
             f"Felicidades, tu solicitud con el ID: #{solicitud.id_solicitud} ha sido aprobada.\n"
@@ -426,7 +571,7 @@ def aprobar_solicitud(request, solicitud_id):
             f"Saludos,\nEl equipo de Dotapp"
         )
 
-        # 💌 Crear correo
+        # Crear correo
         msg = EmailMultiAlternatives(
             'Solicitud aprobada - Dotapp',
             text_content,
@@ -437,7 +582,7 @@ def aprobar_solicitud(request, solicitud_id):
         msg.attach(f'factura_{solicitud.id_solicitud}.pdf', pdf_bytes, 'application/pdf')
 
         try:
-            # 🚀 Enviar correo
+            # Enviar correo
             msg.send(fail_silently=False)
             messages.success(request, "Solicitud aprobada exitosamente y factura enviada al aprendiz.")
         except Exception as e:
@@ -446,9 +591,21 @@ def aprobar_solicitud(request, solicitud_id):
     return redirect("solicitudes-inventario")
 
 
-#vista para despachar solicitudes
 @login_required
 def despachar_solicitud(request, solicitud_id):
+    """
+    Vista para despachar una solicitud aprobada.
+    
+    Cambia el estado de la solicitud de "aprobada" a "despachada"
+    y envía un correo de notificación al aprendiz.
+    
+    Args:
+        request: Objeto HttpRequest del usuario autenticado
+        solicitud_id: ID de la solicitud a despachar
+        
+    Returns:
+        HttpResponseRedirect: Redirige a la página de solicitudes de inventario
+    """
     solicitud = get_object_or_404(Solicitud, id_solicitud=solicitud_id)
 
     if solicitud.estado_solicitud == "aprobada":

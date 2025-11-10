@@ -1,3 +1,15 @@
+{% comment %}
+Template del dashboard del despachador
+
+Este template muestra el menú principal para usuarios con rol de despachador.
+Proporciona acceso a las funcionalidades de gestión de entregas y despachos.
+
+Opciones disponibles:
+- Pedidos pendientes: Ver y gestionar solicitudes que están listas para ser despachadas/entregadas
+
+El despachador es responsable de actualizar el estado de las solicitudes cuando se realizan
+las entregas físicas a los aprendices.
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -6,25 +18,24 @@
   <div class="admin-container">
     <div class="login-card">
       <div class="sticky-sync-wrapper">
-        <!-- Flecha atrás -->
-        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-small" onclick="window.location.href='{% url 'dashboard_admin' %}'" aria-label="Volver">
           ←
         </button>
           
         <div class="slide" id="slideSync">
-
           <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
           <h1>Bienvenido</h1>
           <p>Aqui podrás gestionar los pedidos a despachar</p>
-
         </div>
       </div>
 
+      {% comment %}
+      Menú de opciones del despachador
+      Botón de navegación a la sección de pedidos pendientes
+      {% endcomment %}
       <div class="welcome-buttons">
         <button onclick="window.location.href='{% url 'solicitudes_pendientes' %}'">Pedidos pendientes</button>        
-
       </div>
-
     </div>
   </div>
 

@@ -1,0 +1,87 @@
+\doxysection{Referencia de la clase core.\+models.\+Programa}
+\hypertarget{classcore_1_1models_1_1_programa}{}\label{classcore_1_1models_1_1_programa}\index{core.models.Programa@{core.models.Programa}}
+Diagrama de herencia de core.\+models.\+Programa\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcore_1_1models_1_1_programa}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_programa_a8b9cd57fbf1e6bab537bb71de081c4c0}{\+\_\+\+\_\+str\+\_\+\+\_\+}} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos públicos estáticos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_programa_aa9947a056a0043840c64da63bc9aac73}{id\+\_\+programa}} = models.\+Auto\+Field(primary\+\_\+key=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_programa_a6e8eb37e7433df5d8bc3a567ea67c232}{nombre}} = models.\+Char\+Field(max\+\_\+length=255, unique=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_programa_a8d3529b29019462114cce2078ca005cf}{centro}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Modelo que representa un programa de formación del SENA.
+
+Cada programa pertenece a un centro de formación específico.
+
+Attributes:
+    id_programa: Identificador único del programa (clave primaria)
+    nombre: Nombre del programa (único)
+    centro: Centro de formación al que pertenece (ForeignKey)
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1models_1_1_programa_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1models_1_1_programa_a8b9cd57fbf1e6bab537bb71de081c4c0}\index{core.models.Programa@{core.models.Programa}!\_\_str\_\_@{\_\_str\_\_}}
+\index{\_\_str\_\_@{\_\_str\_\_}!core.models.Programa@{core.models.Programa}}
+\doxysubsubsection{\texorpdfstring{\_\_str\_\_()}{\_\_str\_\_()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_programa_a8b9cd57fbf1e6bab537bb71de081c4c0} 
+core.\+models.\+Programa.\+\_\+\+\_\+str\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Retorna la representación en string del programa.
+
+Returns:
+    str: Nombre del programa y su centro
+\end{DoxyVerb}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcore_1_1models_1_1_programa_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{classcore_1_1models_1_1_programa_a8d3529b29019462114cce2078ca005cf}\index{core.models.Programa@{core.models.Programa}!centro@{centro}}
+\index{centro@{centro}!core.models.Programa@{core.models.Programa}}
+\doxysubsubsection{\texorpdfstring{centro}{centro}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_programa_a8d3529b29019462114cce2078ca005cf} 
+core.\+models.\+Programa.\+centro\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \ models.ForeignKey(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ CentroFormacion,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ on\_delete=models.CASCADE,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ related\_name=\textcolor{stringliteral}{"{}programas"{}}}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{classcore_1_1models_1_1_programa_aa9947a056a0043840c64da63bc9aac73}\index{core.models.Programa@{core.models.Programa}!id\_programa@{id\_programa}}
+\index{id\_programa@{id\_programa}!core.models.Programa@{core.models.Programa}}
+\doxysubsubsection{\texorpdfstring{id\_programa}{id\_programa}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_programa_aa9947a056a0043840c64da63bc9aac73} 
+core.\+models.\+Programa.\+id\+\_\+programa = models.\+Auto\+Field(primary\+\_\+key=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_programa_a6e8eb37e7433df5d8bc3a567ea67c232}\index{core.models.Programa@{core.models.Programa}!nombre@{nombre}}
+\index{nombre@{nombre}!core.models.Programa@{core.models.Programa}}
+\doxysubsubsection{\texorpdfstring{nombre}{nombre}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_programa_a6e8eb37e7433df5d8bc3a567ea67c232} 
+core.\+models.\+Programa.\+nombre = models.\+Char\+Field(max\+\_\+length=255, unique=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{core_2models_8py}{models.\+py}}\end{DoxyCompactItemize}

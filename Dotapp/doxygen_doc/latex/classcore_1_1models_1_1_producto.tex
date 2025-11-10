@@ -1,0 +1,215 @@
+\doxysection{Referencia de la clase core.\+models.\+Producto}
+\hypertarget{classcore_1_1models_1_1_producto}{}\label{classcore_1_1models_1_1_producto}\index{core.models.Producto@{core.models.Producto}}
+Diagrama de herencia de core.\+models.\+Producto\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcore_1_1models_1_1_producto}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_ad0d18b977c8f249e3965f2eda4703f63}{\+\_\+\+\_\+str\+\_\+\+\_\+}} (self)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_ab900c245fb116a82b293d18bea73940c}{imagen\+\_\+url}} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos públicos estáticos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_af97919fc347f5f88e85b902846ae2c21}{id\+\_\+producto}} = models.\+Auto\+Field(primary\+\_\+key=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_a8ea6dc3ae42089dfc6dc859d81222e6d}{tipo}}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_aec897936f0716cfb0877994a45952914}{talla}}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_a9924210e29fc7f315551251194f97283}{color}}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_a5ad9b27562ead74cf0fb6bfc2e98e04b}{precio}} = models.\+Decimal\+Field(max\+\_\+digits=10, decimal\+\_\+places=2)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_aaed59ae9aeb8473859a482153430c823}{stock}} = models.\+Positive\+Integer\+Field(default=0)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_a941d39b832312bbc4a182b4ecbd55088}{imagen}} = models.\+Image\+Field(upload\+\_\+to=\textquotesingle{}productos/\textquotesingle{}, blank=True, null=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_a0c74361c5431ac0d33aba309d2fbb7ef}{almacenista}}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_aa690133ad61cb4ba4265664de35a8b56}{administrador}}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_a30ded15b2388e35404cf2c7cfce42514}{created\+\_\+at}} = models.\+Date\+Time\+Field(auto\+\_\+now\+\_\+add=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_producto_aa5a41f0c16d18434968d10dab29a3cf2}{updated\+\_\+at}} = models.\+Date\+Time\+Field(auto\+\_\+now=True)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Modelo que representa un producto (uniforme) en el inventario.
+
+Un producto se define por su combinación única de tipo, talla y color.
+Cada producto tiene un precio, stock disponible y puede tener una imagen.
+
+Attributes:
+    id_producto: Identificador único del producto (clave primaria)
+    tipo: Tipo de producto (ForeignKey a TipoProducto)
+    talla: Talla del producto (ForeignKey a Talla)
+    color: Color del producto (ForeignKey a Color)
+    precio: Precio del producto (DecimalField)
+    stock: Cantidad disponible en inventario (PositiveIntegerField)
+    imagen: Imagen del producto (ImageField, opcional)
+    almacenista: Usuario almacenista que creó el producto (ForeignKey)
+    administrador: Usuario administrador asociado (ForeignKey, opcional)
+    created_at: Fecha y hora de creación (DateTimeField)
+    updated_at: Fecha y hora de última actualización (DateTimeField)
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1models_1_1_producto_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1models_1_1_producto_ad0d18b977c8f249e3965f2eda4703f63}\index{core.models.Producto@{core.models.Producto}!\_\_str\_\_@{\_\_str\_\_}}
+\index{\_\_str\_\_@{\_\_str\_\_}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{\_\_str\_\_()}{\_\_str\_\_()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_ad0d18b977c8f249e3965f2eda4703f63} 
+core.\+models.\+Producto.\+\_\+\+\_\+str\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Retorna la representación en string del producto.
+
+Returns:
+    str: Descripción del producto (tipo - talla - color)
+\end{DoxyVerb}
+ \Hypertarget{classcore_1_1models_1_1_producto_ab900c245fb116a82b293d18bea73940c}\index{core.models.Producto@{core.models.Producto}!imagen\_url@{imagen\_url}}
+\index{imagen\_url@{imagen\_url}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{imagen\_url()}{imagen\_url()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_ab900c245fb116a82b293d18bea73940c} 
+core.\+models.\+Producto.\+imagen\+\_\+url (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Retorna la URL de la imagen del producto si existe.
+
+Returns:
+    str: URL de la imagen o None si no tiene imagen
+\end{DoxyVerb}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcore_1_1models_1_1_producto_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{classcore_1_1models_1_1_producto_aa690133ad61cb4ba4265664de35a8b56}\index{core.models.Producto@{core.models.Producto}!administrador@{administrador}}
+\index{administrador@{administrador}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{administrador}{administrador}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_aa690133ad61cb4ba4265664de35a8b56} 
+core.\+models.\+Producto.\+administrador\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \ models.ForeignKey(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ settings.AUTH\_USER\_MODEL,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ on\_delete=models.SET\_NULL,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ null=\textcolor{keyword}{True},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ blank=\textcolor{keyword}{True},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ related\_name=\textcolor{stringliteral}{"{}productos\_administrados"{}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ limit\_choices\_to=\{\textcolor{stringliteral}{'rol\_\_nombre\_rol'}:\ \textcolor{stringliteral}{'administrador'}\}}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{classcore_1_1models_1_1_producto_a0c74361c5431ac0d33aba309d2fbb7ef}\index{core.models.Producto@{core.models.Producto}!almacenista@{almacenista}}
+\index{almacenista@{almacenista}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{almacenista}{almacenista}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_a0c74361c5431ac0d33aba309d2fbb7ef} 
+core.\+models.\+Producto.\+almacenista\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \ models.ForeignKey(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ settings.AUTH\_USER\_MODEL,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ on\_delete=models.SET\_NULL,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ null=\textcolor{keyword}{True},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ blank=\textcolor{keyword}{True},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ related\_name=\textcolor{stringliteral}{"{}productos\_creados"{}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ limit\_choices\_to=\{\textcolor{stringliteral}{'rol\_\_nombre\_rol'}:\ \textcolor{stringliteral}{'almacenista'}\}}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{classcore_1_1models_1_1_producto_a9924210e29fc7f315551251194f97283}\index{core.models.Producto@{core.models.Producto}!color@{color}}
+\index{color@{color}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{color}{color}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_a9924210e29fc7f315551251194f97283} 
+core.\+models.\+Producto.\+color\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \ models.ForeignKey(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ Color,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ on\_delete=models.CASCADE,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ related\_name=\textcolor{stringliteral}{'productos'}}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{classcore_1_1models_1_1_producto_a30ded15b2388e35404cf2c7cfce42514}\index{core.models.Producto@{core.models.Producto}!created\_at@{created\_at}}
+\index{created\_at@{created\_at}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{created\_at}{created\_at}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_a30ded15b2388e35404cf2c7cfce42514} 
+core.\+models.\+Producto.\+created\+\_\+at = models.\+Date\+Time\+Field(auto\+\_\+now\+\_\+add=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_producto_af97919fc347f5f88e85b902846ae2c21}\index{core.models.Producto@{core.models.Producto}!id\_producto@{id\_producto}}
+\index{id\_producto@{id\_producto}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{id\_producto}{id\_producto}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_af97919fc347f5f88e85b902846ae2c21} 
+core.\+models.\+Producto.\+id\+\_\+producto = models.\+Auto\+Field(primary\+\_\+key=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_producto_a941d39b832312bbc4a182b4ecbd55088}\index{core.models.Producto@{core.models.Producto}!imagen@{imagen}}
+\index{imagen@{imagen}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{imagen}{imagen}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_a941d39b832312bbc4a182b4ecbd55088} 
+core.\+models.\+Producto.\+imagen = models.\+Image\+Field(upload\+\_\+to=\textquotesingle{}productos/\textquotesingle{}, blank=True, null=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_producto_a5ad9b27562ead74cf0fb6bfc2e98e04b}\index{core.models.Producto@{core.models.Producto}!precio@{precio}}
+\index{precio@{precio}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{precio}{precio}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_a5ad9b27562ead74cf0fb6bfc2e98e04b} 
+core.\+models.\+Producto.\+precio = models.\+Decimal\+Field(max\+\_\+digits=10, decimal\+\_\+places=2)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_producto_aaed59ae9aeb8473859a482153430c823}\index{core.models.Producto@{core.models.Producto}!stock@{stock}}
+\index{stock@{stock}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{stock}{stock}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_aaed59ae9aeb8473859a482153430c823} 
+core.\+models.\+Producto.\+stock = models.\+Positive\+Integer\+Field(default=0)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_producto_aec897936f0716cfb0877994a45952914}\index{core.models.Producto@{core.models.Producto}!talla@{talla}}
+\index{talla@{talla}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{talla}{talla}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_aec897936f0716cfb0877994a45952914} 
+core.\+models.\+Producto.\+talla\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \ models.ForeignKey(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ Talla,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ on\_delete=models.CASCADE,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ related\_name=\textcolor{stringliteral}{'productos'}}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{classcore_1_1models_1_1_producto_a8ea6dc3ae42089dfc6dc859d81222e6d}\index{core.models.Producto@{core.models.Producto}!tipo@{tipo}}
+\index{tipo@{tipo}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{tipo}{tipo}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_a8ea6dc3ae42089dfc6dc859d81222e6d} 
+core.\+models.\+Producto.\+tipo\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Valor inicial\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \ models.ForeignKey(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ TipoProducto,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ on\_delete=models.CASCADE,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ related\_name=\textcolor{stringliteral}{'productos'}}
+\DoxyCodeLine{\ \ \ \ )}
+
+\end{DoxyCode}
+\Hypertarget{classcore_1_1models_1_1_producto_aa5a41f0c16d18434968d10dab29a3cf2}\index{core.models.Producto@{core.models.Producto}!updated\_at@{updated\_at}}
+\index{updated\_at@{updated\_at}!core.models.Producto@{core.models.Producto}}
+\doxysubsubsection{\texorpdfstring{updated\_at}{updated\_at}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_producto_aa5a41f0c16d18434968d10dab29a3cf2} 
+core.\+models.\+Producto.\+updated\+\_\+at = models.\+Date\+Time\+Field(auto\+\_\+now=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{core_2models_8py}{models.\+py}}\end{DoxyCompactItemize}

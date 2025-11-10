@@ -2,237 +2,210 @@
 {% load static %}
 
 {% block content %}
-<div class="admin-container">
-  <div class="admin-card">
-    <div class="sticky-sync-wrapper">
-      <button type="button" class="btn-back-big" onclick="history.back()" aria-label="Volver">←</button>
-      <div class="slide" id="slideSync">
-        <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
-        <h1>Gestión de Palabras</h1>
-        <p>Agrega nuevos tipos, tallas o colores de producto.</p>
-        <p>Puedes agregar nuevos centros o programas de formación.</p>
+  <div class="admin-container">
+    <div class="admin-card">
+      <div class="sticky-sync-wrapper">
+        <button type="button" class="btn-back-big" onclick="window.location.href='{% url 'administrar-productos' %}'" aria-label="Volver">←</button>
+        <div class="slide" id="slideSync">
+          <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo" />
+          <h1>Gestión de Palabras</h1>
+          <p>Agrega nuevos tipos, tallas o colores de producto.</p>
+          <p>Puedes agregar nuevos centros o programas de formación.</p>
 
-        <div class="btn-container">
-          <!-- Botón para abrir el modal de configuracion de productos -->
-          <button id="btnAbrirConfiguraciones" class="btn-config">
-            ⚙️ Configuraciones de Producto
-          </button>
+          <div class="btn-container">
+            <!-- Botón para abrir el modal de configuracion de productos -->
+            <button id="btnAbrirConfiguraciones" class="btn-config">
+              ⚙️ Configuraciones de Producto
+            </button>
 
-          <!-- Botón para abrir el modal de configuraciones Adicionales -->
-          <button id="btnAbrirConfiguracionesAdicionales" class="btn-config">
-            ⚙️ Configuraciones Adicionales
-          </button>
+            <!-- Botón para abrir el modal de configuraciones Adicionales -->
+            <button id="btnAbrirConfiguracionesAdicionales" class="btn-config">
+              ⚙️ Configuraciones Adicionales
+            </button>
+          </div>
+          <br><br>
+
+          <div class="filtros">
+              <input type="text" id="txt_palabra" placeholder="Buscar palabra" />
+              
+              <select id="selTabla">
+                  <option value="">Seleccione una tabla</option>
+                  <option value="centros">Centros</option>
+                  <option value="programas">Programas</option>
+                  <option value="tipos">Tipos de producto</option>
+                  <option value="tallas">Tallas</option>
+                  <option value="colores">Colores</option>
+              </select>
+          </div>
+
         </div>
-        <br><br>
+      </div>
 
-        <div class="filtros">
-            <input type="text" id="txt_palabra" placeholder="Palabra" />
-            
-            <select id="selTabla">
-                <option value="">Seleccione una tabla</option>
-                <option value="centros">Centros</option>
-                <option value="programas">Programas</option>
-                <option value="tipos">Tipos de producto</option>
-                <option value="tallas">Tallas</option>
-                <option value="colores">Colores</option>
-            </select>
-        </div>
+      <div class="table-scroll" id="tableScroll">
+
+          <table class="data-table">
+              <thead>
+                  <tr>
+                  <th>Palabra</th>
+                  <th>Acciones</th>
+                  </tr>
+              </thead>
+              <tbody id="tbody-palabras">
+                  {% include "almacenista/_tbody_fragment.html" %}
+              </tbody>
+          </table>
 
       </div>
-    </div>
 
-    <div class="table-scroll" id="tableScroll">
-
-        <table class="data-table">
-            <thead>
-                <tr>
-                <th>Id</th>
-                <th>Palabra</th>
-                <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tbody-palabras">
-                {% include "almacenista/_tbody_fragment.html" %}
-            </tbody>
-        </table>
 
     </div>
-
-
   </div>
-</div>
 
-    <!-- Modal de configuraciones de productos -->
-    <div id="modalConfiguraciones" class="modal-gestion-producto">
-        <div class="modal-content-gestion-producto">
+  <!-- Modal de configuraciones de productos -->
+  <div id="modalConfiguraciones" class="modal-gestion-producto">
+      <div class="modal-content-gestion-producto">
+
         <span class="close">&times;</span>
         <h2>⚙️ Configuraciones de Producto</h2>
         <p>Puedes agregar nuevos tipos, tallas o colores de producto.</p>
 
         <div class="form-section">
-            {% csrf_token %}
-
-            <div class="row">
+          {% csrf_token %}             
+          <div class="row">
             <input id="nuevoTipo" type="text" placeholder="Nuevo tipo">
             <button class="btn-add" onclick="agregarTipo()">Agregar Tipo</button>
-            </div>
+          </div>
 
-            <div class="row">
+          <div class="row">
             <input id="nuevaTalla" type="text" placeholder="Nueva talla">
             <button class="btn-add" onclick="agregarTalla()">Agregar Talla</button>
-            </div>
-            
-            <div class="row">
+          </div>
+              
+          <div class="row">
             <input id="nuevoColor" type="text" placeholder="Nuevo color">
             <button class="btn-add" onclick="agregarColor()">Agregar Color</button>
-            </div>
-
+          </div>
         </div>
-        </div>
-    </div>
 
-    <script id="tipos-data" type="application/json">{{ tipos_json|safe }}</script>
-    <script id="tallas-data" type="application/json">{{ tallas_json|safe }}</script>
-    <script id="colores-data" type="application/json">{{ colores_json|safe }}</script>
+      </div>
+  </div>
 
 
-    <!-- Modal -->
-    <div id="modalConfiguracionesAdicionales" class="modal">
-        <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>⚙️ Configuraciones Adicionales</h2>
-        <p>Puedes agregar nuevos centros o programas de formación.</p>
 
-        <!-- CSRF token para fetch -->
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
-        <!-- Agregar Centro -->
+  <!-- Modal Configuraciones Adicionales -->
+  <div id="modalConfiguracionesAdicionales" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>⚙️ Configuraciones Adicionales</h2>
+      <p>Puedes agregar nuevos centros o programas de formación.</p>
+
+      <!-- FORMULARIO: agregar centro -->
+      <form method="POST" action="{% url 'agregar_centro' %}">
+        {% csrf_token %}
         <div class="form-row">
-            <input id="nuevoCentro" type="text" placeholder="Nuevo centro de formación">
-            <button class="btn-add" id="btnAgregarCentro">Agregar Centro</button>
+          <input name="nombre" type="text" placeholder="Nuevo centro de formación" required>
+          <button type="submit" class="btn-add">Agregar Centro</button>
         </div>
-        <br>
+      </form>
 
-        <p>Selecciona el centro de formación:</p>
+      <hr>
 
-        <!-- Agregar Programa -->
+      <!-- FORMULARIO: agregar programa -->
+      <form method="POST" action="{% url 'agregar_programa' %}">
+        {% csrf_token %}
         <div class="form-row">
-            <select id="centroSelect">
+          <select name="centro_id" required>
             {% for c in centros %}
-                <option value="{{ c.id_centro }}">{{ c.nombre }}</option>
+              <option value="{{ c.id_centro }}">{{ c.nombre }}</option>
             {% endfor %}
-            </select>
-            <input id="nuevoPrograma" type="text" placeholder="Nuevo programa de formación">
-            <button class="btn-add" id="btnAgregarPrograma">Agregar Programa</button>
+          </select>
+          <input name="nombre" type="text" placeholder="Nuevo programa de formación" required>
+          <button type="submit" class="btn-add">Agregar Programa</button>
         </div>
-        </div>
+      </form>
     </div>
-
-
-
+  </div>
 
 {% endblock %}
 
 {% block scripts %}
-<script>
-    document.getElementById('selTabla').addEventListener('change', async function(){
-    const t = this.value;
-    if (!t) return;
 
-    const resp = await fetch(`{% url 'listado_tablas' %}?tabla=${t}&fmt=html`);
-    const html = await resp.text();
-    document.getElementById('tbody-palabras').innerHTML = html;
-    });
+  <!-- Script de Filtros de Busqueda y Eliminar -->
+  <script>
+      let tablaActual = '';
+      let datosOriginales = [];
 
-    document.getElementById('tbody-palabras').addEventListener('click', async e => {
-    if (!e.target.classList.contains('js-eliminar')) return;
-    const id = e.target.dataset.id;
-    const tabla = document.getElementById('selTabla').value;
-    if (!tabla || !confirm('¿Eliminar esta palabra?')) return;
+      // Carga inicial
+      document.getElementById('selTabla').addEventListener('change', async function () {
+          tablaActual = this.value;
+          if (!tablaActual) return;
 
-    const res = await fetch(`{% url 'eliminar_palabra' %}?tabla=${tabla}&id=${id}`, {
-        method: 'POST',
-        headers: {'X-CSRFToken': '{{ csrf_token }}'}
-    });
-    if (res.ok) {
-        document.getElementById('selTabla').dispatchEvent(new Event('change'));
-    } else {
-        alert('Error al eliminar');
-    }
-    });
-</script>
+          const resp = await fetch(`{% url 'listado_tablas' %}?tabla=${tablaActual}&fmt=html`);
+          const html = await resp.text();
+          document.getElementById('tbody-palabras').innerHTML = html;
 
-<script>
-    let tablaActual   = '';
-    let datosOriginales = [];
+          // Guardar datos en memoria
+          const rows = document.querySelectorAll('#tbody-palabras tr[data-id]');
+          datosOriginales = Array.from(rows).map(tr => ({
+              pk: tr.dataset.id,
+              nombre: tr.cells[1].textContent.trim()
+          }));
+      });
 
-    /* carga inicial */
-    document.getElementById('selTabla').addEventListener('change', async function(){
-        tablaActual = this.value;
-        if (!tablaActual) return;
+      // Filtro en tiempo real
+      document.getElementById('txt_palabra').addEventListener('input', () => {
+          const q = document.getElementById('txt_palabra').value.trim().toLowerCase();
+          const tbody = document.getElementById('tbody-palabras');
 
-        const resp = await fetch(`{% url 'listado_tablas' %}?tabla=${tablaActual}&fmt=html`);
-        const html = await resp.text();
-        document.getElementById('tbody-palabras').innerHTML = html;
+          let html = '';
+          datosOriginales
+              .filter(item => item.nombre.toLowerCase().includes(q))
+              .forEach(item => {
+                  html += `
+                  <tr data-id="${item.pk}">
+                      <td>${item.pk}</td>
+                      <td>${item.nombre}</td>
+                      <td>
+                          <button class="eliminar-btn js-eliminar" data-id="${item.pk}">Eliminar</button>
+                      </td>
+                  </tr>`;
+              });
 
-        /* guardar datos en memoria */
-        const rows = document.querySelectorAll('#tbody-palabras tr[data-id]');
-        datosOriginales = Array.from(rows).map(tr => ({
-            pk     : tr.dataset.id,               // ← pk
-            nombre : tr.cells[1].textContent.trim()
-        }));
-    });
+          tbody.innerHTML = html || '<tr><td colspan="3" style="text-align:center; color:gray;">Sin coincidencias</td></tr>';
+      });
 
-    /* filtro en tiempo real */
-    document.getElementById('txt_palabra').addEventListener('input', () => {
-        const q = document.getElementById('txt_palabra').value.trim().toLowerCase();
-        const tbody = document.getElementById('tbody-palabras');
-
-        let html = '';
-        datosOriginales
-            .filter(item => item.nombre.toLowerCase().includes(q))
-            .forEach(item => {
-                html += `
-                <tr data-id="${item.pk}">                       <!-- pk -->
-                <td>${item.pk}</td>                           <!-- pk -->
-                <td>${item.nombre}</td>
-                <td>
-                    <button class="eliminar-btn js-eliminar" data-id="${item.pk}">Eliminar</button>
-                </td>
-                </tr>`;
-            });
-
-        tbody.innerHTML = html || '<tr><td colspan="3" class="text-center">Sin coincidencias.</td></tr>';
-    });
-
-    /* eliminar (delegado) */
+    // Eliminar directo (sin confirmación)
     document.getElementById('tbody-palabras').addEventListener('click', async e => {
         if (!e.target.classList.contains('js-eliminar')) return;
         const pk = e.target.dataset.id;
-        if (!tablaActual || !confirm('¿Eliminar esta palabra?')) return;
+        if (!tablaActual) return;
 
         try {
             const res = await fetch(`{% url 'eliminar_palabra' %}?tabla=${tablaActual}&id=${pk}`, {
-                method : 'POST',
-                headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                method: 'POST',
+                headers: { 'X-CSRFToken': '{{ csrf_token }}' }
             });
 
-            // primero leemos el JSON
             const data = await res.json();
 
-            if (res.ok && data.ok) {          // éxito
+            if (res.ok && data.ok) {
+                // Recargar tabla
                 document.getElementById('selTabla').dispatchEvent(new Event('change'));
                 document.getElementById('txt_palabra').value = '';
-            } else {                            // error controlado por nosotros
-                alert(data.error || 'Error al eliminar');
+
+                // Mostrar mensaje de éxito con tu función existente
+                showNotification("Palabra eliminada correctamente", "success");
+            } else {
+                console.error(data.error || 'Error al eliminar');
+                showNotification("Error al eliminar la palabra", "error");
             }
-        } catch (err) {                         // error de red / 500
-            console.error(err);
-            alert('Error al eliminar');
+        } catch (err) {
+            console.error('Error al eliminar:', err);
+            showNotification("Ocurrió un error inesperado", "error");
         }
     });
-</script>
-
+  </script>
 
   <!-- script de configuraciones de productos -->
   <script>
@@ -248,7 +221,7 @@
     // 🟢 Agregar Tipo
     function agregarTipo() {
       const tipo = document.getElementById('nuevoTipo').value.trim();
-      if (!tipo) return alert("⚠️ Ingresa un tipo");
+      if (!tipo) return showNotification("Ingresa un tipo", "warning");
       const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
       fetch("{% url 'agregar_tipo' %}", {
@@ -260,18 +233,18 @@
         body: new URLSearchParams({ nombre: tipo }),
         credentials: "same-origin"
       })
-      .then(res => {
-        if (!res.ok) throw new Error();
-        alert("✅ Tipo agregado correctamente");
-        document.getElementById('nuevoTipo').value = "";
+      .then(res => res.json())
+      .then(data => {
+        showNotification(data.message, data.success ? "success" : "warning");
+        if (data.success) document.getElementById('nuevoTipo').value = "";
       })
-      .catch(() => alert("⚠️ Error al enviar los datos"));
+      .catch(() => showNotification("Error al enviar los datos", "error"));
     }
 
-    // 🟣 Agregar Talla
+    // 🟢 Agregar Talla
     function agregarTalla() {
       const talla = document.getElementById('nuevaTalla').value.trim();
-      if (!talla) return alert("⚠️ Ingresa una talla");
+      if (!talla) return showNotification("Ingresa una talla", "warning");
       const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
       fetch("{% url 'agregar_talla' %}", {
@@ -283,18 +256,18 @@
         body: new URLSearchParams({ nombre: talla }),
         credentials: "same-origin"
       })
-      .then(res => {
-        if (!res.ok) throw new Error();
-        alert("✅ Talla agregada correctamente");
-        document.getElementById('nuevaTalla').value = "";
+      .then(res => res.json())
+      .then(data => {
+        showNotification(data.message, data.success ? "success" : "warning");
+        if (data.success) document.getElementById('nuevaTalla').value = "";
       })
-      .catch(() => alert("⚠️ Error al enviar los datos"));
+      .catch(() => showNotification("Error al enviar los datos", "error"));
     }
 
-    // 🔵 Agregar Color
+    // 🟢 Agregar Color
     function agregarColor() {
       const color = document.getElementById('nuevoColor').value.trim();
-      if (!color) return alert("⚠️ Ingresa un color");
+      if (!color) return showNotification("Ingresa un color", "warning");
       const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
       fetch("{% url 'agregar_color' %}", {
@@ -306,12 +279,12 @@
         body: new URLSearchParams({ nombre: color }),
         credentials: "same-origin"
       })
-      .then(res => {
-        if (!res.ok) throw new Error();
-        alert("✅ Color agregado correctamente");
-        document.getElementById('nuevoColor').value = "";
+      .then(res => res.json())
+      .then(data => {
+        showNotification(data.message, data.success ? "success" : "warning");
+        if (data.success) document.getElementById('nuevoColor').value = "";
       })
-      .catch(() => alert("⚠️ Error al enviar los datos"));
+      .catch(() => showNotification("Error al enviar los datos", "error"));
     }
   </script>
 
@@ -333,7 +306,7 @@
       // Agregar Centro
       document.getElementById("btnAgregarCentro").addEventListener("click", () => {
         const nombre = document.getElementById("nuevoCentro").value.trim();
-        if (!nombre) return alert("⚠️ Ingresa un nombre de centro");
+        if (!nombre) return showNotification("Ingresa un nombre de centro", "warning");
 
         fetch("{% url 'agregar_centro' %}", {
           method: "POST",
@@ -346,12 +319,10 @@
         .then(res => res.json())
         .then(data => {
           if (!data.success) throw new Error(data.error || "Error desconocido");
-          alert("✅ Centro agregado correctamente");
+          showNotification("Centro agregado correctamente", "success");
 
-          // Limpiar input
           document.getElementById("nuevoCentro").value = "";
 
-          // Actualizar select
           const select = document.getElementById("centroSelect");
           const option = document.createElement("option");
           option.value = data.id_centro;
@@ -359,15 +330,15 @@
           select.appendChild(option);
           option.selected = true;
         })
-        .catch(err => alert("⚠️ Error: " + err.message));
+        .catch(err => showNotification("Error: " + err.message, "error"));
       });
 
       // Agregar Programa
       document.getElementById("btnAgregarPrograma").addEventListener("click", () => {
         const nombre = document.getElementById("nuevoPrograma").value.trim();
         const centroId = document.getElementById("centroSelect").value;
-        if (!nombre) return alert("⚠️ Ingresa un nombre de programa");
-        if (!centroId) return alert("⚠️ Selecciona un centro");
+        if (!nombre) return showNotification("Ingresa un nombre de programa", "warning");
+        if (!centroId) return showNotification("Selecciona un centro", "warning");
 
         fetch("{% url 'agregar_programa' %}", {
           method: "POST",
@@ -380,12 +351,10 @@
         .then(res => res.json())
         .then(data => {
           if (!data.success) throw new Error(data.error || "Error desconocido");
-          alert("✅ Programa agregado correctamente");
+          showNotification("Programa agregado correctamente", "success");
 
-          // Limpiar input
           document.getElementById("nuevoPrograma").value = "";
 
-          // Si tienes un select de programas, lo actualizas aquí
           const programaSelect = document.getElementById("programaSelect");
           if (programaSelect) {
             const option = document.createElement("option");
@@ -395,7 +364,7 @@
             option.selected = true;
           }
         })
-        .catch(err => alert("⚠️ Error: " + err.message));
+        .catch(err => showNotification("Error: " + err.message, "error"));
       });
     });
   </script>

@@ -1,0 +1,196 @@
+\doxysection{Referencia del espacio de nombres administrador.\+views}
+\hypertarget{namespaceadministrador_1_1views}{}\label{namespaceadministrador_1_1views}\index{administrador.views@{administrador.views}}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_a9769c35a9c09425aeac6fd3669ac1de7}{panel\+\_\+admin}} (request)
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_a734bc7efc6e58c3d637d762c4f89185f}{administracion\+\_\+usuarios}} (request)
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_a4cf0eb0e7ecbc1e03bf7a15a2bc0b9d7}{historial\+\_\+usuarios}} (request, id\+\_\+usuario)
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_a74f698b356e7d5c523859922cfd7fe40}{editar\+\_\+usuario}} (request, id\+\_\+usuario)
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_a55546c87af4480b2e38793e105a92b22}{eliminar\+\_\+usuario}} (request, id\+\_\+usuario)
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_ab5f393cdebd638c04fbf35c467c1dbb6}{cambiar\+\_\+estado\+\_\+usuario}} (request, id\+\_\+usuario)
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_ab5449f46a29d8734232ac2835e638043}{seguimiento\+\_\+pedidos}} (request)
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_a7862bcc054704f01422e1c226fc52a73}{exportar\+\_\+pdf}} (request)
+\item 
+\mbox{\hyperlink{namespaceadministrador_1_1views_ab7a7fbe2d14d49e7c69897436c1e1806}{exportar\+\_\+excel}} (request)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Vistas para la aplicación de Administrador.
+
+Este módulo contiene todas las vistas relacionadas con las funcionalidades
+disponibles para los usuarios con rol de administrador, incluyendo:
+- Gestión de usuarios
+- Seguimiento de pedidos
+- Exportación de reportes (PDF y Excel)
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{namespaceadministrador_1_1views_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{namespaceadministrador_1_1views_a734bc7efc6e58c3d637d762c4f89185f}\index{administrador.views@{administrador.views}!administracion\_usuarios@{administracion\_usuarios}}
+\index{administracion\_usuarios@{administracion\_usuarios}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{administracion\_usuarios()}{administracion\_usuarios()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_a734bc7efc6e58c3d637d762c4f89185f} 
+administrador.\+views.\+administracion\+\_\+usuarios (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para la administración de usuarios del sistema.
+
+Muestra la lista de todos los usuarios (excepto superusuario) y sus roles
+para que el administrador pueda gestionarlos.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza la página de administración de usuarios
+\end{DoxyVerb}
+ \Hypertarget{namespaceadministrador_1_1views_ab5f393cdebd638c04fbf35c467c1dbb6}\index{administrador.views@{administrador.views}!cambiar\_estado\_usuario@{cambiar\_estado\_usuario}}
+\index{cambiar\_estado\_usuario@{cambiar\_estado\_usuario}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{cambiar\_estado\_usuario()}{cambiar\_estado\_usuario()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_ab5f393cdebd638c04fbf35c467c1dbb6} 
+administrador.\+views.\+cambiar\+\_\+estado\+\_\+usuario (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{id\+\_\+usuario}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para activar o desactivar un usuario.
+
+Alterna el estado activo/inactivo del usuario. Los usuarios inactivos
+no pueden iniciar sesión en el sistema.
+
+Args:
+    request: Objeto HttpRequest (debe ser POST)
+    id_usuario: ID del usuario cuyo estado se desea cambiar
+    
+Returns:
+    HttpResponseRedirect: Redirige a la administración de usuarios
+\end{DoxyVerb}
+ \Hypertarget{namespaceadministrador_1_1views_a74f698b356e7d5c523859922cfd7fe40}\index{administrador.views@{administrador.views}!editar\_usuario@{editar\_usuario}}
+\index{editar\_usuario@{editar\_usuario}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{editar\_usuario()}{editar\_usuario()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_a74f698b356e7d5c523859922cfd7fe40} 
+administrador.\+views.\+editar\+\_\+usuario (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{id\+\_\+usuario}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para editar la información de un usuario.
+
+Permite al administrador modificar el nombre, apellido, correo y rol
+de un usuario. No permite editar usuarios inactivos.
+
+Args:
+    request: Objeto HttpRequest con los datos del formulario
+    id_usuario: ID del usuario a editar
+    
+Returns:
+    HttpResponseRedirect: Redirige a la administración de usuarios
+\end{DoxyVerb}
+ \Hypertarget{namespaceadministrador_1_1views_a55546c87af4480b2e38793e105a92b22}\index{administrador.views@{administrador.views}!eliminar\_usuario@{eliminar\_usuario}}
+\index{eliminar\_usuario@{eliminar\_usuario}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{eliminar\_usuario()}{eliminar\_usuario()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_a55546c87af4480b2e38793e105a92b22} 
+administrador.\+views.\+eliminar\+\_\+usuario (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{id\+\_\+usuario}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para eliminar un usuario del sistema.
+
+Solo permite eliminar usuarios activos. Los usuarios inactivos
+no pueden ser eliminados.
+
+Args:
+    request: Objeto HttpRequest (debe ser POST)
+    id_usuario: ID del usuario a eliminar
+    
+Returns:
+    HttpResponseRedirect: Redirige a la administración de usuarios
+\end{DoxyVerb}
+ \Hypertarget{namespaceadministrador_1_1views_ab7a7fbe2d14d49e7c69897436c1e1806}\index{administrador.views@{administrador.views}!exportar\_excel@{exportar\_excel}}
+\index{exportar\_excel@{exportar\_excel}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{exportar\_excel()}{exportar\_excel()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_ab7a7fbe2d14d49e7c69897436c1e1806} 
+administrador.\+views.\+exportar\+\_\+excel (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para exportar solicitudes a formato Excel.
+
+Genera un archivo Excel (.xlsx) con las solicitudes filtradas según
+los parámetros de búsqueda, estado y usuario. Incluye formato de tabla.
+
+Args:
+    request: Objeto HttpRequest con parámetros de filtrado opcionales
+    
+Returns:
+    HttpResponse: Archivo Excel con el reporte de solicitudes
+\end{DoxyVerb}
+ \Hypertarget{namespaceadministrador_1_1views_a7862bcc054704f01422e1c226fc52a73}\index{administrador.views@{administrador.views}!exportar\_pdf@{exportar\_pdf}}
+\index{exportar\_pdf@{exportar\_pdf}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{exportar\_pdf()}{exportar\_pdf()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_a7862bcc054704f01422e1c226fc52a73} 
+administrador.\+views.\+exportar\+\_\+pdf (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para exportar solicitudes a formato PDF.
+
+Genera un reporte en PDF con las solicitudes filtradas según los parámetros
+de búsqueda, estado y usuario. El PDF se genera en formato landscape.
+
+Args:
+    request: Objeto HttpRequest con parámetros de filtrado opcionales
+    
+Returns:
+    HttpResponse: Archivo PDF con el reporte de solicitudes
+\end{DoxyVerb}
+ \Hypertarget{namespaceadministrador_1_1views_a4cf0eb0e7ecbc1e03bf7a15a2bc0b9d7}\index{administrador.views@{administrador.views}!historial\_usuarios@{historial\_usuarios}}
+\index{historial\_usuarios@{historial\_usuarios}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{historial\_usuarios()}{historial\_usuarios()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_a4cf0eb0e7ecbc1e03bf7a15a2bc0b9d7} 
+administrador.\+views.\+historial\+\_\+usuarios (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{id\+\_\+usuario}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para mostrar el historial de solicitudes de un usuario específico.
+
+Muestra todas las solicitudes realizadas por el usuario seleccionado,
+ordenadas por fecha de solicitud (más recientes primero).
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    id_usuario: ID del usuario cuyo historial se desea ver
+    
+Returns:
+    HttpResponse: Renderiza el historial de solicitudes del usuario
+\end{DoxyVerb}
+ \Hypertarget{namespaceadministrador_1_1views_a9769c35a9c09425aeac6fd3669ac1de7}\index{administrador.views@{administrador.views}!panel\_admin@{panel\_admin}}
+\index{panel\_admin@{panel\_admin}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{panel\_admin()}{panel\_admin()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_a9769c35a9c09425aeac6fd3669ac1de7} 
+administrador.\+views.\+panel\+\_\+admin (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista del panel principal del administrador.
+
+Verifica que el usuario tenga rol de administrador antes de mostrar el panel.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza el panel de administración o redirige si no tiene permisos
+\end{DoxyVerb}
+ \Hypertarget{namespaceadministrador_1_1views_ab5449f46a29d8734232ac2835e638043}\index{administrador.views@{administrador.views}!seguimiento\_pedidos@{seguimiento\_pedidos}}
+\index{seguimiento\_pedidos@{seguimiento\_pedidos}!administrador.views@{administrador.views}}
+\doxysubsubsection{\texorpdfstring{seguimiento\_pedidos()}{seguimiento\_pedidos()}}
+{\footnotesize\ttfamily \label{namespaceadministrador_1_1views_ab5449f46a29d8734232ac2835e638043} 
+administrador.\+views.\+seguimiento\+\_\+pedidos (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para el seguimiento de pedidos y solicitudes.
+
+Muestra todas las solicitudes del sistema con opciones de filtrado
+por búsqueda de texto y estado. También muestra los borradores guardados.
+
+Args:
+    request: Objeto HttpRequest con parámetros de búsqueda opcionales
+    
+Returns:
+    HttpResponse: Renderiza la página de seguimiento de pedidos
+\end{DoxyVerb}
+ 

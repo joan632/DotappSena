@@ -1,0 +1,46 @@
+\doxysection{Referencia de la clase core.\+tokens.\+Expiring\+Token\+Generator}
+\hypertarget{classcore_1_1tokens_1_1_expiring_token_generator}{}\label{classcore_1_1tokens_1_1_expiring_token_generator}\index{core.tokens.ExpiringTokenGenerator@{core.tokens.ExpiringTokenGenerator}}
+Diagrama de herencia de core.\+tokens.\+Expiring\+Token\+Generator\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcore_1_1tokens_1_1_expiring_token_generator}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos protegidos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1tokens_1_1_expiring_token_generator_ab4deb375b5cd6d9a8016d54a57a3b48e}{\+\_\+make\+\_\+hash\+\_\+value}} (self, user, timestamp)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Generador de tokens de recuperación de contraseña con expiración.
+
+Los tokens generados por esta clase expiran después de 15 minutos
+para mayor seguridad en el proceso de recuperación de contraseña.
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1tokens_1_1_expiring_token_generator_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1tokens_1_1_expiring_token_generator_ab4deb375b5cd6d9a8016d54a57a3b48e}\index{core.tokens.ExpiringTokenGenerator@{core.tokens.ExpiringTokenGenerator}!\_make\_hash\_value@{\_make\_hash\_value}}
+\index{\_make\_hash\_value@{\_make\_hash\_value}!core.tokens.ExpiringTokenGenerator@{core.tokens.ExpiringTokenGenerator}}
+\doxysubsubsection{\texorpdfstring{\_make\_hash\_value()}{\_make\_hash\_value()}}
+{\footnotesize\ttfamily \label{classcore_1_1tokens_1_1_expiring_token_generator_ab4deb375b5cd6d9a8016d54a57a3b48e} 
+core.\+tokens.\+Expiring\+Token\+Generator.\+\_\+make\+\_\+hash\+\_\+value (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{user}{, }\item[{}]{timestamp}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\begin{DoxyVerb}Genera el valor hash para el token basado en el usuario y timestamp.
+
+Args:
+    user: Instancia del usuario
+    timestamp: Timestamp de creación del token
+    
+Returns:
+    str: Valor hash combinado del usuario y timestamp
+\end{DoxyVerb}
+ 
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{tokens_8py}{tokens.\+py}}\end{DoxyCompactItemize}

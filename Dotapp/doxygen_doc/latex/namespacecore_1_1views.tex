@@ -1,0 +1,280 @@
+\doxysection{Referencia del espacio de nombres core.\+views}
+\hypertarget{namespacecore_1_1views}{}\label{namespacecore_1_1views}\index{core.views@{core.views}}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_afe611c20939d8d6d5336ba416d77d322}{registro\+\_\+aprendiz}} (request)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_a42e92a213b5450f479c7babb369dcc5f}{login\+\_\+view}} (request)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_aeeded4b83613c1b317118bdb047e5aa2}{manual}} (request)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_a85a8a00bff9314ee850639656daa38ab}{password\+\_\+reset\+\_\+request}} (request)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_a9db85c64c9bb2ec0c9871eecff4c94d3}{password\+\_\+reset\+\_\+confirm}} (request, uidb64, token)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_ad99edd2ce188952e669a172485013c0d}{dashboard\+\_\+admin}} (request)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_a6e96eb9ea50e1bb4adb644105f2d7ac9}{acceso\+\_\+denegado}} (request)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_aa754f70f4c905ad9530d98b6ce069889}{csrf\+\_\+error\+\_\+redirect}} (request, reason="{}"{})
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_a9c451b998db6116c79cbc70b3614a41b}{error\+\_\+view}} (request, exception=None, status\+\_\+code=500, message="{}Ocurrió un error."{})
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_a615043550d2a896606ea23fd7f06cde4}{error\+\_\+404\+\_\+view}} (request, exception)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_af1bf477d4c4acd395f890b601d9bcb04}{error\+\_\+500\+\_\+view}} (request)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_af0daa19bd5a494cc67bd8df0702ec24a}{error\+\_\+403\+\_\+view}} (request, exception)
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_a3af5a90cf9656ba784aa48f7f7db1745}{error\+\_\+400\+\_\+view}} (request, exception)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_a7e92d18b93f26f8f9f5082d42c429a09}{User}} = get\+\_\+user\+\_\+model()
+\item 
+\mbox{\hyperlink{namespacecore_1_1views_aae13e6af686f879e86c1fb0dff4578b1}{expiring\+\_\+token\+\_\+generator}} = Password\+Reset\+Token\+Generator()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Vistas principales del sistema DotApp SENA.
+
+Este módulo contiene las vistas para autenticación, registro de usuarios,
+recuperación de contraseña y manejo de errores.
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{namespacecore_1_1views_doc-func-members}
+\doxysubsection{Documentación de funciones}
+\Hypertarget{namespacecore_1_1views_a6e96eb9ea50e1bb4adb644105f2d7ac9}\index{core.views@{core.views}!acceso\_denegado@{acceso\_denegado}}
+\index{acceso\_denegado@{acceso\_denegado}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{acceso\_denegado()}{acceso\_denegado()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_a6e96eb9ea50e1bb4adb644105f2d7ac9} 
+core.\+views.\+acceso\+\_\+denegado (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para mostrar mensaje de acceso denegado.
+
+Se muestra cuando un usuario intenta acceder a una página
+para la cual no tiene permisos.
+
+Args:
+    request: Objeto HttpRequest
+    
+Returns:
+    HttpResponse: Renderiza la página de acceso denegado
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_aa754f70f4c905ad9530d98b6ce069889}\index{core.views@{core.views}!csrf\_error\_redirect@{csrf\_error\_redirect}}
+\index{csrf\_error\_redirect@{csrf\_error\_redirect}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{csrf\_error\_redirect()}{csrf\_error\_redirect()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_aa754f70f4c905ad9530d98b6ce069889} 
+core.\+views.\+csrf\+\_\+error\+\_\+redirect (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{reason}{ = {\ttfamily "{}"{}}}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Redirige a la página de inicio cuando falla la validación CSRF.
+
+Args:
+    request: Objeto HttpRequest
+    reason: Razón del fallo CSRF (opcional)
+    
+Returns:
+    HttpResponseRedirect: Redirige a la página de login
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_ad99edd2ce188952e669a172485013c0d}\index{core.views@{core.views}!dashboard\_admin@{dashboard\_admin}}
+\index{dashboard\_admin@{dashboard\_admin}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{dashboard\_admin()}{dashboard\_admin()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_ad99edd2ce188952e669a172485013c0d} 
+core.\+views.\+dashboard\+\_\+admin (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para el dashboard de administración.
+
+Panel principal para usuarios con roles de administrador, almacenista o despachador.
+Requiere autenticación.
+
+Args:
+    request: Objeto HttpRequest del usuario autenticado
+    
+Returns:
+    HttpResponse: Renderiza el dashboard de administración
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_a3af5a90cf9656ba784aa48f7f7db1745}\index{core.views@{core.views}!error\_400\_view@{error\_400\_view}}
+\index{error\_400\_view@{error\_400\_view}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{error\_400\_view()}{error\_400\_view()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_a3af5a90cf9656ba784aa48f7f7db1745} 
+core.\+views.\+error\+\_\+400\+\_\+view (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{exception}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para manejar errores 400 (Solicitud incorrecta).
+
+Args:
+    request: Objeto HttpRequest
+    exception: Excepción que causó el error
+    
+Returns:
+    HttpResponse: Renderiza la plantilla de error 400
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_af0daa19bd5a494cc67bd8df0702ec24a}\index{core.views@{core.views}!error\_403\_view@{error\_403\_view}}
+\index{error\_403\_view@{error\_403\_view}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{error\_403\_view()}{error\_403\_view()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_af0daa19bd5a494cc67bd8df0702ec24a} 
+core.\+views.\+error\+\_\+403\+\_\+view (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{exception}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para manejar errores 403 (Acceso prohibido).
+
+Args:
+    request: Objeto HttpRequest
+    exception: Excepción que causó el error
+    
+Returns:
+    HttpResponse: Renderiza la plantilla de error 403
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_a615043550d2a896606ea23fd7f06cde4}\index{core.views@{core.views}!error\_404\_view@{error\_404\_view}}
+\index{error\_404\_view@{error\_404\_view}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{error\_404\_view()}{error\_404\_view()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_a615043550d2a896606ea23fd7f06cde4} 
+core.\+views.\+error\+\_\+404\+\_\+view (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{exception}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para manejar errores 404 (Página no encontrada).
+
+Args:
+    request: Objeto HttpRequest
+    exception: Excepción que causó el error
+    
+Returns:
+    HttpResponse: Renderiza la plantilla de error 404
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_af1bf477d4c4acd395f890b601d9bcb04}\index{core.views@{core.views}!error\_500\_view@{error\_500\_view}}
+\index{error\_500\_view@{error\_500\_view}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{error\_500\_view()}{error\_500\_view()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_af1bf477d4c4acd395f890b601d9bcb04} 
+core.\+views.\+error\+\_\+500\+\_\+view (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para manejar errores 500 (Error interno del servidor).
+
+Args:
+    request: Objeto HttpRequest
+    
+Returns:
+    HttpResponse: Renderiza la plantilla de error 500
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_a9c451b998db6116c79cbc70b3614a41b}\index{core.views@{core.views}!error\_view@{error\_view}}
+\index{error\_view@{error\_view}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{error\_view()}{error\_view()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_a9c451b998db6116c79cbc70b3614a41b} 
+core.\+views.\+error\+\_\+view (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{exception}{ = {\ttfamily None}, }\item[{}]{status\+\_\+code}{ = {\ttfamily 500}, }\item[{}]{message}{ = {\ttfamily "{}Ocurrió~un~error."{}}}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista genérica para manejo de errores HTTP.
+
+Args:
+    request: Objeto HttpRequest
+    exception: Excepción que causó el error (opcional)
+    status_code: Código de estado HTTP
+    message: Mensaje de error a mostrar
+    
+Returns:
+    HttpResponse: Renderiza la plantilla de error con el código de estado
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_a42e92a213b5450f479c7babb369dcc5f}\index{core.views@{core.views}!login\_view@{login\_view}}
+\index{login\_view@{login\_view}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{login\_view()}{login\_view()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_a42e92a213b5450f479c7babb369dcc5f} 
+core.\+views.\+login\+\_\+view (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para el inicio de sesión de usuarios.
+
+Autentica al usuario usando correo y contraseña, y redirige según su rol:
+- Administrador, Despachador, Almacenista: Dashboard de administración
+- Aprendiz: Página de bienvenida del aprendiz
+
+Args:
+    request: Objeto HttpRequest con las credenciales del usuario
+    
+Returns:
+    HttpResponse: Renderiza la plantilla de login o redirige según el rol
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_aeeded4b83613c1b317118bdb047e5aa2}\index{core.views@{core.views}!manual@{manual}}
+\index{manual@{manual}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{manual()}{manual()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_aeeded4b83613c1b317118bdb047e5aa2} 
+core.\+views.\+manual (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para mostrar el manual de usuario.
+
+Args:
+    request: Objeto HttpRequest
+    
+Returns:
+    HttpResponse: Renderiza la plantilla del manual de usuario
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_a9db85c64c9bb2ec0c9871eecff4c94d3}\index{core.views@{core.views}!password\_reset\_confirm@{password\_reset\_confirm}}
+\index{password\_reset\_confirm@{password\_reset\_confirm}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{password\_reset\_confirm()}{password\_reset\_confirm()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_a9db85c64c9bb2ec0c9871eecff4c94d3} 
+core.\+views.\+password\+\_\+reset\+\_\+confirm (\begin{DoxyParamCaption}\item[{}]{request}{, }\item[{}]{uidb64}{, }\item[{}]{token}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para confirmar y cambiar la contraseña del usuario.
+
+Valida el token y el UID proporcionados en el enlace de recuperación.
+Si son válidos, muestra un formulario para establecer la nueva contraseña.
+
+Args:
+    request: Objeto HttpRequest
+    uidb64: ID del usuario codificado en base64
+    token: Token de restablecimiento de contraseña
+    
+Returns:
+    HttpResponse: Formulario para cambiar contraseña o mensaje de error
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_a85a8a00bff9314ee850639656daa38ab}\index{core.views@{core.views}!password\_reset\_request@{password\_reset\_request}}
+\index{password\_reset\_request@{password\_reset\_request}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{password\_reset\_request()}{password\_reset\_request()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_a85a8a00bff9314ee850639656daa38ab} 
+core.\+views.\+password\+\_\+reset\+\_\+request (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para solicitar el restablecimiento de contraseña.
+
+Recibe el correo del usuario y envía un email con un enlace
+para restablecer la contraseña. El token tiene una validez de 15 minutos.
+
+Args:
+    request: Objeto HttpRequest con el correo en el body (JSON)
+    
+Returns:
+    JsonResponse: Estado de la operación (ok o error)
+    HttpResponse: Formulario para ingresar el correo (GET)
+\end{DoxyVerb}
+ \Hypertarget{namespacecore_1_1views_afe611c20939d8d6d5336ba416d77d322}\index{core.views@{core.views}!registro\_aprendiz@{registro\_aprendiz}}
+\index{registro\_aprendiz@{registro\_aprendiz}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{registro\_aprendiz()}{registro\_aprendiz()}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_afe611c20939d8d6d5336ba416d77d322} 
+core.\+views.\+registro\+\_\+aprendiz (\begin{DoxyParamCaption}\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Vista para el registro de nuevos aprendices.
+
+Permite a los usuarios crear una cuenta nueva en el sistema.
+Valida que las contraseñas coincidan, tengan al menos 8 caracteres,
+y que el correo tenga un formato válido y no esté ya registrado.
+
+Args:
+    request: Objeto HttpRequest con los datos del formulario
+    
+Returns:
+    HttpResponse: Renderiza la plantilla de registro o login según el caso
+\end{DoxyVerb}
+ 
+
+\label{doc-var-members}
+\Hypertarget{namespacecore_1_1views_doc-var-members}
+\doxysubsection{Documentación de variables}
+\Hypertarget{namespacecore_1_1views_aae13e6af686f879e86c1fb0dff4578b1}\index{core.views@{core.views}!expiring\_token\_generator@{expiring\_token\_generator}}
+\index{expiring\_token\_generator@{expiring\_token\_generator}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{expiring\_token\_generator}{expiring\_token\_generator}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_aae13e6af686f879e86c1fb0dff4578b1} 
+core.\+views.\+expiring\+\_\+token\+\_\+generator = Password\+Reset\+Token\+Generator()}
+
+\Hypertarget{namespacecore_1_1views_a7e92d18b93f26f8f9f5082d42c429a09}\index{core.views@{core.views}!User@{User}}
+\index{User@{User}!core.views@{core.views}}
+\doxysubsubsection{\texorpdfstring{User}{User}}
+{\footnotesize\ttfamily \label{namespacecore_1_1views_a7e92d18b93f26f8f9f5082d42c429a09} 
+core.\+views.\+User = get\+\_\+user\+\_\+model()}
+

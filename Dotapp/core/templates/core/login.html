@@ -1,3 +1,19 @@
+{% comment %}
+Template de inicio de sesión (Login)
+
+Este template permite a los usuarios autenticarse en el sistema.
+Incluye:
+- Formulario de login con correo y contraseña
+- Botón para mostrar/ocultar contraseña
+- Enlace para recuperar contraseña con modal
+- Enlace para registro de nuevos usuarios
+- Botón de ayuda que redirige al manual
+
+Funcionalidades JavaScript:
+- Toggle de visibilidad de contraseña
+- Modal de recuperación de contraseña con temporizador de reenvío
+- Validación y envío de solicitud de recuperación vía AJAX
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -5,8 +21,12 @@
 
 {% block content %}
 <div class="admin-container">
-  <div class="login-card">
+    <div class="login-card">
 
+    {% comment %}
+    Encabezado con logo y botón de ayuda
+    El botón de ayuda redirige al manual de usuario
+    {% endcomment %}
     <div>
       <img src="{% static 'img/logo-dotapp-sena.png' %}" alt="Logo DotApp SENA" class="logo">
       
@@ -20,6 +40,10 @@
     </div>
     <h1 style="margin-top: -50px;">Iniciar Sesión</h1>
 
+    {% comment %}
+    Formulario de inicio de sesión
+    Envía los datos a la vista 'login' mediante POST
+    {% endcomment %}
     <form method="POST" action="{% url 'login' %}">
       {% csrf_token %}
       <div class="form-group">
@@ -29,6 +53,10 @@
       <div class="form-group">
         <input type="password" id="contrasena" name="password" required placeholder=" ">
         <label for="contrasena">Contraseña</label>
+        {% comment %}
+        Botón para alternar visibilidad de la contraseña
+        Cambia entre mostrar y ocultar el texto de la contraseña
+        {% endcomment %}
         <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Mostrar/Ocultar contraseña" style="max-width:fit-content;">
           <!-- SVG de ojo -->
            <!-- Eye (mostrar) -->
@@ -45,11 +73,21 @@
       <button type="submit">Ingresar</button>
     </form>
 
+    {% comment %}
+    Enlaces de ayuda y registro
+    - Enlace para recuperar contraseña (abre modal)
+    - Botón para redirigir al registro de nuevos usuarios
+    {% endcomment %}
     <div class="registro-link">
       <a href="#" id="olvido-contrasena">¿Olvidaste tu contraseña?</a>
       <button type="button" onclick="window.location.href={% url 'registro-aprendiz' %}">Regístrate aquí</button>
     </div>
 
+    {% comment %}
+    Modal de recuperación de contraseña
+    Permite solicitar un enlace de recuperación por correo electrónico.
+    Incluye temporizador de 60 segundos para reenvío de solicitud.
+    {% endcomment %}
     <div id="modal-olvido" class="modal-recuperacion-contrasena">
       <div class="modal-content-recuperacion-contrasena">
         <span class="close-recuperacion-contrasena" id="cerrar-modal">&times;</span>
@@ -63,6 +101,10 @@
           <div id="mensaje-olvido" style="color:red; margin-bottom:10px;"></div>
           <button type="submit">Enviar</button>
         </form>
+        {% comment %}
+        Botón de reenvío con temporizador
+        Se muestra después de enviar el correo y se deshabilita por 60 segundos
+        {% endcomment %}
         <button id="reenviar-olvido" style="display:none; margin-top:10px;" disabled>Reenviar enlace (60s)</button>
       </div>
     </div>
@@ -72,9 +114,16 @@
 {% endblock %}
 
 {% block scripts %}
+{% comment %}
+Script para alternar visibilidad de contraseña
+Cambia el tipo de input entre 'password' y 'text' y alterna los iconos de ojo
+{% endcomment %}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Mostrar / ocultar contraseña
+    /**
+     * Alterna la visibilidad de la contraseña en el campo de login
+     * Cambia entre mostrar y ocultar el texto, y actualiza los iconos visuales
+     */
     window.togglePassword = function() {
       const passwordInput = document.getElementById('contrasena');
       const eyeIcon = document.querySelector('.eye-icon');
@@ -87,40 +136,53 @@
   });
 </script>
 
-<!-- Script de Recuperación de contraseña -->
+{% comment %}
+Script de recuperación de contraseña
+Maneja el modal de recuperación, envío de solicitud por AJAX y temporizador de reenvío
+{% endcomment %}
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Referencias a elementos del DOM
     const modal         = document.getElementById('modal-olvido');
     const mensaje       = document.getElementById('mensaje-olvido');
     const form          = document.getElementById('form-olvido');
     const reenviarBtn   = document.getElementById('reenviar-olvido');
-    let   lastEmail     = null;
-    let   timer         = null;
-    let   countdown     = 60;
+    let   lastEmail     = null;  // Último correo enviado para reenvío
+    let   timer         = null;   // Temporizador del countdown
+    let   countdown     = 60;     // Segundos restantes para reenvío
 
-    // Ocultar botón al arrancar (por si acaso)
+    // Ocultar botón de reenvío inicialmente
     reenviarBtn.style.display = 'none';
 
-    // Abrir / cerrar modal
+    /**
+     * Abre el modal de recuperación de contraseña
+     */
     document.getElementById('olvido-contrasena').onclick = e => {
       e.preventDefault();
       modal.style.display = 'flex';
     };
 
+    /**
+     * Cierra el modal y resetea el estado
+     */
     function cerrarModal() {
       modal.style.display = 'none';
       mensaje.innerText   = '';
-      reenviarBtn.style.display = 'none';   // ← lo oculta al cerrar
+      reenviarBtn.style.display = 'none';
       clearInterval(timer);
       countdown = 60;
       reenviarBtn.disabled = false;
       reenviarBtn.innerText = 'Reenviar enlace';
     }
 
+    // Event listeners para cerrar el modal
     document.getElementById('cerrar-modal').onclick = cerrarModal;
     window.onclick = e => { if (e.target === modal) cerrarModal(); };
 
-    // Envío de correo
+    /**
+     * Envía la solicitud de recuperación de contraseña al servidor
+     * @param {string} email - Correo electrónico del usuario
+     */
     async function enviarCorreo(email) {
       try {
         const res = await fetch("{% url 'password_reset_request' %}", {
@@ -150,7 +212,10 @@
       enviarCorreo(document.getElementById('email-olvido').value);
     };
 
-    // Reenvío
+    /**
+     * Maneja el reenvío de la solicitud de recuperación
+     * Reinicia el temporizador y envía el correo nuevamente
+     */
     reenviarBtn.onclick = () => {
       if (lastEmail) {
         countdown = 60;
@@ -158,7 +223,10 @@
       }
     };
 
-    // Temporizador
+    /**
+     * Inicia el temporizador de 60 segundos para el botón de reenvío
+     * Deshabilita el botón durante el countdown y lo habilita al finalizar
+     */
     function iniciarTemporizador() {
       clearInterval(timer);
       countdown = 60;

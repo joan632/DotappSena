@@ -1,6 +1,5 @@
 {% for obj in objetos %}
 <tr data-id="{{ obj.pk }}">
-  <td>{{ obj.pk }}</td>
   <td>{{ obj.nombre }}</td>
   <td>
     <button class="eliminar-btn js-eliminar" data-id="{{ obj.pk }}">Eliminar</button>
@@ -8,6 +7,6 @@
 </tr>
 {% empty %}
 <tr>
-  <td colspan="3" class="text-center">No hay registros.</td>
+  <td colspan="3" style="text-align: center; color: gray">No hay registros</td>
 </tr>
 {% endfor %}

@@ -1,0 +1,95 @@
+\doxysection{Referencia de la clase core.\+middleware.\+Amigable\+Exception\+Middleware}
+\hypertarget{classcore_1_1middleware_1_1_amigable_exception_middleware}{}\label{classcore_1_1middleware_1_1_amigable_exception_middleware}\index{core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1middleware_1_1_amigable_exception_middleware_aef6d8374b6c4bf68ac09fd6d6d25034e}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classcore_1_1middleware_1_1_amigable_exception_middleware_a1f6a4e6d5bbcf4e96d617bce4b4eb893}{get\+\_\+response}})
+\item 
+\mbox{\hyperlink{classcore_1_1middleware_1_1_amigable_exception_middleware_a2d5a1069f57224b0cb543dee9d6bb64c}{\+\_\+\+\_\+call\+\_\+\+\_\+}} (self, request)
+\item 
+\mbox{\hyperlink{classcore_1_1middleware_1_1_amigable_exception_middleware_a742a6542449efc9ed5c82224d646b0ea}{process\+\_\+exception}} (self, request, exception)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1middleware_1_1_amigable_exception_middleware_a1f6a4e6d5bbcf4e96d617bce4b4eb893}{get\+\_\+response}} = get\+\_\+response
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Middleware para manejar excepciones de manera amigable.
+
+Captura excepciones no manejadas y redirige al usuario a una página
+apropiada en lugar de mostrar un error técnico.
+\end{DoxyVerb}
+ 
+
+\label{doc-constructors}
+\Hypertarget{classcore_1_1middleware_1_1_amigable_exception_middleware_doc-constructors}
+\doxysubsection{Documentación de constructores y destructores}
+\Hypertarget{classcore_1_1middleware_1_1_amigable_exception_middleware_aef6d8374b6c4bf68ac09fd6d6d25034e}\index{core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily \label{classcore_1_1middleware_1_1_amigable_exception_middleware_aef6d8374b6c4bf68ac09fd6d6d25034e} 
+core.\+middleware.\+Amigable\+Exception\+Middleware.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{get\+\_\+response}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Inicializa el middleware.
+
+Args:
+    get_response: Función que procesa la solicitud y retorna la respuesta
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1middleware_1_1_amigable_exception_middleware_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1middleware_1_1_amigable_exception_middleware_a2d5a1069f57224b0cb543dee9d6bb64c}\index{core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}!\_\_call\_\_@{\_\_call\_\_}}
+\index{\_\_call\_\_@{\_\_call\_\_}!core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}}
+\doxysubsubsection{\texorpdfstring{\_\_call\_\_()}{\_\_call\_\_()}}
+{\footnotesize\ttfamily \label{classcore_1_1middleware_1_1_amigable_exception_middleware_a2d5a1069f57224b0cb543dee9d6bb64c} 
+core.\+middleware.\+Amigable\+Exception\+Middleware.\+\_\+\+\_\+call\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{request}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Procesa la solicitud normalmente.
+
+Args:
+    request: Objeto HttpRequest
+    
+Returns:
+    HttpResponse: Respuesta procesada
+\end{DoxyVerb}
+ \Hypertarget{classcore_1_1middleware_1_1_amigable_exception_middleware_a742a6542449efc9ed5c82224d646b0ea}\index{core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}!process\_exception@{process\_exception}}
+\index{process\_exception@{process\_exception}!core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}}
+\doxysubsubsection{\texorpdfstring{process\_exception()}{process\_exception()}}
+{\footnotesize\ttfamily \label{classcore_1_1middleware_1_1_amigable_exception_middleware_a742a6542449efc9ed5c82224d646b0ea} 
+core.\+middleware.\+Amigable\+Exception\+Middleware.\+process\+\_\+exception (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{request}{, }\item[{}]{exception}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Procesa excepciones no manejadas y redirige al usuario.
+
+Intenta redirigir al usuario a una página apropiada:
+1. Si es una vista de token único, redirige al login
+2. Si hay un template guardado, lo renderiza
+3. En caso contrario, redirige al login
+
+Args:
+    request: Objeto HttpRequest
+    exception: Excepción que se produjo
+    
+Returns:
+    HttpResponse: Redirección o renderizado de template
+\end{DoxyVerb}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcore_1_1middleware_1_1_amigable_exception_middleware_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{classcore_1_1middleware_1_1_amigable_exception_middleware_a1f6a4e6d5bbcf4e96d617bce4b4eb893}\index{core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}!get\_response@{get\_response}}
+\index{get\_response@{get\_response}!core.middleware.AmigableExceptionMiddleware@{core.middleware.AmigableExceptionMiddleware}}
+\doxysubsubsection{\texorpdfstring{get\_response}{get\_response}}
+{\footnotesize\ttfamily \label{classcore_1_1middleware_1_1_amigable_exception_middleware_a1f6a4e6d5bbcf4e96d617bce4b4eb893} 
+core.\+middleware.\+Amigable\+Exception\+Middleware.\+get\+\_\+response = get\+\_\+response}
+
+
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{middleware_8py}{middleware.\+py}}\end{DoxyCompactItemize}

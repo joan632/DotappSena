@@ -1,3 +1,13 @@
+{% comment %}
+Template de página de error genérica
+
+Este template se muestra cuando ocurre un error en el sistema.
+Muestra el código de estado HTTP y un mensaje de error personalizado.
+
+Variables de contexto:
+- status_code: Código de estado HTTP (ej: 404, 500, 403)
+- message: Mensaje de error descriptivo para el usuario
+{% endcomment %}
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Error{% endblock %}

@@ -1,3 +1,16 @@
+{% comment %}
+Template del panel de administración
+
+Este template muestra el menú principal para usuarios con rol de administrador.
+Proporciona acceso a las funcionalidades de gestión del sistema.
+
+Opciones disponibles:
+- Administración de usuarios: Gestionar usuarios del sistema (crear, editar, eliminar, cambiar estado)
+- Seguimiento de pedidos: Ver y gestionar todas las solicitudes de uniformes
+- Gestión de productos: Acceso directo a la administración de productos (redirige al panel de almacenista)
+
+Este panel permite a los administradores realizar todas las tareas de gestión del sistema.
+{% endcomment %}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -7,8 +20,7 @@
   <div class="admin-container">
     <div class="login-card">
       <div class="sticky-sync-wrapper">
-        <!-- Flecha atrás -->
-        <button type="button" class="btn-back-small" onclick="history.back()" aria-label="Volver">
+        <button type="button" class="btn-back-small" onclick="window.location.href='{% url 'dashboard_admin' %}'" aria-label="Volver">
           ← 
         </button>
           
@@ -19,14 +31,20 @@
         </div>
       </div>
         
+      {% comment %}
+      Menú de opciones principales del administrador
+      Botones de navegación a las diferentes secciones de gestión
+      {% endcomment %}
       <div class="welcome-buttons">
-
         <button onclick="window.location.href='{% url 'administracion-usuarios' %}'">Administración de usuarios</button>
         <button onclick="window.location.href='{% url 'seguimiento-pedidos' %}'">Seguimiento de pedidos</button>
         <button onclick="window.location.href='{% url 'administrar-productos' %}'">Gestión de productos</button>
         <br>
 
-        <!-- Botón de cerrar sesión -->
+        {% comment %}
+        Formulario de cierre de sesión
+        Utiliza POST para mayor seguridad
+        {% endcomment %}
         <form method="post" action="{% url 'logout' %}">
           {% csrf_token %}
           <button type="submit" class="btn-logout">Cerrar Sesión</button>

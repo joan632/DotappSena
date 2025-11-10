@@ -1,0 +1,73 @@
+\doxysection{Referencia de la clase core.\+models.\+Rol}
+\hypertarget{classcore_1_1models_1_1_rol}{}\label{classcore_1_1models_1_1_rol}\index{core.models.Rol@{core.models.Rol}}
+Diagrama de herencia de core.\+models.\+Rol\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcore_1_1models_1_1_rol}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Métodos públicos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_rol_a034fab80dd437ee232b72e3b9ad77f33}{\+\_\+\+\_\+str\+\_\+\+\_\+}} (self)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Atributos públicos estáticos}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_rol_a51313b29d49bc1e37191eaae4657559d}{id\+\_\+rol}} = models.\+Auto\+Field(primary\+\_\+key=True)
+\item 
+\mbox{\hyperlink{classcore_1_1models_1_1_rol_ae21861da984ed3fa9171973ba00e6eab}{nombre\+\_\+rol}} = models.\+Char\+Field(max\+\_\+length=255, unique=True)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVerb}Modelo que representa los roles de usuario en el sistema.
+
+Los roles definen los diferentes tipos de usuarios y sus permisos:
+- aprendiz: Usuario que puede realizar solicitudes
+- administrador: Usuario con acceso completo al sistema
+- almacenista: Usuario que gestiona el inventario
+- despachador: Usuario que gestiona las entregas
+
+Attributes:
+    id_rol: Identificador único del rol (clave primaria)
+    nombre_rol: Nombre del rol (único en el sistema)
+\end{DoxyVerb}
+ 
+
+\label{doc-func-members}
+\Hypertarget{classcore_1_1models_1_1_rol_doc-func-members}
+\doxysubsection{Documentación de funciones miembro}
+\Hypertarget{classcore_1_1models_1_1_rol_a034fab80dd437ee232b72e3b9ad77f33}\index{core.models.Rol@{core.models.Rol}!\_\_str\_\_@{\_\_str\_\_}}
+\index{\_\_str\_\_@{\_\_str\_\_}!core.models.Rol@{core.models.Rol}}
+\doxysubsubsection{\texorpdfstring{\_\_str\_\_()}{\_\_str\_\_()}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_rol_a034fab80dd437ee232b72e3b9ad77f33} 
+core.\+models.\+Rol.\+\_\+\+\_\+str\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Retorna la representación en string del rol.
+
+Returns:
+    str: Nombre del rol
+\end{DoxyVerb}
+ 
+
+\label{doc-variable-members}
+\Hypertarget{classcore_1_1models_1_1_rol_doc-variable-members}
+\doxysubsection{Documentación de datos miembro}
+\Hypertarget{classcore_1_1models_1_1_rol_a51313b29d49bc1e37191eaae4657559d}\index{core.models.Rol@{core.models.Rol}!id\_rol@{id\_rol}}
+\index{id\_rol@{id\_rol}!core.models.Rol@{core.models.Rol}}
+\doxysubsubsection{\texorpdfstring{id\_rol}{id\_rol}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_rol_a51313b29d49bc1e37191eaae4657559d} 
+core.\+models.\+Rol.\+id\+\_\+rol = models.\+Auto\+Field(primary\+\_\+key=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcore_1_1models_1_1_rol_ae21861da984ed3fa9171973ba00e6eab}\index{core.models.Rol@{core.models.Rol}!nombre\_rol@{nombre\_rol}}
+\index{nombre\_rol@{nombre\_rol}!core.models.Rol@{core.models.Rol}}
+\doxysubsubsection{\texorpdfstring{nombre\_rol}{nombre\_rol}}
+{\footnotesize\ttfamily \label{classcore_1_1models_1_1_rol_ae21861da984ed3fa9171973ba00e6eab} 
+core.\+models.\+Rol.\+nombre\+\_\+rol = models.\+Char\+Field(max\+\_\+length=255, unique=True)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+La documentación de esta clase está generada del siguiente archivo\+:\begin{DoxyCompactItemize}
+\item 
+core/\mbox{\hyperlink{core_2models_8py}{models.\+py}}\end{DoxyCompactItemize}
