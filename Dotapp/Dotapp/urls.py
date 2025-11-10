@@ -25,11 +25,9 @@ from django.conf.urls.static import static
 
 def redirect_to_login(request):
     return redirect('login')
-from django.conf import settings
-from django.shortcuts import redirect
 
 urlpatterns = [
-path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('error/', include('core.urls')),
     path('', redirect_to_login),
     path('', include('core.urls')),
@@ -39,7 +37,6 @@ path('admin/', admin.site.urls),
     path('despachador/', include('despachador.urls')),
 ]
 """
-
 
 
 
