@@ -79,28 +79,20 @@ def registro_aprendiz(request):
 
 
 def login_view(request):
-    """
-    Vista para el inicio de sesión de usuarios.
-    
-    Autentica al usuario usando correo y contraseña, y redirige según su rol:
-    - Administrador, Despachador, Almacenista: Dashboard de administración
-    - Aprendiz: Página de bienvenida del aprendiz
-    
-    Args:
-        request: Objeto HttpRequest con las credenciales del usuario
-        
-    Returns:
-        HttpResponse: Renderiza la plantilla de login o redirige según el rol
-    """
+    # Si el usuario ya está logueado, redirige según su rol
+    if request.user.is_authenticated:
+        rol = getattr(request.user, 'rol', None)
+        if rol:
+            if rol.nombre_rol in ['administrador', 'despachador', 'almacenista']:
+                return redirect('dashboard_admin')
+            elif rol.nombre_rol == 'aprendiz':
+                return redirect('bienvenido-aprendiz')
+
     if request.method == 'POST':
         correo = request.POST.get('correo')
         password = request.POST.get('password')
 
-        try:
-            usuario = authenticate(request, username=correo, password=password)
-        except Exception:
-            messages.error(request, "Error, intente nuevamente.")
-            return render(request, 'core/login.html')
+        usuario = authenticate(request, username=correo, password=password)
 
         if usuario is not None and usuario.is_active:
             login(request, usuario)
@@ -113,7 +105,6 @@ def login_view(request):
             messages.error(request, "Credenciales inválidas")
 
     return render(request, 'core/login.html')
-
 
 def manual(request):
     """
