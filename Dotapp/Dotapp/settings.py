@@ -378,6 +378,9 @@ PASSWORD_RESET_TIMEOUT = 900
 # a una vista protegida con @login_required
 LOGIN_URL = '/login/'
 
+# URL a la que se redirige después de iniciar sesión exitosamente
+LOGIN_REDIRECT_URL = '/' 
+
 # URL a la que se redirige después de cerrar sesión
 LOGOUT_REDIRECT_URL = '/login/'
 
