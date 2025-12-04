@@ -182,8 +182,8 @@ AUTH_USER_MODEL = 'core.Usuario'
 
 #sendgrid
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = "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"
-DEFAULT_FROM_EMAIL = "dotappsena@gmail.com"
+SENDGRID_API_KEY = ""
+DEFAULT_FROM_EMAIL = ""
 
 
 
